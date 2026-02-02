@@ -1,0 +1,307 @@
+.attendance-page {
+    padding: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: var(--dark-bg);
+}
+
+.attendance-page h1 {
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.today-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.status-details-card {
+    width: 100%;
+    max-width: 800px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.status-details-card h3 {
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.status-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.status-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.status-item .label {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 500;
+}
+
+.status-item .value {
+    font-size: 1.25rem;
+    color: white;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.status-item .value.highlight {
+    color: #10b981;
+    font-size: 1.5rem;
+}
+
+.completion-badge {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 12px;
+    color: #10b981;
+    font-weight: 600;
+}
+
+.completion-badge svg {
+    flex-shrink: 0;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.tab {
+    padding: 12px 24px;
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tab:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+}
+
+.tab.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* Date filter */
+.date-filter {
+    margin-bottom: 20px;
+}
+
+.date-filter input[type="date"] {
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.date-filter input[type="date"]:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.date-filter input[type="date"]:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Attendance table */
+.attendance-table {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 20px;
+    overflow-x: auto;
+}
+
+.attendance-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.attendance-table thead tr {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.attendance-table th {
+    padding: 15px;
+    text-align: left;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.attendance-table td {
+    padding: 15px;
+    color: white;
+    font-size: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.attendance-table tbody tr {
+    transition: background 0.2s ease;
+}
+
+.attendance-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.attendance-table .status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.attendance-table .status-badge.present {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+}
+
+.attendance-table .status-badge.absent {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+}
+
+.attendance-table .status-badge.half_day {
+    background: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+}
+
+/* No data */
+.no-data {
+    text-align: center;
+    padding: 60px 20px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.125rem;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .attendance-page {
+        padding: 20px 15px;
+    }
+
+    .attendance-page h1 {
+        font-size: 2rem;
+    }
+
+    .status-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tabs {
+        width: 100%;
+    }
+
+    .tab {
+        flex: 1;
+        text-align: center;
+    }
+
+    .attendance-table {
+        padding: 15px;
+    }
+
+    .attendance-table th,
+    .attendance-table td {
+        padding: 10px 8px;
+        font-size: 0.875rem;
+    }
+}
+
+.report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.report-header h2 {
+    color: white;
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+/* Status Badges */
+.attendance-table .status-badge.on_leave {
+    background: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+}
+
+.attendance-table .status-badge.holiday {
+    background: rgba(99, 102, 241, 0.2);
+    color: #6366f1;
+}
+
+.attendance-table .status-badge.weekend {
+    background: rgba(107, 114, 128, 0.2);
+    color: #9ca3af;
+}
+
+.attendance-table .status-badge.work_from_home {
+    background: rgba(59, 130, 246, 0.2);
+    color: #3b82f6;
+}
