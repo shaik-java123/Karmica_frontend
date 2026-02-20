@@ -97,6 +97,7 @@ const Dashboard = () => {
         { label: 'Mark Attendance', icon: '⏰', path: '/attendance' },
         { label: 'My Tasks', icon: '📋', path: '/tasks' },
         { label: 'Apply Leave', icon: '📝', path: '/leaves' },
+        { label: 'Appraisals', icon: '🎯', path: '/appraisals' },
     ];
 
     if (user?.role === 'ADMIN' || user?.role === 'HR') {
@@ -121,6 +122,12 @@ const Dashboard = () => {
             label: 'Organization',
             icon: '🏢',
             path: '/organization'
+        });
+        // Employees also need access to Payroll for slips/tax
+        quickActions.push({
+            label: 'Payroll',
+            icon: '💰',
+            path: '/payroll'
         });
     }
 

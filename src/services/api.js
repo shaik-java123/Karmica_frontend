@@ -208,6 +208,35 @@ export const payrollAPI = {
     rejectSalarySlip: (id, reason) => api.put(`/payroll/slip/${id}/reject`, { reason }),
     getPendingApprovalSlips: () => api.get('/payroll/slips/pending-approval'),
     bulkApproveSalarySlips: (slipIds, remarks) => api.post('/payroll/slips/bulk-approve', { slipIds, remarks }),
+    // Regenerate slip with latest salary structure values
+    regenerateSalarySlip: (id) => api.post(`/payroll/slip/${id}/regenerate`),
+};
+
+// Appraisal API
+export const appraisalAPI = {
+    // Cycle Management
+    createCycle: (data) => api.post('/appraisals/cycles', data),
+    getAllCycles: () => api.get('/appraisals/cycles'),
+    getActiveCycles: () => api.get('/appraisals/cycles/active'),
+    activateCycle: (id) => api.post(`/appraisals/cycles/${id}/activate`),
+
+    // Competency Management
+    createCompetency: (data) => api.post('/appraisals/competencies', data),
+    getAllCompetencies: () => api.get('/appraisals/competencies'),
+
+    // Appraisal Management
+    getMyAppraisals: () => api.get('/appraisals/my-appraisals'),
+    getCycleAppraisals: (cycleId) => api.get(`/appraisals/cycles/${cycleId}/appraisals`),
+    getAppraisal: (id) => api.get(`/appraisals/${id}`),
+    addPeerReviewers: (id, peerIds) => api.post(`/appraisals/${id}/peer-reviewers`, { peerIds }),
+
+    // Review Submission
+    getMyPendingReviews: () => api.get('/appraisals/my-reviews/pending'),
+    getReviewDetails: (reviewId) => api.get(`/appraisals/reviews/${reviewId}`),
+    submitReview: (reviewId, data) => api.post(`/appraisals/reviews/${reviewId}/submit`, data),
+
+    // Approval
+    approveAppraisal: (id, remarks) => api.post(`/appraisals/${id}/approve`, { remarks }),
 };
 
 export default api;

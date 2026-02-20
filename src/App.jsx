@@ -15,6 +15,7 @@ import Profile from './pages/Profile';
 import ChangePassword from './pages/ChangePassword';
 import Organization from './pages/Organization';
 import Payroll from './pages/Payroll';
+import Appraisals from './pages/Appraisals';
 import './index.css';
 
 // Protected Route Component
@@ -166,6 +167,14 @@ function App() {
                                 element={
                                     <ProtectedRoute>
                                         <Payroll />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route
+                                path="/appraisals"
+                                element={
+                                    <ProtectedRoute>
+                                        <Appraisals />
                                     </ProtectedRoute>
                                 }
                             />

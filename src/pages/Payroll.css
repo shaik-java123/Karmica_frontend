@@ -76,6 +76,11 @@
     cursor: pointer;
 }
 
+.filters select option {
+    background-color: #1e1e32;
+    color: white;
+}
+
 /* Salary Slips Table */
 .slips-table {
     background: rgba(255, 255, 255, 0.05);
@@ -315,11 +320,36 @@
 .form-group textarea {
     width: 100%;
     padding: 10px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
-    color: white;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    /* Force for WebKit */
     font-family: inherit;
+}
+
+/* Force consistency for autofill */
+.form-group input:-webkit-autofill,
+.form-group input:-webkit-autofill:hover,
+.form-group input:-webkit-autofill:focus,
+.form-group input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #2d2d3a inset !important;
+    /* Match dark theme */
+    -webkit-text-fill-color: white !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: rgba(255, 255, 255, 0.6) !important;
+    opacity: 1;
+    /* Firefox default is lower opacity */
+}
+
+.form-group select option {
+    background-color: #1e1e32;
+    color: white;
 }
 
 .form-group input:focus,
@@ -356,6 +386,24 @@
 }
 
 /* Slip Details */
+/* Slip Modal Specifics - Light Theme */
+.slip-modal {
+    max-width: 800px;
+    width: 90%;
+    background: #ffffff !important;
+    /* Force white background for slip */
+    color: #333333;
+}
+
+.slip-modal .modal-header h2 {
+    color: #1e3a8a;
+    /* Dark Blue title */
+}
+
+.slip-modal .close-btn {
+    color: #64748b;
+}
+
 .slip-details {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -363,44 +411,72 @@
 }
 
 .slip-section {
-    background: rgba(255, 255, 255, 0.03);
+    background: #f8fafc;
+    /* Very light slate/gray */
     padding: 15px;
     border-radius: 8px;
+    border: 1px solid #e2e8f0;
 }
 
 .slip-section h3 {
-    color: white;
+    color: #1e3a8a;
+    /* Dark Blue headers */
     margin: 0 0 10px 0;
     font-size: 1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 2px solid #e2e8f0;
     padding-bottom: 5px;
+    font-weight: 600;
 }
 
 .slip-section p {
-    color: rgba(255, 255, 255, 0.8);
+    color: #475569;
+    /* Slate gray text */
     margin: 5px 0;
     font-size: 0.9rem;
+    font-weight: 500;
 }
 
-.slip-section p.total {
-    font-weight: 600;
-    color: white;
+.slip-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #e2e8f0;
+    color: #334155;
+    /* Darker slate for row items */
+    font-weight: 500;
+}
+
+.slip-row:last-child {
+    border-bottom: none;
+}
+
+.slip-section p.total,
+.slip-row.total {
+    font-weight: 700;
+    color: #000000;
+    /* Black for totals */
     margin-top: 10px;
     padding-top: 10px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 2px solid #cbd5e1;
+}
+
+.deduction-total {
+    color: #ef4444 !important;
 }
 
 .net-section {
     grid-column: 1 / -1;
     text-align: center;
-    background: rgba(16, 185, 129, 0.1);
-    border: 1px solid rgba(16, 185, 129, 0.3);
+    background: #ecfdf5;
+    /* Light emerald bg */
+    border: 2px solid #10b981;
 }
 
 .net-amount {
     font-size: 2rem;
-    font-weight: 700;
-    color: #10b981;
+    font-weight: 800;
+    color: #059669;
+    /* Emerald text */
     margin: 10px 0;
 }
 
@@ -468,4 +544,635 @@
     .components-grid {
         grid-template-columns: 1fr;
     }
+}
+
+/* Structure Tab Styles */
+.structure-section {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 30px;
+    height: calc(100vh - 200px);
+}
+
+.employee-sidebar {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.employee-sidebar h3 {
+    color: white;
+    margin: 0 0 15px 0;
+    font-size: 1.1rem;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: white;
+    margin-bottom: 15px;
+}
+
+.employee-list-container {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.employee-select-list {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    color: white;
+    font-family: inherit;
+    font-size: 0.95rem;
+}
+
+.employee-select-list option {
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #1e1e32;
+    margin-bottom: 2px;
+}
+
+.employee-select-list option:checked {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.structure-details {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.structure-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.emp-info h2 {
+    color: white;
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.emp-info p {
+    color: rgba(255, 255, 255, 0.6);
+    margin: 5px 0 0 0;
+}
+
+.components-group {
+    margin-bottom: 30px;
+}
+
+.components-group h3 {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    padding-left: 10px;
+    border-left: 4px solid #667eea;
+}
+
+.structure-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+}
+
+.structure-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 15px;
+    transition: all 0.2s;
+}
+
+.structure-item.enabled {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(102, 126, 234, 0.3);
+}
+
+.structure-item.disabled {
+    opacity: 0.6;
+}
+
+.item-header {
+    margin-bottom: 10px;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 500;
+    color: white;
+    user-select: none;
+}
+
+.checkbox-container input {
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+}
+
+.calc-info {
+    font-size: 0.8rem;
+    color: #ffd700;
+    margin-left: 5px;
+}
+
+.item-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.currency {
+    position: absolute;
+    left: 10px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.item-input input {
+    width: 100%;
+    padding: 8px 8px 8px 25px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: white;
+}
+
+.item-input input:disabled {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+    /* increased contrast */
+    cursor: not-allowed;
+    border-color: transparent;
+    font-weight: 500;
+}
+
+.total-earnings {
+    margin-top: 15px;
+    text-align: right;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #10b981;
+    padding: 10px;
+    background: rgba(16, 185, 129, 0.1);
+    border-radius: 8px;
+}
+
+.deduction-total {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.no-selection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.2rem;
+}
+
+@media (max-width: 1024px) {
+    .structure-section {
+        grid-template-columns: 250px 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .structure-section {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+
+    .employee-sidebar {
+        height: 400px;
+    }
+}
+
+/* Tax Calculator Styles */
+.tax-calculator-section {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    /* Assuming dark mode base */
+    border-radius: 12px;
+}
+
+.calculator-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.calculator-form {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.calculator-result {
+    background: linear-gradient(135deg, rgba(8, 59, 42, 0.6), rgba(6, 95, 70, 0.3));
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.calculator-form h2,
+.calculator-result h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #e5e7eb;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 10px;
+}
+
+.calculator-result h3 {
+    color: #10b981;
+    border-bottom-color: rgba(16, 185, 129, 0.3);
+}
+
+.regime-toggle {
+    display: flex;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.toggle-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: transparent;
+    color: #9ca3af;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.toggle-btn.active {
+    background: #3b82f6;
+    color: white;
+    font-weight: bold;
+}
+
+.exemptions-group {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.exemptions-group h3 {
+    font-size: 0.9rem;
+    margin-top: 0;
+    margin-bottom: 1px;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: none !important;
+}
+
+.input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.result-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: #e5e7eb;
+}
+
+.result-row.deduction span:last-child {
+    color: #ef4444;
+}
+
+.result-row.total {
+    font-weight: bold;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-bottom: none;
+    margin-top: 5px;
+    padding-top: 15px;
+    font-size: 1.1rem;
+}
+
+.result-row.total.final {
+    color: #10b981;
+    font-size: 1.3rem;
+}
+
+.divider {
+    height: 2px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 15px 0;
+}
+
+.monthly-tax {
+    margin-top: 20px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #9ca3af;
+}
+
+/* Response for smaller screens */
+@media (max-width: 900px) {
+    .calculator-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ====== Approval Badge (table) ====== */
+.approval-badge-sm {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.approval-badge-sm.warn {
+    background: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+}
+
+.approval-badge-sm.success {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+}
+
+.approval-badge-sm.danger {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+}
+
+.approval-badge-sm.muted {
+    background: rgba(107, 114, 128, 0.2);
+    color: #9ca3af;
+}
+
+/* ====== Approval Badge (large, inside slip modal) ====== */
+.approval-badge-lg {
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-top: 6px;
+}
+
+.approval-badge-lg.warn {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.approval-badge-lg.success {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.approval-badge-lg.danger {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.approval-badge-lg.muted {
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+/* ====== Slip Modal Company Header ====== */
+.slip-company-header {
+    position: relative;
+    text-align: center;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #e2e8f0;
+    margin-bottom: 18px;
+}
+
+.slip-company-name {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #1e3a8a;
+}
+
+.slip-company-sub {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-top: 3px;
+}
+
+.slip-title-bar {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #334155;
+    letter-spacing: 1px;
+    margin-top: 8px;
+}
+
+.slip-close-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #94a3b8;
+    line-height: 1;
+}
+
+.slip-close-btn:hover {
+    color: #475569;
+}
+
+/* ====== No data in slip section ====== */
+.no-data-msg {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+/* ====== Action icon colours ====== */
+.approve-icon {
+    color: #10b981;
+}
+
+.reject-icon {
+    color: #ef4444;
+}
+
+/* ====== Extra Buttons ====== */
+.btn-success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+}
+
+.btn-warning:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(245, 158, 11, 0.4);
+}
+
+.full-width {
+    width: 100%;
+}
+
+/* ====== Settings Section ====== */
+.settings-section {
+    max-width: 900px;
+}
+
+.settings-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 28px;
+}
+
+.settings-card h2 {
+    color: white;
+    margin: 0 0 20px;
+}
+
+.settings-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.preview-row {
+    display: flex;
+    gap: 16px;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.preview-row span {
+    color: rgba(255, 255, 255, 0.55);
+    min-width: 140px;
+}
+
+.preview-row strong {
+    color: white;
+}
+
+/* ====== Approval Workflow Diagram ====== */
+.workflow-steps {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.wf-step {
+    text-align: center;
+}
+
+.wf-step p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.82rem;
+    max-width: 160px;
+    margin: 8px auto 0;
+}
+
+.wf-badge {
+    display: inline-block;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.wf-badge.warn {
+    background: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+.wf-badge.success {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.wf-badge.danger {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.wf-arrow {
+    font-size: 1.6rem;
+    color: rgba(255, 255, 255, 0.35);
+    font-weight: 300;
+}
+
+.workflow-note {
+    background: rgba(99, 129, 234, 0.1);
+    border: 1px solid rgba(99, 129, 234, 0.2);
+    padding: 12px 16px;
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.88rem;
+    line-height: 1.6;
+}
+
+.workflow-note code {
+    background: rgba(99, 129, 234, 0.2);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: #a5b4fc;
+    font-weight: 600;
 }
