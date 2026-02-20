@@ -5,6 +5,7 @@ import { ToastProvider } from './context/ToastContext';
 import { ThemeProvider } from './context/ThemeContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ForgotPassword from './pages/ForgotPassword';
 import Dashboard from './pages/Dashboard';
 import Employees from './pages/Employees';
 import Departments from './pages/Departments';
@@ -87,6 +88,14 @@ function App() {
                                 element={
                                     <PublicRoute>
                                         <Register />
+                                    </PublicRoute>
+                                }
+                            />
+                            <Route
+                                path="/forgot-password"
+                                element={
+                                    <PublicRoute>
+                                        <ForgotPassword />
                                     </PublicRoute>
                                 }
                             />

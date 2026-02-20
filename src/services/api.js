@@ -29,6 +29,9 @@ export const authAPI = {
     register: (userData) => api.post('/auth/register', userData),
     test: () => api.get('/auth/test'),
     changePassword: (data) => api.post('/auth/change-password', data),
+    forgotPassword: (email) => api.post('/auth/forgot-password', { email }),
+    resetPassword: (email, token, newPassword) =>
+        api.post('/auth/reset-password', { email, token, newPassword }),
 };
 
 // Employee API

@@ -264,54 +264,80 @@ const Tasks = () => {
             {showModal && (
                 <div className="modal-overlay" onClick={() => setShowModal(false)}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                        <h2>Assign New Task</h2>
+                        <h2>📋 Assign New Task</h2>
                         <form onSubmit={handleSubmit}>
-                            <input
-                                type="text"
-                                placeholder="Task Title *"
-                                value={formData.title}
-                                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                                required
-                            />
-                            <textarea
-                                placeholder="Task Description *"
-                                value={formData.description}
-                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                rows="4"
-                                required
-                            />
-                            <select
-                                value={formData.assignedToId}
-                                onChange={(e) => setFormData({ ...formData, assignedToId: e.target.value })}
-                                required
-                            >
-                                <option value="">Select Employee *</option>
-                                {employees.map(emp => (
-                                    <option key={emp.id} value={emp.id}>
-                                        {emp.firstName} {emp.lastName} - {emp.designation}
-                                    </option>
-                                ))}
-                            </select>
-                            <input
-                                type="date"
-                                value={formData.dueDate}
-                                onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
-                                min={new Date().toISOString().split('T')[0]}
-                                required
-                            />
-                            <select
-                                value={formData.priority}
-                                onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
-                                required
-                            >
-                                <option value="LOW">Low Priority</option>
-                                <option value="MEDIUM">Medium Priority</option>
-                                <option value="HIGH">High Priority</option>
-                                <option value="URGENT">Urgent</option>
-                            </select>
+
+                            <div className="form-group">
+                                <label>Task Title *</label>
+                                <input
+                                    type="text"
+                                    placeholder="e.g. Prepare monthly report"
+                                    value={formData.title}
+                                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label>Description *</label>
+                                <textarea
+                                    placeholder="Describe the task in detail..."
+                                    value={formData.description}
+                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                    rows="4"
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label>Assign To *</label>
+                                <select
+                                    value={formData.assignedToId}
+                                    onChange={(e) => setFormData({ ...formData, assignedToId: e.target.value })}
+                                    required
+                                >
+                                    <option value="">— Select Employee —</option>
+                                    {employees.map(emp => (
+                                        <option key={emp.id} value={emp.id}>
+                                            {emp.firstName} {emp.lastName}
+                                            {emp.designation ? ` · ${emp.designation}` : ''}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="form-group">
+                                <label>Due Date *</label>
+                                <input
+                                    type="date"
+                                    value={formData.dueDate}
+                                    onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
+                                    min={new Date().toISOString().split('T')[0]}
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label>Priority *</label>
+                                <select
+                                    value={formData.priority}
+                                    onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
+                                    required
+                                >
+                                    <option value="LOW">🟢 Low</option>
+                                    <option value="MEDIUM">🟡 Medium</option>
+                                    <option value="HIGH">🔴 High</option>
+                                    <option value="URGENT">🚨 Urgent</option>
+                                </select>
+                            </div>
+
                             <div className="modal-actions">
-                                <button type="button" onClick={() => setShowModal(false)}>Cancel</button>
-                                <button type="submit" className="btn-primary">Assign Task</button>
+                                <button type="button" className="btn-cancel" onClick={() => setShowModal(false)}>
+                                    Cancel
+                                </button>
+                                <button type="submit" className="btn-submit">
+                                    ✅ Assign Task
+                                </button>
                             </div>
                         </form>
                     </div>
