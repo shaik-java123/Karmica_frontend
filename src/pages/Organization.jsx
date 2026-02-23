@@ -378,8 +378,8 @@ const Organization = () => {
                                     onChange={e => setHolidayForm({ ...holidayForm, description: e.target.value })} />
                             </div>
                             <div className="modal-actions">
-                                <button type="button" onClick={() => setShowHolidayModal(false)}>Cancel</button>
-                                <button type="submit" className="btn-primary">Save</button>
+                                <button type="button" className="btn btn-secondary" onClick={() => setShowHolidayModal(false)}>Cancel</button>
+                                <button type="submit" className="btn btn-primary">Save</button>
                             </div>
                         </form>
                     </div>
@@ -417,8 +417,8 @@ const Organization = () => {
                                     onChange={e => setPolicyForm({ ...policyForm, version: e.target.value })} />
                             </div>
                             <div className="modal-actions">
-                                <button type="button" onClick={() => setShowPolicyModal(false)}>Cancel</button>
-                                <button type="submit" className="btn-primary">Save</button>
+                                <button type="button" className="btn btn-secondary" onClick={() => setShowPolicyModal(false)}>Cancel</button>
+                                <button type="submit" className="btn btn-primary">Save</button>
                             </div>
                         </form>
                     </div>
@@ -465,8 +465,8 @@ const Organization = () => {
                                 </label>
                             </div>
                             <div className="modal-actions">
-                                <button type="button" onClick={() => setShowLeaveTypeModal(false)}>Cancel</button>
-                                <button type="submit" className="btn-primary">Save</button>
+                                <button type="button" className="btn btn-secondary" onClick={() => setShowLeaveTypeModal(false)}>Cancel</button>
+                                <button type="submit" className="btn btn-primary">Save</button>
                             </div>
                         </form>
                     </div>

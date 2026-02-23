@@ -18,6 +18,7 @@ const Attendance = () => {
 
     const canViewTeam = ['ADMIN', 'HR', 'MANAGER'].includes(user?.role);
     const canViewReport = ['ADMIN', 'HR'].includes(user?.role);
+    const canCheckInOut = true; // All roles can check in/out
     const [dailyReport, setDailyReport] = useState([]);
 
     useEffect(() => {
@@ -110,7 +111,7 @@ const Attendance = () => {
             <BackButton to="/dashboard" label="Back to Dashboard" />
             <h1>🕐 Attendance</h1>
 
-            {activeTab === 'today' && (
+            {activeTab === 'today' && canCheckInOut && (
                 <div className="today-section">
                     <AnimatedClock
                         isCheckedIn={todayStatus?.checkedIn && !todayStatus?.checkOutTime}

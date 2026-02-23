@@ -19,6 +19,7 @@ import Payroll from './pages/Payroll';
 import Appraisals from './pages/Appraisals';
 import Onboarding from './pages/Onboarding';
 import Worklist from './pages/Worklist';
+import AnalyticsDashboard from './pages/AnalyticsDashboard';
 import ChatBot from './components/ChatBot';
 import './index.css';
 
@@ -203,6 +204,14 @@ function App() {
                                 element={
                                     <ProtectedRoute>
                                         <Worklist />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route
+                                path="/analytics"
+                                element={
+                                    <ProtectedRoute>
+                                        <AnalyticsDashboard />
                                     </ProtectedRoute>
                                 }
                             />

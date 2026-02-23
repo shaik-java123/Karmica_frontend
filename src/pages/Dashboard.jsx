@@ -20,9 +20,13 @@ const Dashboard = () => {
     const [showAnnouncementModal, setShowAnnouncementModal] = useState(false);
     const [announcementData, setAnnouncementData] = useState({ title: '', message: '' });
 
+    // Flash Announcement State
+    const [flashAnnouncement, setFlashAnnouncement] = useState(null);
+
     useEffect(() => {
         // ... existing useEffect ...
         fetchDashboardStats();
+        checkFlashAnnouncements();
         // Update profile image if it changes
         const updateProfileImage = () => {
             setProfileImage(localStorage.getItem(`profile-image-${user?.username}`) || null);
@@ -40,6 +44,31 @@ const Dashboard = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const checkFlashAnnouncements = async () => {
+        try {
+            const response = await notificationAPI.getAll();
+            const unreadAnnouncements = response.data.notifications?.filter(
+                n => n.type === 'ANNOUNCEMENT' && !n.isRead
+            );
+            if (unreadAnnouncements && unreadAnnouncements.length > 0) {
+                // Show the most recent unread announcement
+                setFlashAnnouncement(unreadAnnouncements[0]);
+            }
+        } catch (error) {
+            console.error('Failed to get notifications', error);
+        }
+    };
+
+    const dismissFlashAnnouncement = async () => {
+        if (!flashAnnouncement) return;
+        try {
+            await notificationAPI.markAsRead(flashAnnouncement.id);
+        } catch (error) {
+            console.error('Failed to mark announcement as read', error);
+        }
+        setFlashAnnouncement(null);
     };
 
     const handleLogout = () => {
@@ -70,9 +99,11 @@ const Dashboard = () => {
                 { label: 'Total Employees', value: stats.totalEmployees || '0', icon: '👥', color: 'primary', path: '/employees' },
                 { label: 'Attendance Rate', value: stats.attendanceRate || '0%', icon: '📊', color: 'success', path: '/attendance' },
                 { label: 'Departments', value: stats.totalDepartments || '0', icon: '🏢', color: 'secondary', path: '/departments' },
+                { label: 'Project Count', value: stats.projectCount || '0', icon: '📁', color: 'info', path: '/analytics' },
                 { label: 'Pending Leaves', value: stats.pendingLeaves || '0', icon: '📋', color: 'warning', path: '/leaves' },
-                { label: 'Weekly Leaves', value: stats.approvedLeavesThisWeek || '0', icon: '📈', color: 'info', path: '/leaves' },
+                { label: 'Weekly Leaves', value: stats.approvedLeavesThisWeek || '0', icon: '📈', color: 'primary', path: '/leaves' },
                 { label: 'Today Present', value: stats.todayAttendance || '0', icon: '✅', color: 'success', path: '/attendance' },
+                { label: 'My Check-in', value: stats.todayCheckIn ? '✓ Done' : '✗ Pending', icon: '⏰', color: stats.todayCheckIn ? 'success' : 'warning', path: '/attendance' },
             ];
         } else if (user?.role === 'MANAGER') {
             return [
@@ -101,6 +132,14 @@ const Dashboard = () => {
         { label: 'Appraisals', icon: '🎯', path: '/appraisals' },
         { label: 'Onboarding', icon: '🎓', path: '/onboarding' },
     ];
+
+    if (user?.role === 'ADMIN' || user?.role === 'HR' || user?.role === 'MANAGER') {
+        quickActions.unshift({
+            label: 'Team Analytics',
+            icon: '📊',
+            path: '/analytics'
+        });
+    }
 
     if (user?.role === 'ADMIN' || user?.role === 'HR') {
         quickActions.push({
@@ -276,6 +315,30 @@ const Dashboard = () => {
                                 <button type="submit" className="btn btn-primary">Broadcast 📢</button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Flash Announcement Popup */}
+            {flashAnnouncement && (
+                <div className="modal-overlay" style={{ zIndex: 9999 }}>
+                    <div className="modal-content glass-card" style={{ textAlign: 'center', animation: 'fadeInDown 0.5s ease-out' }}>
+                        <div className="modal-header" style={{ justifyContent: 'center', borderBottom: 'none' }}>
+                            <h2 style={{ fontSize: '2rem', marginBottom: '0' }}>📢 {flashAnnouncement.title}</h2>
+                        </div>
+                        <p style={{ margin: '2rem 0', fontSize: '1.2rem', color: '#e2e8f0', lineHeight: '1.6' }}>
+                            {flashAnnouncement.message}
+                        </p>
+                        <div className="modal-actions" style={{ justifyContent: 'center' }}>
+                            <button
+                                type="button"
+                                className="btn btn-primary"
+                                style={{ padding: '0.75rem 3rem', fontSize: '1.1rem' }}
+                                onClick={dismissFlashAnnouncement}
+                            >
+                                Got it! ✓
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

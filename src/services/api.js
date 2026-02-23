@@ -120,6 +120,7 @@ export const dashboardAPI = {
     getStats: () => api.get('/dashboard/stats'),
     getHRAnalytics: () => api.get('/dashboard/hr-analytics'),
     getSummary: () => api.get('/dashboard/summary'),
+    getTeamAnalytics: () => api.get('/dashboard/team-analytics'),
 };
 
 // Notification API
