@@ -1,0 +1,850 @@
+/* ============================================================
+   Worklist Page — Premium Dark Glassmorphism
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+.wl-page {
+    padding: 28px 32px;
+    max-width: 1100px;
+    margin: 0 auto;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+}
+
+/* ── Header ─────────────────────────────────────────────────── */
+.wl-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 28px;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.wl-header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.wl-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.7);
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: fit-content;
+}
+
+.wl-back:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+}
+
+.wl-title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0;
+    background: linear-gradient(135deg, #667eea 0%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.wl-sub {
+    margin: 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.wl-btn-assign {
+    padding: 11px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s;
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+    white-space: nowrap;
+}
+
+.wl-btn-assign:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.55);
+}
+
+/* ── Summary Stats ───────────────────────────────────────────── */
+.wl-stats-row {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+}
+
+.wl-stat-card {
+    flex: 1 1 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 18px 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    transition: transform 0.2s;
+}
+
+.wl-stat-card:hover {
+    transform: translateY(-3px);
+}
+
+.wl-stat-card.todo {
+    background: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.25);
+}
+
+.wl-stat-card.inprogress {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.25);
+}
+
+.wl-stat-card.completed {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: rgba(16, 185, 129, 0.25);
+}
+
+.wl-stat-card.overdue {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.25);
+}
+
+.wl-stat-card.delegated {
+    background: rgba(167, 139, 250, 0.1);
+    border-color: rgba(167, 139, 250, 0.25);
+}
+
+.wl-stat-num {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+}
+
+.wl-stat-card.todo .wl-stat-num {
+    color: #f59e0b;
+}
+
+.wl-stat-card.inprogress .wl-stat-num {
+    color: #60a5fa;
+}
+
+.wl-stat-card.completed .wl-stat-num {
+    color: #34d399;
+}
+
+.wl-stat-card.overdue .wl-stat-num {
+    color: #f87171;
+}
+
+.wl-stat-card.delegated .wl-stat-num {
+    color: #a78bfa;
+}
+
+.wl-stat-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.55);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ── Tabs ────────────────────────────────────────────────────── */
+.wl-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.wl-tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.wl-tab:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.wl-tab.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 14px rgba(102, 126, 234, 0.4);
+}
+
+.wl-tab-badge {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 99px;
+    min-width: 20px;
+    text-align: center;
+}
+
+.wl-tab.active .wl-tab-badge {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Filters ─────────────────────────────────────────────────── */
+.wl-filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.wl-search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 10px;
+    padding: 0 12px;
+    flex: 1;
+    min-width: 200px;
+}
+
+.wl-search-icon {
+    font-size: 0.9rem;
+    opacity: 0.55;
+}
+
+.wl-search {
+    flex: 1;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 0.9rem;
+    padding: 10px 0;
+    outline: none;
+}
+
+.wl-search::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.wl-filter-select {
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.wl-filter-select:focus {
+    border-color: #667eea;
+}
+
+.wl-filter-select option {
+    background: #1e1b3a;
+}
+
+.wl-clear-filters {
+    padding: 10px 16px;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #f87171;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.wl-clear-filters:hover {
+    background: rgba(239, 68, 68, 0.25);
+}
+
+/* ── Loading / Empty ─────────────────────────────────────────── */
+.wl-loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: rgba(255, 255, 255, 0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.wl-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid rgba(102, 126, 234, 0.2);
+    border-top-color: #667eea;
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.wl-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.wl-empty-icon {
+    font-size: 3.5rem;
+    margin-bottom: 12px;
+}
+
+.wl-empty h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0 0 8px;
+}
+
+.wl-empty p {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin: 0;
+}
+
+/* ── Work Item List ──────────────────────────────────────────── */
+.wl-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.wl-item {
+    display: flex;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.25s;
+    animation: wlFadeIn 0.35s ease;
+}
+
+.wl-item:hover {
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(255, 255, 255, 0.18);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.wl-item.overdue {
+    border-color: rgba(239, 68, 68, 0.4);
+    background: rgba(239, 68, 68, 0.06);
+}
+
+.wl-item.completed {
+    opacity: 0.7;
+}
+
+@keyframes wlFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Left accent stripe */
+.wl-item-accent {
+    width: 5px;
+    flex-shrink: 0;
+    border-radius: 0;
+}
+
+.wl-item-body {
+    flex: 1;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Row 1 */
+.wl-item-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.wl-item-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.wl-item-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.wl-overdue-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #f87171;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    padding: 2px 8px;
+    border-radius: 99px;
+    white-space: nowrap;
+}
+
+.wl-item-badges {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+    align-items: center;
+}
+
+.wl-badge-priority,
+.wl-badge-status {
+    padding: 4px 10px;
+    border-radius: 99px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    border: 1px solid;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+}
+
+/* Row 2: description */
+.wl-item-desc {
+    margin: 0;
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.65);
+    line-height: 1.6;
+}
+
+/* Row 3: comments */
+.wl-item-comments {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.55);
+    font-style: italic;
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 3px solid rgba(102, 126, 234, 0.4);
+    padding: 8px 12px;
+    border-radius: 0 6px 6px 0;
+}
+
+/* Row 4: meta */
+.wl-item-meta {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.wl-meta-item {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.wl-meta-item strong {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+}
+
+.wl-meta-done {
+    color: #34d399;
+}
+
+/* Row 5: actions */
+.wl-item-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 2px;
+}
+
+.wl-action-btn {
+    padding: 7px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #fff;
+}
+
+.wl-action-btn.start {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.wl-action-btn.complete {
+    background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.wl-action-btn.cancel {
+    background: rgba(107, 114, 128, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.wl-action-btn.delete {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #f87171;
+}
+
+.wl-action-btn.start:hover {
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.45);
+    transform: translateY(-1px);
+}
+
+.wl-action-btn.complete:hover {
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.45);
+    transform: translateY(-1px);
+}
+
+.wl-action-btn.cancel:hover {
+    background: rgba(107, 114, 128, 0.4);
+    color: #fff;
+}
+
+.wl-action-btn.delete:hover {
+    background: rgba(239, 68, 68, 0.25);
+}
+
+/* ── Modal ───────────────────────────────────────────────────── */
+.wl-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.wl-modal {
+    background: #1a1535;
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    border-radius: 20px;
+    padding: 32px;
+    width: 100%;
+    max-width: 540px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+}
+
+.wl-modal.wl-modal-sm {
+    max-width: 420px;
+}
+
+.wl-modal h2 {
+    margin: 0 0 8px;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #fff;
+}
+
+.wl-modal-task-name {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.55);
+    margin: 0 0 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.wl-modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.wl-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.wl-field label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.wl-field input,
+.wl-field select,
+.wl-field textarea {
+    padding: 11px 14px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 0.9rem;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.wl-field select option {
+    background: #1a1535;
+}
+
+.wl-field input:focus,
+.wl-field select:focus,
+.wl-field textarea:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+    background: rgba(102, 126, 234, 0.08);
+}
+
+.wl-field textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.wl-field input::placeholder,
+.wl-field textarea::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.wl-field input[type="date"] {
+    color-scheme: dark;
+}
+
+.wl-field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.wl-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.wl-btn-ghost {
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.7);
+    border-radius: 9px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.wl-btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+}
+
+.wl-btn-primary {
+    padding: 10px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: #fff;
+    border-radius: 9px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 14px rgba(102, 126, 234, 0.4);
+}
+
+.wl-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.55);
+}
+
+.wl-btn-success {
+    padding: 10px 24px;
+    background: linear-gradient(135deg, #10b981, #059669);
+    border: none;
+    color: #fff;
+    border-radius: 9px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+}
+
+.wl-btn-success:hover {
+    transform: translateY(-2px);
+}
+
+.wl-btn-danger {
+    padding: 10px 24px;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    border: none;
+    color: #fff;
+    border-radius: 9px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+}
+
+.wl-btn-danger:hover {
+    transform: translateY(-2px);
+}
+
+/* ── Reassign button ─────────────────────────────────────────── */
+.wl-action-btn.reassign {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #fff;
+}
+
+.wl-action-btn.reassign:hover {
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.45);
+    transform: translateY(-1px);
+}
+
+/* ── Reassign modal extras ───────────────────────────────────── */
+.wl-reassign-current {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+}
+
+.wl-reassign-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.wl-reassign-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.wl-reassign-note {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(102, 126, 234, 0.08);
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    border-radius: 8px;
+    padding: 10px 14px;
+    line-height: 1.5;
+}
+
+.wl-reassign-note strong {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Disabled state for confirm button */
+.wl-btn-primary:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .wl-page {
+        padding: 16px;
+    }
+
+    .wl-title {
+        font-size: 1.5rem;
+    }
+
+    .wl-stats-row {
+        gap: 10px;
+    }
+
+    .wl-stat-card {
+        padding: 14px 10px;
+    }
+
+    .wl-stat-num {
+        font-size: 1.5rem;
+    }
+
+    .wl-item-top {
+        flex-direction: column;
+    }
+
+    .wl-item-badges {
+        flex-direction: row;
+    }
+
+    .wl-field-row {
+        grid-template-columns: 1fr;
+    }
+
+    .wl-modal {
+        padding: 22px;
+    }
+}

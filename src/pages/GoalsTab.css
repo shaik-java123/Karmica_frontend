@@ -1,0 +1,935 @@
+/* ============================================================
+   GoalsTab — premium dark glass styles
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ── Wrap ── */
+.gt-wrap {
+    font-family: 'Inter', sans-serif;
+    animation: gtFadeIn 0.35s ease;
+}
+
+@keyframes gtFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ── Loading ── */
+.gt-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 60px 20px;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.gt-spinner {
+    width: 34px;
+    height: 34px;
+    border: 3px solid rgba(102, 126, 234, 0.2);
+    border-top-color: #667eea;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ── Header ── */
+.gt-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 22px;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.gt-heading {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 0;
+    background: linear-gradient(135deg, #667eea, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.gt-sub {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.45);
+    margin: 4px 0 0;
+}
+
+.gt-header-actions {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+/* Buttons */
+.gt-btn-primary {
+    padding: 10px 22px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 14px rgba(102, 126, 234, 0.38);
+}
+
+.gt-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.55);
+}
+
+.gt-btn-ghost {
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.75);
+    border-radius: 10px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.gt-btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.13);
+    color: #fff;
+}
+
+/* ── Stats ── */
+.gt-stats {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+}
+
+.gt-stat {
+    flex: 1 1 110px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 16px 12px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    backdrop-filter: blur(10px);
+    transition: transform 0.2s;
+}
+
+.gt-stat:hover {
+    transform: translateY(-2px);
+}
+
+.gt-stat.in-progress {
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+.gt-stat.completed {
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+.gt-stat.overdue {
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.gt-stat.progress {
+    border-color: rgba(167, 139, 250, 0.3);
+    min-width: 140px;
+}
+
+.gt-stat-n {
+    font-size: 1.8rem;
+    font-weight: 800;
+    line-height: 1;
+    color: #fff;
+}
+
+.gt-stat.in-progress .gt-stat-n {
+    color: #60a5fa;
+}
+
+.gt-stat.completed .gt-stat-n {
+    color: #34d399;
+}
+
+.gt-stat.overdue .gt-stat-n {
+    color: #f87171;
+}
+
+.gt-stat.progress .gt-stat-n {
+    color: #a78bfa;
+}
+
+.gt-stat-l {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.gt-mini-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 99px;
+    margin-top: 4px;
+    overflow: hidden;
+}
+
+.gt-mini-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #a78bfa);
+    border-radius: 99px;
+    transition: width 0.6s ease;
+}
+
+/* ── Panel (form + excel) ── */
+.gt-panel {
+    background: rgba(26, 21, 53, 0.95);
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    border-radius: 18px;
+    padding: 26px;
+    margin-bottom: 22px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+    animation: gtFadeIn 0.25s ease;
+}
+
+.gt-panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.gt-panel-head h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.gt-panel-close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.gt-panel-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+/* ── Form ── */
+.gt-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.gt-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.gt-field label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.55);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.gt-field input,
+.gt-field select,
+.gt-field textarea {
+    padding: 10px 13px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 9px;
+    color: #fff;
+    font-size: 0.875rem;
+    font-family: inherit;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.gt-field select option {
+    background: #1a1535;
+}
+
+.gt-field input:focus,
+.gt-field select:focus,
+.gt-field textarea:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+    background: rgba(102, 126, 234, 0.07);
+}
+
+.gt-field textarea {
+    resize: vertical;
+    min-height: 70px;
+}
+
+.gt-field input::placeholder,
+.gt-field textarea::placeholder {
+    color: rgba(255, 255, 255, 0.28);
+}
+
+.gt-field input[type="date"] {
+    color-scheme: dark;
+}
+
+.gt-field-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+}
+
+.gt-form-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* ── Excel steps ── */
+.gt-excel-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.gt-excel-step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.gt-step-num {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #fff;
+}
+
+.gt-step-body {
+    flex: 1;
+}
+
+.gt-step-body h4 {
+    margin: 0 0 4px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.gt-step-body p {
+    margin: 0 0 10px;
+    font-size: 0.825rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.gt-step-body code {
+    background: rgba(102, 126, 234, 0.15);
+    border: 1px solid rgba(102, 126, 234, 0.25);
+    border-radius: 5px;
+    padding: 2px 6px;
+    font-size: 0.8rem;
+    color: #a78bfa;
+}
+
+.gt-col-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.gt-col-chip {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 99px;
+    padding: 3px 10px;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.gt-upload-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 10px;
+}
+
+.gt-or {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.35);
+    font-style: italic;
+}
+
+.gt-csv-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    font-family: monospace;
+    font-size: 0.8rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 9px;
+    color: rgba(255, 255, 255, 0.8);
+    resize: vertical;
+    outline: none;
+}
+
+.gt-csv-textarea:focus {
+    border-color: #667eea;
+}
+
+.gt-parse-errors {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    border-radius: 9px;
+    padding: 12px;
+    margin-bottom: 10px;
+}
+
+.gt-err-row {
+    font-size: 0.8rem;
+    color: #f87171;
+    padding: 2px 0;
+}
+
+.gt-preview-count {
+    font-size: 0.875rem;
+    color: #34d399;
+    font-weight: 600;
+    margin: 0 0 10px;
+}
+
+.gt-preview-table-wrap {
+    overflow-x: auto;
+    border-radius: 10px;
+    margin-bottom: 14px;
+}
+
+.gt-preview-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+}
+
+.gt-preview-table th {
+    background: rgba(102, 126, 234, 0.15);
+    color: rgba(255, 255, 255, 0.7);
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.gt-preview-table td {
+    padding: 7px 12px;
+    color: rgba(255, 255, 255, 0.8);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.gt-preview-table tr:hover td {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+/* ── Tabs ── */
+.gt-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+.gt-tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 18px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.6);
+    border-radius: 10px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.gt-tab:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.gt-tab.active {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 14px rgba(102, 126, 234, 0.4);
+}
+
+.gt-badge {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 99px;
+    min-width: 18px;
+    text-align: center;
+}
+
+/* ── Filters ── */
+.gt-filters {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.gt-search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 0 12px;
+    flex: 1;
+    min-width: 200px;
+}
+
+.gt-search {
+    flex: 1;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 0.875rem;
+    padding: 10px 0;
+    outline: none;
+}
+
+.gt-search::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.gt-select {
+    padding: 10px 13px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+}
+
+.gt-select option {
+    background: #1a1535;
+}
+
+.gt-clear {
+    padding: 10px 14px;
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.28);
+    color: #f87171;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.gt-clear:hover {
+    background: rgba(239, 68, 68, 0.22);
+}
+
+/* ── Empty ── */
+.gt-empty {
+    text-align: center;
+    padding: 54px 20px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.gt-empty-icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+}
+
+.gt-empty h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0 0 8px;
+}
+
+.gt-empty p {
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+/* ── Goal Cards ── */
+.gt-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.gt-card {
+    display: flex;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.25s;
+    animation: gtFadeIn 0.3s ease;
+}
+
+.gt-card:hover {
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(255, 255, 255, 0.18);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3);
+}
+
+.gt-card.overdue {
+    border-color: rgba(239, 68, 68, 0.38);
+    background: rgba(239, 68, 68, 0.05);
+}
+
+.gt-card-accent {
+    width: 5px;
+    flex-shrink: 0;
+}
+
+.gt-card-body {
+    flex: 1;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.gt-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.gt-card-title-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.gt-card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.gt-overdue-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #f87171;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    padding: 2px 8px;
+    border-radius: 99px;
+    white-space: nowrap;
+}
+
+.gt-card-badges {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+}
+
+.gt-badge-pill {
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    border: 1px solid;
+    white-space: nowrap;
+}
+
+.gt-badge-weight {
+    color: rgba(255, 255, 255, 0.6) !important;
+    background: rgba(255, 255, 255, 0.07) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.gt-card-desc {
+    margin: 0;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.5;
+}
+
+/* Progress bar */
+.gt-progress-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.gt-progress-track {
+    flex: 1;
+    height: 7px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 99px;
+    overflow: hidden;
+}
+
+.gt-progress-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.5s ease;
+}
+
+.gt-progress-pct {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.7);
+    flex-shrink: 0;
+    min-width: 36px;
+    text-align: right;
+}
+
+.gt-target-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+}
+
+.gt-target-label {
+    color: rgba(255, 255, 255, 0.45);
+    font-weight: 600;
+}
+
+.gt-target-val {
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 600;
+}
+
+.gt-card-meta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.gt-meta-item {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.gt-meta-item strong {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+}
+
+.gt-comment-block {
+    font-size: 0.8rem;
+    font-style: italic;
+    padding: 7px 12px;
+    border-radius: 0 8px 8px 0;
+    line-height: 1.5;
+}
+
+.gt-comment-block.manager {
+    color: rgba(255, 255, 255, 0.55);
+    background: rgba(255, 255, 255, 0.04);
+    border-left: 3px solid rgba(102, 126, 234, 0.45);
+}
+
+.gt-comment-block.self {
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(16, 185, 129, 0.05);
+    border-left: 3px solid rgba(16, 185, 129, 0.35);
+}
+
+.gt-card-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 2px;
+}
+
+.gt-action {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #fff;
+}
+
+.gt-action.start {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.gt-action.comment {
+    background: rgba(167, 139, 250, 0.2);
+    border: 1px solid rgba(167, 139, 250, 0.3);
+    color: #a78bfa;
+}
+
+.gt-action.delete {
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.28);
+    color: #f87171;
+}
+
+.gt-action.start:hover {
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.45);
+    transform: translateY(-1px);
+}
+
+.gt-action.comment:hover {
+    background: rgba(167, 139, 250, 0.3);
+}
+
+.gt-action.delete:hover {
+    background: rgba(239, 68, 68, 0.22);
+}
+
+/* ── Modal ── */
+.gt-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.68);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1100;
+    padding: 20px;
+}
+
+.gt-modal {
+    background: #1a1535;
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    border-radius: 20px;
+    padding: 30px;
+    width: 100%;
+    max-width: 460px;
+    max-height: 88vh;
+    overflow-y: auto;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+}
+
+.gt-modal h2 {
+    margin: 0 0 6px;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #fff;
+}
+
+.gt-modal-sub {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0 0 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.gt-modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.gt-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* Slider */
+.gt-slider-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.gt-slider-wrap input[type=range] {
+    flex: 1;
+    accent-color: #667eea;
+}
+
+.gt-slider-val {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #a78bfa;
+    min-width: 40px;
+    text-align: right;
+}
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+    .gt-field-row {
+        grid-template-columns: 1fr;
+    }
+
+    .gt-card-top {
+        flex-direction: column;
+    }
+
+    .gt-modal {
+        padding: 20px;
+    }
+}

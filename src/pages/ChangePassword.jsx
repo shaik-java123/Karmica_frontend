@@ -17,10 +17,11 @@ const ChangePassword = () => {
     const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
         setError('');
     };
 
@@ -96,7 +97,7 @@ const ChangePassword = () => {
                         )}
 
                         <div className="form-group">
-                            <label htmlFor="currentPassword" class="form-label">
+                            <label htmlFor="currentPassword" className="form-label">
                                 Current Password
                             </label>
                             <input
@@ -111,7 +112,7 @@ const ChangePassword = () => {
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="newPassword" class="form-label">
+                            <label htmlFor="newPassword" className="form-label">
                                 New Password
                             </label>
                             <input
@@ -126,7 +127,7 @@ const ChangePassword = () => {
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="confirmPassword" class="form-label">
+                            <label htmlFor="confirmPassword" className="form-label">
                                 Confirm New Password
                             </label>
                             <input
@@ -138,6 +139,20 @@ const ChangePassword = () => {
                                 onChange={handleChange}
                                 required
                             />
+                            {/* Live match indicator */}
+                            {formData.confirmPassword && (
+                                <span style={{
+                                    fontSize: '0.78rem',
+                                    fontWeight: 600,
+                                    marginTop: '4px',
+                                    display: 'block',
+                                    color: formData.newPassword === formData.confirmPassword ? '#10b981' : '#ef4444'
+                                }}>
+                                    {formData.newPassword === formData.confirmPassword
+                                        ? '✅ Passwords match'
+                                        : '❌ Passwords do not match'}
+                                </span>
+                            )}
                         </div>
 
                         <button

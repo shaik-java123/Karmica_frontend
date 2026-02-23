@@ -17,6 +17,8 @@ import ChangePassword from './pages/ChangePassword';
 import Organization from './pages/Organization';
 import Payroll from './pages/Payroll';
 import Appraisals from './pages/Appraisals';
+import Onboarding from './pages/Onboarding';
+import Worklist from './pages/Worklist';
 import './index.css';
 
 // Protected Route Component
@@ -184,6 +186,22 @@ function App() {
                                 element={
                                     <ProtectedRoute>
                                         <Appraisals />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route
+                                path="/onboarding"
+                                element={
+                                    <ProtectedRoute>
+                                        <Onboarding />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route
+                                path="/worklist"
+                                element={
+                                    <ProtectedRoute>
+                                        <Worklist />
                                     </ProtectedRoute>
                                 }
                             />

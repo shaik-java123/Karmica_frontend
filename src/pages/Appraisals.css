@@ -410,6 +410,7 @@
 
 .modal-content {
     background: white;
+    color: #2c3e50;
     border-radius: 16px;
     max-width: 600px;
     width: 100%;
@@ -486,7 +487,18 @@
     border: 2px solid #e0e0e0;
     border-radius: 8px;
     font-size: 1rem;
+    color: #2c3e50;
+    background: #fff;
     transition: border-color 0.3s ease;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #aab0b8;
+}
+
+.checkbox-group label {
+    color: #2c3e50;
 }
 
 .form-group input:focus,

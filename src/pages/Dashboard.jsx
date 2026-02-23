@@ -96,8 +96,10 @@ const Dashboard = () => {
         { label: 'Employee Directory', icon: '👥', path: '/employees' },
         { label: 'Mark Attendance', icon: '⏰', path: '/attendance' },
         { label: 'My Tasks', icon: '📋', path: '/tasks' },
+        { label: 'Worklist', icon: '✅', path: '/worklist' },
         { label: 'Apply Leave', icon: '📝', path: '/leaves' },
         { label: 'Appraisals', icon: '🎯', path: '/appraisals' },
+        { label: 'Onboarding', icon: '🎓', path: '/onboarding' },
     ];
 
     if (user?.role === 'ADMIN' || user?.role === 'HR') {

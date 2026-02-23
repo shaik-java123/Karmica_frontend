@@ -21,10 +21,10 @@ export const AuthProvider = ({ children }) => {
     const login = async (credentials) => {
         try {
             const response = await authAPI.login(credentials);
-            const { token, userId, username, email, role, passwordChangeRequired } = response.data;
+            const { token, userId, employeeId, username, email, role, passwordChangeRequired } = response.data;
 
             localStorage.setItem('token', token);
-            const userData = { userId, username, email, role, passwordChangeRequired };
+            const userData = { userId, employeeId, username, email, role, passwordChangeRequired };
             localStorage.setItem('user', JSON.stringify(userData));
 
             setUser(userData);
@@ -40,10 +40,10 @@ export const AuthProvider = ({ children }) => {
     const register = async (userData) => {
         try {
             const response = await authAPI.register(userData);
-            const { token, userId, username, email, role } = response.data;
+            const { token, userId, employeeId, username, email, role } = response.data;
 
             localStorage.setItem('token', token);
-            const user = { userId, username, email, role };
+            const user = { userId, employeeId, username, email, role };
             localStorage.setItem('user', JSON.stringify(user));
 
             setUser(user);

@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { appraisalAPI, employeeAPI } from '../services/api';
 import BackButton from '../components/BackButton';
+import GoalsTab from './GoalsTab';
 import './Appraisals.css';
 
 const Appraisals = () => {
@@ -257,6 +258,12 @@ const Appraisals = () => {
                         <span className="badge">{pendingReviews.length}</span>
                     )}
                 </button>
+                <button
+                    className={activeTab === 'goals' ? 'tab active' : 'tab'}
+                    onClick={() => setActiveTab('goals')}
+                >
+                    🎯 Goals & Targets
+                </button>
                 {isAdminOrHR && (
                     <>
                         <button
@@ -384,6 +391,9 @@ const Appraisals = () => {
                     )}
                 </div>
             )}
+
+            {/* Goals & Targets Tab */}
+            {activeTab === 'goals' && <GoalsTab />}
 
             {/* Cycles Tab (Admin/HR) */}
             {activeTab === 'cycles' && isAdminOrHR && (

@@ -1,0 +1,915 @@
+/* ============================================================
+   Onboarding.css — Employee Onboarding Page
+   ============================================================ */
+
+/* ── Page shell ── */
+.ob-page {
+    padding: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    color: var(--text-primary, #f1f5f9);
+}
+
+/* ── Back button ── */
+.ob-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    padding: 6px 14px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 12px;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.ob-back-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.22);
+    transform: translateX(-2px);
+}
+
+.ob-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin: 0;
+    background: linear-gradient(135deg, #667eea, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.ob-subtitle {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.55);
+    margin: 6px 0 0;
+}
+
+/* ── Employee selector bar ── */
+.ob-selector-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 16px 20px;
+    flex-wrap: wrap;
+}
+
+.ob-select-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 260px;
+}
+
+.ob-select-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+    white-space: nowrap;
+}
+
+.ob-select {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: #f1f5f9;
+    font-size: 0.9rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.ob-select:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.ob-select option {
+    background: #1e1b4b;
+    color: #f1f5f9;
+}
+
+.ob-emp-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* ── Buttons ── */
+.ob-btn-start {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 14px rgba(102, 126, 234, 0.4);
+}
+
+.ob-btn-start:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.55);
+}
+
+.ob-btn-start:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.ob-btn-secondary {
+    padding: 10px 18px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.ob-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.28);
+}
+
+.ob-btn-primary {
+    padding: 11px 22px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
+}
+
+.ob-btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(102, 126, 234, 0.5);
+}
+
+.ob-btn-ghost {
+    padding: 10px 18px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.ob-btn-ghost:hover {
+    border-color: rgba(255, 255, 255, 0.28);
+    color: #fff;
+}
+
+.ob-btn-review {
+    padding: 6px 14px;
+    background: rgba(59, 130, 246, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    border-radius: 8px;
+    color: #60a5fa;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.ob-btn-review:hover {
+    background: rgba(59, 130, 246, 0.25);
+}
+
+.ob-btn-del {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    border-radius: 8px;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.ob-btn-del:hover {
+    background: rgba(239, 68, 68, 0.22);
+}
+
+.ob-btn-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 8px;
+    color: #34d399;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px;
+}
+
+.ob-btn-download:hover {
+    background: rgba(16, 185, 129, 0.22);
+}
+
+.ob-btn-submit-task {
+    padding: 7px 16px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.83rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.ob-btn-submit-task:hover {
+    transform: translateY(-1px);
+}
+
+/* ── Summary Card ── */
+.ob-summary-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.ob-summary-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.ob-summary-emp {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.ob-emp-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.ob-summary-emp h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.ob-summary-emp p {
+    margin: 3px 0 0;
+    font-size: 0.83rem;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.ob-summary-stats {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.ob-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid;
+    border-radius: 12px;
+    opacity: 0.9;
+}
+
+.ob-stat-count {
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.ob-stat-label {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.55);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-top: 3px;
+}
+
+/* ── Progress bar ── */
+.ob-progress-bar-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ob-progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.ob-progress-pct {
+    font-weight: 700;
+    color: #a5b4fc;
+}
+
+.ob-progress-track {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.ob-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #a78bfa);
+    border-radius: 999px;
+    transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ── Tabs ── */
+.ob-tabs {
+    display: flex;
+    gap: 0;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 4px;
+    width: fit-content;
+}
+
+.ob-tab {
+    padding: 9px 20px;
+    background: transparent;
+    border: none;
+    border-radius: 9px;
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ob-tab.active {
+    background: rgba(102, 126, 234, 0.25);
+    color: #a5b4fc;
+}
+
+.ob-tab-badge {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    padding: 1px 8px;
+    font-size: 0.75rem;
+}
+
+.ob-tab.active .ob-tab-badge {
+    background: rgba(102, 126, 234, 0.35);
+}
+
+/* ── Checklist ── */
+.ob-checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.ob-task-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 14px;
+    padding: 18px 20px;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ob-task-card:hover {
+    border-color: rgba(255, 255, 255, 0.16);
+    transform: translateY(-1px);
+}
+
+.ob-task-card.approved {
+    border-left: 3px solid #10b981;
+}
+
+.ob-task-card.in_review {
+    border-left: 3px solid #3b82f6;
+}
+
+.ob-task-card.rejected {
+    border-left: 3px solid #ef4444;
+}
+
+.ob-task-card.waived {
+    border-left: 3px solid #8b5cf6;
+    opacity: 0.75;
+}
+
+.ob-task-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.ob-task-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.ob-task-type {
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.ob-task-status {
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.ob-overdue {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #f87171;
+}
+
+.ob-task-hr-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.ob-task-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0;
+    color: #f1f5f9;
+}
+
+.ob-task-desc {
+    font-size: 0.87rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0;
+    line-height: 1.55;
+}
+
+.ob-task-note {
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.83rem;
+    line-height: 1.5;
+}
+
+.ob-task-note.hr-note {
+    background: rgba(102, 126, 234, 0.1);
+    border-left: 3px solid #667eea;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.ob-task-note.emp-note {
+    background: rgba(16, 185, 129, 0.08);
+    border-left: 3px solid #10b981;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.ob-task-note.rejection-note {
+    background: rgba(239, 68, 68, 0.1);
+    border-left: 3px solid #ef4444;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.ob-task-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.ob-task-dates {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.ob-task-actions-right {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* ── Documents ── */
+.ob-doc-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.ob-doc-header h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.ob-doc-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ob-doc-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 12px;
+    padding: 14px 18px;
+    transition: all 0.2s;
+}
+
+.ob-doc-card:hover {
+    border-color: rgba(255, 255, 255, 0.16);
+    transform: translateX(3px);
+}
+
+.ob-doc-card.hr {
+    border-left: 3px solid #667eea;
+}
+
+.ob-doc-card.emp {
+    border-left: 3px solid #10b981;
+}
+
+.ob-doc-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.ob-doc-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.ob-doc-info h4 {
+    margin: 0 0 4px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ob-doc-info p {
+    margin: 0 0 8px;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.ob-doc-meta {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.ob-doc-type,
+.ob-doc-size,
+.ob-doc-source {
+    font-size: 0.74rem;
+    padding: 2px 8px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.07);
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.ob-doc-uploaded {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin-top: 6px;
+}
+
+.ob-doc-download {
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(102, 126, 234, 0.15);
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    border-radius: 10px;
+    font-size: 1.1rem;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.ob-doc-download:hover {
+    background: rgba(102, 126, 234, 0.28);
+    transform: scale(1.08);
+}
+
+/* ── Empty State ── */
+.ob-empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.ob-empty-icon {
+    font-size: 3.5rem;
+    margin-bottom: 16px;
+}
+
+.ob-empty-state h3 {
+    margin: 0 0 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.ob-empty-state p {
+    margin: 0;
+    font-size: 0.88rem;
+    max-width: 380px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.ob-loading {
+    text-align: center;
+    padding: 40px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1rem;
+}
+
+/* ── Modals ── */
+.ob-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(6px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.ob-modal {
+    background: #1a1a2e;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    padding: 28px;
+    max-width: 520px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.25s ease;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(102, 126, 234, 0.4) transparent;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.ob-modal h3 {
+    margin: 0 0 20px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #f1f5f9;
+}
+
+.ob-modal-desc {
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin: -10px 0 14px;
+}
+
+.ob-modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.ob-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.ob-field label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.ob-field input,
+.ob-field select,
+.ob-field textarea {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 10px;
+    padding: 11px 14px;
+    color: #f1f5f9;
+    font-size: 0.9rem;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    resize: vertical;
+}
+
+.ob-field input:focus,
+.ob-field select:focus,
+.ob-field textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+.ob-field input::placeholder,
+.ob-field textarea::placeholder {
+    color: rgba(255, 255, 255, 0.28);
+}
+
+.ob-field select option {
+    background: #1a1a2e;
+}
+
+/* ── File Drop Zone ── */
+.ob-file-drop {
+    border: 2px dashed rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.88rem;
+}
+
+.ob-file-drop:hover {
+    border-color: #667eea;
+    background: rgba(102, 126, 234, 0.06);
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.ob-file-drop.has-file {
+    border-color: #10b981;
+    background: rgba(16, 185, 129, 0.06);
+    color: #34d399;
+}
+
+.ob-file-icon {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.ob-file-hint {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.35);
+    margin-top: 4px;
+}
+
+.ob-file-name {
+    font-weight: 700;
+}
+
+.ob-file-size {
+    font-size: 0.78rem;
+    color: rgba(16, 185, 129, 0.7);
+    margin-left: 8px;
+}
+
+/* ── Radio group for review ── */
+.ob-radio-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.ob-radio-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border: 2px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+    transition: all 0.2s;
+}
+
+.ob-radio-label input {
+    display: none;
+}
+
+.ob-radio-label.selected {
+    border-color: var(--radio-color, #667eea);
+    background: color-mix(in srgb, var(--radio-color, #667eea) 12%, transparent);
+    color: #fff;
+}
+
+.ob-radio-label:hover {
+    border-color: rgba(255, 255, 255, 0.25);
+    color: #fff;
+}
+
+.ob-modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    padding-top: 4px;
+}
+
+.block-link {
+    display: block;
+    margin-bottom: 12px;
+}

@@ -140,7 +140,22 @@ export const taskAPI = {
     getAll: () => api.get('/tasks/all'),
     updateStatus: (id, data) => api.put(`/tasks/${id}/status`, data),
     update: (id, data) => api.put(`/tasks/${id}`, data),
+    reassign: (id, assignedToId, reason) => api.post(`/tasks/${id}/reassign`, { assignedToId, reason }),
     delete: (id) => api.delete(`/tasks/${id}`),
+};
+
+// Goals / Targets API
+export const goalAPI = {
+    getMyGoals: () => api.get('/goals/my-goals'),
+    getTeamGoals: () => api.get('/goals/team'),
+    getGoalsForEmployee: (empId) => api.get(`/goals/employee/${empId}`),
+    getGoalsByCycle: (cycleId) => api.get(`/goals/cycle/${cycleId}`),
+    create: (data) => api.post('/goals', data),
+    bulkCreate: (goals) => api.post('/goals/bulk', { goals }),
+    updateProgress: (id, data) => api.put(`/goals/${id}/progress`, data),
+    updateStatus: (id, status) => api.put(`/goals/${id}/status`, { status }),
+    addComment: (id, managerComments) => api.put(`/goals/${id}/comment`, { managerComments }),
+    delete: (id) => api.delete(`/goals/${id}`),
 };
 
 // Team Management (for HR to assign employees to managers)
@@ -240,6 +255,30 @@ export const appraisalAPI = {
 
     // Approval
     approveAppraisal: (id, remarks) => api.post(`/appraisals/${id}/approve`, { remarks }),
+};
+
+// Onboarding API
+export const onboardingAPI = {
+    // HR operations
+    startOnboarding: (employeeId) => api.post(`/onboarding/employee/${employeeId}/start`),
+    addChecklistTask: (employeeId, data) => api.post(`/onboarding/employee/${employeeId}/checklist`, data),
+    reviewChecklist: (taskId, action, reason) =>
+        api.put(`/onboarding/checklist/${taskId}/review`, { action, reason }),
+    deleteChecklist: (taskId) => api.delete(`/onboarding/checklist/${taskId}`),
+    uploadHrDocument: (employeeId, formData) =>
+        api.post(`/onboarding/employee/${employeeId}/documents`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }),
+
+    // Employee operations
+    submitChecklistTask: (taskId, formData) =>
+        api.post(`/onboarding/checklist/${taskId}/submit`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }),
+
+    // Shared
+    getOnboardingData: (employeeId) => api.get(`/onboarding/employee/${employeeId}`),
+    getSummary: (employeeId) => api.get(`/onboarding/employee/${employeeId}/summary`),
 };
 
 export default api;
