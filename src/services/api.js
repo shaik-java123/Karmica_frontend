@@ -281,4 +281,16 @@ export const onboardingAPI = {
     getSummary: (employeeId) => api.get(`/onboarding/employee/${employeeId}/summary`),
 };
 
+// Chatbot AI API
+export const chatbotAPI = {
+    /**
+     * Send a message to Karma (Gemini-backed HR assistant)
+     * @param {string} message - The user's message
+     * @param {Array}  history - [{role:'user'|'model', content:string}, ...]
+     */
+    chat: (message, history = []) =>
+        api.post('/chatbot/chat', { message, history }),
+};
+
 export default api;
+

@@ -19,6 +19,7 @@ import Payroll from './pages/Payroll';
 import Appraisals from './pages/Appraisals';
 import Onboarding from './pages/Onboarding';
 import Worklist from './pages/Worklist';
+import ChatBot from './components/ChatBot';
 import './index.css';
 
 // Protected Route Component
@@ -206,6 +207,8 @@ function App() {
                                 }
                             />
                         </Routes>
+                        {/* Karma AI Assistant — floats on every authenticated page */}
+                        <ChatBot />
                     </AuthProvider>
                 </Router>
             </ToastProvider>
