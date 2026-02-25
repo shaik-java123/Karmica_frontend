@@ -256,6 +256,44 @@ export const appraisalAPI = {
 
     // Approval
     approveAppraisal: (id, remarks) => api.post(`/appraisals/${id}/approve`, { remarks }),
+
+    // Goal-based Rating / Band
+    ratingPreview: (id) => api.get(`/appraisals/${id}/rating-preview`),
+    finalizeRating: (id, overrideRating) =>
+        api.put(`/appraisals/${id}/finalize-rating`, overrideRating ? { overrideRating } : {}),
+
+    // Acknowledgement
+    acknowledgeAppraisal: (id, agreed, comments) =>
+        api.post(`/appraisals/${id}/acknowledge`, { agreed, comments }),
+};
+
+// Goal Template API (revamped appraisal goal workflow)
+export const goalTemplateAPI = {
+    // Preset metrics catalogue
+    getPresetCatalogue: () => api.get('/goal-templates/preset-catalogue'),
+
+    // Manager: template lifecycle
+    createTemplate: (data) => api.post('/goal-templates', data),
+    getMyTemplates: () => api.get('/goal-templates'),
+    getTemplate: (id) => api.get(`/goal-templates/${id}`),
+    publishTemplate: (id) => api.post(`/goal-templates/${id}/publish`),
+    lockTemplate: (id) => api.post(`/goal-templates/${id}/lock`),
+
+    // Manager: metric management
+    addMetric: (id, data) => api.post(`/goal-templates/${id}/metrics`, data),
+    bulkAddMetrics: (id, metrics) => api.post(`/goal-templates/${id}/metrics/bulk`, { metrics }),
+    removeMetric: (id, metricId) => api.delete(`/goal-templates/${id}/metrics/${metricId}`),
+
+    // Manager: goal review & approval
+    getTemplateGoals: (id) => api.get(`/goal-templates/${id}/goals`),
+    approveGoal: (goalId, managerComments) =>
+        api.put(`/goal-templates/goals/${goalId}/approve`, { managerComments }),
+    rejectGoal: (goalId, managerComments) =>
+        api.put(`/goal-templates/goals/${goalId}/reject`, { managerComments }),
+
+    // Employee: view & submit
+    getMyGoals: () => api.get('/goal-templates/my-goals'),
+    submitActuals: (goalId, data) => api.put(`/goal-templates/goals/${goalId}/submit`, data),
 };
 
 // Onboarding API

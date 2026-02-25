@@ -261,8 +261,11 @@ const Leaves = () => {
             {/* View Modal */}
             {showViewModal && selectedLeave && (
                 <div className="modal-overlay" onClick={() => setShowViewModal(false)}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                        <h2>Leave Details</h2>
+                    <div className="modal-content glass-card" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                            <h2 style={{ margin: 0 }}>Leave Details</h2>
+                            <button className="close-btn" onClick={() => setShowViewModal(false)}>×</button>
+                        </div>
                         <div className="view-profile-header">
                             <div className="profile-avatar-large">
                                 {selectedLeave.employee?.photoUrl ? (
@@ -310,11 +313,11 @@ const Leaves = () => {
                         <div className="modal-actions">
                             {selectedLeave.status === 'PENDING' && canApproveLeaves && activeTab !== 'my' && (
                                 <>
-                                    <button onClick={() => handleReject(selectedLeave.id)} className="btn-icon danger" style={{ background: 'rgba(239, 68, 68, 0.2)', width: 'auto', padding: '0.75rem 1.5rem', borderRadius: '8px', color: '#EF4444' }}>Reject</button>
-                                    <button onClick={() => handleApprove(selectedLeave.id)} className="btn-primary">Approve</button>
+                                    <button onClick={() => handleReject(selectedLeave.id)} className="btn btn-secondary" style={{ color: '#EF4444' }}>Reject</button>
+                                    <button onClick={() => handleApprove(selectedLeave.id)} className="btn btn-primary">Approve</button>
                                 </>
                             )}
-                            <button type="button" onClick={() => setShowViewModal(false)}>Close</button>
+                            <button type="button" className="btn btn-secondary" onClick={() => setShowViewModal(false)}>Close</button>
                         </div>
                     </div>
                 </div>
@@ -323,8 +326,11 @@ const Leaves = () => {
             {/* Apply Leave Modal */}
             {showModal && (
                 <div className="modal-overlay" onClick={() => setShowModal(false)}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                        <h2>Apply for Leave</h2>
+                    <div className="modal-content glass-card" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                            <h2 style={{ margin: 0 }}>Apply for Leave</h2>
+                            <button className="close-btn" onClick={() => setShowModal(false)}>×</button>
+                        </div>
                         <form onSubmit={handleSubmit}>
                             <select
                                 value={formData.leaveType}
@@ -358,8 +364,8 @@ const Leaves = () => {
                                 required
                             />
                             <div className="modal-actions">
-                                <button type="button" onClick={() => setShowModal(false)}>Cancel</button>
-                                <button type="submit" className="btn-primary">Submit</button>
+                                <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Cancel</button>
+                                <button type="submit" className="btn btn-primary">Submit</button>
                             </div>
                         </form>
                     </div>

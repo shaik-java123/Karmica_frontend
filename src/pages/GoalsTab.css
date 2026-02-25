@@ -933,3 +933,707 @@
         padding: 20px;
     }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   REVAMPED GOALS TAB — SUPPLEMENTARY STYLES
+══════════════════════════════════════════════════════════════ */
+
+.gt-badge-sm {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 99px;
+    font-size: 0.68rem;
+    font-weight: 800;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.22);
+}
+
+.gt-card.approved {
+    border-color: rgba(16, 185, 129, 0.3);
+    background: rgba(16, 185, 129, 0.04);
+}
+
+.gt-unit-chip {
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    background: rgba(102, 126, 234, 0.15);
+    color: #a78bfa;
+    border: 1px solid rgba(102, 126, 234, 0.25);
+}
+
+/* Pillar groups */
+.gt-pillar-group {
+    margin-bottom: 24px;
+}
+
+.gt-pillar-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border-radius: 12px;
+    border-left: 4px solid;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.gt-pillar-icon {
+    font-size: 1.1rem;
+}
+
+/* Template grid */
+.gt-template-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 18px;
+}
+
+.gt-template-card {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.25s;
+    display: flex;
+    flex-direction: column;
+}
+
+.gt-template-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3);
+    border-color: rgba(102, 126, 234, 0.3);
+}
+
+.gt-tmpl-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 18px 20px 14px;
+}
+
+.gt-tmpl-header h3 {
+    margin: 0 0 4px;
+    font-size: 1.02rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.gt-tmpl-cycle {
+    margin: 0;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.gt-cycle-type {
+    background: rgba(102, 126, 234, 0.18);
+    color: #a78bfa;
+    padding: 1px 7px;
+    border-radius: 99px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-left: 5px;
+}
+
+.gt-status-pill {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.gt-tmpl-body {
+    padding: 0 20px 14px;
+    flex: 1;
+}
+
+.gt-tmpl-desc {
+    font-size: 0.825rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0 0 10px;
+    line-height: 1.5;
+}
+
+.gt-tmpl-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.gt-tmpl-footer {
+    padding: 14px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.gt-btn-danger {
+    padding: 9px 18px;
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.28);
+    color: #f87171;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.gt-btn-danger:hover {
+    background: rgba(239, 68, 68, 0.24);
+}
+
+/* Review panel */
+.gt-review-panel {
+    animation: gtFadeIn 0.25s ease;
+}
+
+.gt-review-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+}
+
+.gt-review-header h3 {
+    margin: 0 0 2px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.gt-review-header p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.gt-back-btn {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    color: rgba(255, 255, 255, 0.7);
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.gt-back-btn:hover {
+    background: rgba(255, 255, 255, 0.13);
+    color: #fff;
+}
+
+.gt-review-filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+/* Employee sections */
+.gt-emp-section {
+    margin-bottom: 24px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.gt-emp-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.gt-emp-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1rem;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.gt-emp-header strong {
+    color: #fff;
+    font-size: 0.95rem;
+}
+
+.gt-emp-meta {
+    margin: 2px 0 0;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.gt-emp-progress-chips {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+}
+
+.gt-chip {
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.gt-chip.submitted {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+}
+
+.gt-chip.approved {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+}
+
+/* Review table */
+.gt-review-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+}
+
+.gt-review-table th {
+    background: rgba(102, 126, 234, 0.1);
+    padding: 10px 14px;
+    text-align: left;
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    font-weight: 700;
+}
+
+.gt-review-table td {
+    padding: 10px 14px;
+    color: rgba(255, 255, 255, 0.8);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    vertical-align: middle;
+}
+
+.gt-review-table tr.row-approved td {
+    background: rgba(16, 185, 129, 0.04);
+}
+
+.gt-review-table tr.row-submitted td {
+    background: rgba(59, 130, 246, 0.04);
+}
+
+.gt-review-table tr:hover td {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.gt-pillar-chip {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 8px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.gt-mini-comment {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin-top: 3px;
+    font-style: italic;
+}
+
+.gt-mini-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 90px;
+}
+
+.gt-mini-bar-t {
+    flex: 1;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 99px;
+    overflow: hidden;
+}
+
+.gt-mini-bar-f {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.4s ease;
+}
+
+.gt-status-chip {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 8px;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.gt-status-chip.approved {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+}
+
+.gt-status-chip.submitted {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+}
+
+.gt-status-chip.pending {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.45);
+}
+
+/* Wide modal */
+.gt-modal-wide {
+    max-width: 700px;
+}
+
+/* Wizard */
+.gt-wizard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+.gt-wizard-header h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #fff;
+}
+
+.gt-wizard-steps {
+    display: flex;
+    gap: 0;
+    margin-bottom: 26px;
+    position: relative;
+}
+
+.gt-wizard-steps::before {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: 20px;
+    right: 20px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 0;
+}
+
+.gt-wstep {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+    z-index: 1;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.gt-wstep.active {
+    color: #a78bfa;
+}
+
+.gt-wstep.done {
+    color: #34d399;
+}
+
+.gt-wstep-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 800;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    background: #1a1535;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.gt-wstep.active .gt-wstep-num {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(102, 126, 234, 0.5);
+}
+
+.gt-wstep.done .gt-wstep-num {
+    background: #065f46;
+    border-color: #10b981;
+    color: #34d399;
+}
+
+.gt-wizard-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.gt-mode-toggle {
+    display: flex;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 4px;
+}
+
+.gt-mode-btn {
+    flex: 1;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 9px;
+    background: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.gt-mode-btn.active {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+}
+
+.gt-metric-form {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.gt-added-metrics {
+    margin-top: 8px;
+}
+
+.gt-added-metrics h4 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.gt-metric-chips {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.gt-metric-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid;
+    border-radius: 10px;
+    padding: 8px 12px;
+    flex-wrap: wrap;
+}
+
+.gt-chip-pillar {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.gt-chip-label {
+    flex: 1;
+    font-size: 0.84rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+}
+
+.gt-chip-target {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.gt-chip-weight {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #a78bfa;
+    background: rgba(167, 139, 250, 0.12);
+    border-radius: 6px;
+    padding: 2px 7px;
+}
+
+.gt-chip-remove {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.gt-chip-remove:hover {
+    color: #f87171;
+    background: rgba(239, 68, 68, 0.12);
+}
+
+.gt-weight-total {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.45);
+    margin: 8px 0 0;
+    text-align: right;
+}
+
+.gt-weight-warn {
+    color: #f59e0b;
+    font-weight: 600;
+}
+
+/* Step 3 review */
+.gt-review-summary {
+    background: rgba(102, 126, 234, 0.07);
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.gt-review-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+}
+
+.gt-review-row span {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.gt-review-row strong {
+    color: #fff;
+}
+
+.gt-review-pillar {
+    margin-bottom: 14px;
+}
+
+.gt-review-metric-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 7px 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    font-size: 0.84rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.gt-review-metric-row:last-child {
+    border-bottom: none;
+}
+
+/* Review modal detail */
+.gt-review-detail-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 4px;
+}
+
+.gt-review-detail-row>div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.gt-review-detail-row strong {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.gt-review-detail-row p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #fff;
+    font-weight: 700;
+}
+
+/* Stat colour variants */
+.gt-stat.submitted {
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+.gt-stat.submitted .gt-stat-n {
+    color: #60a5fa;
+}
+
+@media (max-width: 640px) {
+    .gt-template-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .gt-review-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .gt-review-table {
+        font-size: 0.72rem;
+    }
+
+    .gt-wizard-steps::before {
+        display: none;
+    }
+
+    .gt-emp-progress-chips {
+        flex-direction: column;
+        gap: 4px;
+        margin-left: 0;
+    }
+}
