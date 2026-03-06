@@ -1,0 +1,853 @@
+/* =========================================
+   System Health — Circuit Breaker Dashboard
+   ========================================= */
+
+.system-health {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    color: rgba(255, 255, 255, 0.95);
+    animation: fadeIn 0.5s ease-out;
+}
+
+.sh-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+}
+
+.sh-header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.sh-header h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.sh-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.sh-last-updated {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.sh-refresh-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.25s ease;
+    backdrop-filter: blur(10px);
+}
+
+.sh-refresh-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+}
+
+.sh-refresh-btn.spinning svg {
+    animation: spin 1s linear infinite;
+}
+
+.sh-auto-refresh {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.sh-auto-refresh input[type="checkbox"] {
+    accent-color: var(--primary-500);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+/* ─── Overall Health Banner ───────────────────────────────────── */
+
+.sh-health-banner {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem 2rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    transition: all 0.4s ease;
+}
+
+.sh-health-banner.healthy {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(52, 211, 153, 0.06) 100%);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.sh-health-banner.degraded {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(251, 191, 36, 0.06) 100%);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.sh-health-banner.critical {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(248, 113, 113, 0.06) 100%);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    animation: pulseBorder 2s ease-in-out infinite;
+}
+
+.sh-health-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    flex-shrink: 0;
+}
+
+.sh-health-banner.healthy .sh-health-icon {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+}
+
+.sh-health-banner.degraded .sh-health-icon {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+}
+
+.sh-health-banner.critical .sh-health-icon {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+}
+
+.sh-health-text h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem 0;
+}
+
+.sh-health-text p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* ─── Summary Stats Row ──────────────────────────────────────── */
+
+.sh-stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.sh-stat-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.25rem 1rem;
+    text-align: center;
+}
+
+.sh-stat-value {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 0.25rem;
+    line-height: 1;
+}
+
+.sh-stat-value.green {
+    color: #34d399;
+}
+
+.sh-stat-value.yellow {
+    color: #fbbf24;
+}
+
+.sh-stat-value.red {
+    color: #f87171;
+}
+
+.sh-stat-value.blue {
+    color: #818cf8;
+}
+
+.sh-stat-label {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 600;
+}
+
+/* ─── Circuit Breaker Cards ──────────────────────────────────── */
+
+.sh-breakers-section-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+    color: rgba(255, 255, 255, 0.85);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sh-breakers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.sh-breaker-card {
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+}
+
+.sh-breaker-card-inner {
+    padding: 1.75rem;
+}
+
+/* State indicator bar at top of card */
+.sh-breaker-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+}
+
+.sh-breaker-card.state-closed::after {
+    background: linear-gradient(90deg, #10b981, #34d399);
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+}
+
+.sh-breaker-card.state-open::after {
+    background: linear-gradient(90deg, #ef4444, #f87171);
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+    animation: pulseGlow 2s ease-in-out infinite;
+}
+
+.sh-breaker-card.state-half_open::after {
+    background: linear-gradient(90deg, #f59e0b, #fbbf24);
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+}
+
+.sh-breaker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.25rem;
+}
+
+.sh-breaker-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.sh-breaker-desc {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.45);
+    margin-top: 0.25rem;
+}
+
+/* State Badge */
+.sh-state-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+
+.sh-state-badge.closed {
+    background: rgba(16, 185, 129, 0.12);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.sh-state-badge.open {
+    background: rgba(239, 68, 68, 0.12);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    animation: pulseOpacity 1.5s ease-in-out infinite;
+}
+
+.sh-state-badge.half_open {
+    background: rgba(245, 158, 11, 0.12);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.sh-state-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.sh-state-badge.closed .sh-state-dot {
+    background: #34d399;
+    box-shadow: 0 0 6px rgba(52, 211, 153, 0.6);
+}
+
+.sh-state-badge.open .sh-state-dot {
+    background: #f87171;
+    box-shadow: 0 0 6px rgba(248, 113, 113, 0.6);
+    animation: blink 1s ease-in-out infinite;
+}
+
+.sh-state-badge.half_open .sh-state-dot {
+    background: #fbbf24;
+    box-shadow: 0 0 6px rgba(251, 191, 36, 0.6);
+}
+
+/* ── Circuit Diagram Visual ─────────────────────────────────── */
+
+.sh-circuit-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    padding: 1.25rem 1rem;
+    margin-bottom: 1.25rem;
+    position: relative;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+}
+
+.sh-circuit-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    z-index: 1;
+}
+
+.sh-circuit-node-circle {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 700;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.06);
+    transition: all 0.3s ease;
+}
+
+.sh-circuit-node-label {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.sh-circuit-node.active .sh-circuit-node-circle {
+    border-color: rgba(99, 102, 241, 0.6);
+    background: rgba(99, 102, 241, 0.15);
+    color: #818cf8;
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+}
+
+.sh-circuit-node.success .sh-circuit-node-circle {
+    border-color: rgba(16, 185, 129, 0.6);
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+}
+
+.sh-circuit-node.danger .sh-circuit-node-circle {
+    border-color: rgba(239, 68, 68, 0.6);
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+}
+
+.sh-circuit-node.warning .sh-circuit-node-circle {
+    border-color: rgba(245, 158, 11, 0.6);
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+}
+
+.sh-circuit-wire {
+    width: 60px;
+    height: 2px;
+    position: relative;
+    z-index: 0;
+    margin-bottom: 1.4rem;
+}
+
+.sh-circuit-wire.flowing {
+    background: rgba(16, 185, 129, 0.3);
+}
+
+.sh-circuit-wire.flowing::after {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 20px;
+    height: 4px;
+    border-radius: 2px;
+    background: #34d399;
+    box-shadow: 0 0 8px rgba(52, 211, 153, 0.6);
+    animation: flowRight 1.5s linear infinite;
+}
+
+.sh-circuit-wire.blocked {
+    background: rgba(239, 68, 68, 0.3);
+}
+
+.sh-circuit-wire.blocked::after {
+    content: '✕';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #f87171;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.sh-circuit-wire.testing {
+    background: rgba(245, 158, 11, 0.3);
+}
+
+.sh-circuit-wire.testing::after {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 12px;
+    height: 4px;
+    border-radius: 2px;
+    background: #fbbf24;
+    box-shadow: 0 0 8px rgba(251, 191, 36, 0.6);
+    animation: flowRight 2.5s linear infinite;
+}
+
+/* ── Metrics Grid ────────────────────────────────────────────── */
+
+.sh-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.sh-metric-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.75rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: all 0.2s ease;
+}
+
+.sh-metric-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.sh-metric-number {
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+}
+
+.sh-metric-number.success {
+    color: #34d399;
+}
+
+.sh-metric-number.danger {
+    color: #f87171;
+}
+
+.sh-metric-number.warning {
+    color: #fbbf24;
+}
+
+.sh-metric-number.neutral {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.sh-metric-label {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* ── Failure Rate Bar ────────────────────────────────────────── */
+
+/* ── Live Service Probe Badge ────────────────────────────────── */
+
+.sh-service-probe {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.sh-service-probe.online {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    color: #34d399;
+}
+
+.sh-service-probe.offline {
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #f87171;
+}
+
+.sh-probe-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.sh-service-probe.online .sh-probe-indicator {
+    background: #34d399;
+    box-shadow: 0 0 8px rgba(52, 211, 153, 0.6);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.sh-service-probe.offline .sh-probe-indicator {
+    background: #f87171;
+    box-shadow: 0 0 8px rgba(248, 113, 113, 0.6);
+    animation: blink 1s ease-in-out infinite;
+}
+
+.sh-probe-text {
+    flex: 1;
+}
+
+.sh-probe-latency {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.8rem;
+}
+
+.sh-failure-rate-section {
+    margin-bottom: 0.25rem;
+}
+
+.sh-failure-rate-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.sh-failure-rate-label {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 600;
+}
+
+.sh-failure-rate-value {
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.sh-failure-rate-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+.sh-failure-rate-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.sh-failure-rate-fill.low {
+    background: linear-gradient(90deg, #10b981, #34d399);
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
+}
+
+.sh-failure-rate-fill.medium {
+    background: linear-gradient(90deg, #f59e0b, #fbbf24);
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
+}
+
+.sh-failure-rate-fill.high {
+    background: linear-gradient(90deg, #ef4444, #f87171);
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
+}
+
+.sh-failure-threshold {
+    position: absolute;
+    top: -3px;
+    bottom: -3px;
+    width: 2px;
+    background: rgba(255, 255, 255, 0.6);
+    z-index: 2;
+}
+
+.sh-failure-threshold-label {
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.6rem;
+    color: rgba(255, 255, 255, 0.4);
+    white-space: nowrap;
+}
+
+/* ─── State Description ──────────────────────────────────────── */
+
+.sh-state-description {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.sh-state-description-icon {
+    flex-shrink: 0;
+}
+
+/* ─── Loading ────────────────────────────────────────────────── */
+
+.sh-loading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    gap: 1rem;
+}
+
+.sh-loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--primary-500);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.sh-loading p {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1rem;
+}
+
+.sh-error {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh;
+    text-align: center;
+    gap: 1rem;
+}
+
+.sh-error h2 {
+    font-size: 1.4rem;
+    margin: 0;
+}
+
+.sh-error p {
+    color: rgba(255, 255, 255, 0.5);
+    max-width: 400px;
+}
+
+/* ─── Animations ─────────────────────────────────────────────── */
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes flowRight {
+    0% {
+        left: -20px;
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        left: calc(100%);
+        opacity: 0;
+    }
+}
+
+@keyframes pulseGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 24px rgba(239, 68, 68, 0.7);
+    }
+}
+
+@keyframes pulseBorder {
+
+    0%,
+    100% {
+        border-color: rgba(239, 68, 68, 0.25);
+    }
+
+    50% {
+        border-color: rgba(239, 68, 68, 0.5);
+    }
+}
+
+@keyframes pulseOpacity {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
+}
+
+/* ─── Responsive ─────────────────────────────────────────────── */
+
+@media (max-width: 1024px) {
+    .sh-stats-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .sh-breakers-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .system-health {
+        padding: 1rem;
+    }
+
+    .sh-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .sh-stats-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .sh-metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .sh-circuit-wire {
+        width: 30px;
+    }
+}
+
+/* Light Theme */
+[data-theme="light"] .system-health {
+    color: var(--gray-900);
+}
+
+[data-theme="light"] .sh-health-text p,
+[data-theme="light"] .sh-state-description,
+[data-theme="light"] .sh-last-updated,
+[data-theme="light"] .sh-auto-refresh {
+    color: var(--gray-600);
+}
+
+[data-theme="light"] .sh-circuit-visual {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="light"] .sh-metric-item {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .sh-refresh-btn {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.12);
+    color: var(--gray-800);
+}
+
+[data-theme="light"] .sh-refresh-btn:hover {
+    background: rgba(0, 0, 0, 0.08);
+}
