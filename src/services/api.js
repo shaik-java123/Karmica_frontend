@@ -422,5 +422,10 @@ export const chatbotAPI = {
         api.post('/chatbot/chat', { message, history }),
 };
 
+// Admin API
+export const adminAPI = {
+    getCircuitBreakers: () => api.get('/admin/circuit-breakers'),
+};
+
 export default api;
 
