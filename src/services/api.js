@@ -337,6 +337,20 @@ export const inventoryAPI = {
         api.put(`/inventory/requests/${id}/process`, { action, comments }),
 };
 
+// Job Posting API
+export const jobPostingAPI = {
+    getAll: (params) => api.get('/job-postings', { params }),
+    getStats: () => api.get('/job-postings/stats'),
+    create: (data) => api.post('/job-postings', data),
+    update: (id, data) => api.put(`/job-postings/${id}`, data),
+    publish: (id) => api.put(`/job-postings/${id}/publish`),
+    close: (id) => api.put(`/job-postings/${id}/close`),
+    hold: (id) => api.put(`/job-postings/${id}/hold`),
+    delete: (id) => api.delete(`/job-postings/${id}`),
+    getApplications: (jobId) => api.get(`/job-postings/${jobId}/applications`),
+    updateApplicationStatus: (appId, data) => api.put(`/job-postings/applications/${appId}/status`, data),
+};
+
 // Chatbot AI API
 export const chatbotAPI = {
     /**
