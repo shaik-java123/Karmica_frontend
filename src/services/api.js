@@ -359,6 +359,58 @@ export const resumeValidationAPI = {
     getTopCandidates: (minScore) => api.get(`/recruitment/applications/top-candidates?minScore=${minScore}`)
 };
 
+// LMS (Learning Management System) API
+export const lmsAPI = {
+    // Stats & Overview
+    getStats: () => api.get('/lms/stats'),
+    getMyStats: () => api.get('/lms/my-stats'),
+
+    // Course Management
+    getCourses: (search) => api.get('/lms/courses', { params: { search } }),
+    getCourse: (id) => api.get(`/lms/courses/${id}`),
+    createCourse: (data) => api.post('/lms/courses', data),
+    updateCourse: (id, data) => api.put(`/lms/courses/${id}`, data),
+    publishCourse: (id) => api.post(`/lms/courses/${id}/publish`),
+    archiveCourse: (id) => api.post(`/lms/courses/${id}/archive`),
+    deleteCourse: (id) => api.delete(`/lms/courses/${id}`),
+
+    // Content/Lessons
+    getLessons: (courseId) => api.get(`/lms/courses/${courseId}/lessons`),
+    addLesson: (courseId, data, file) => {
+        const formData = new FormData();
+        formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+        if (file) formData.append('file', file);
+        return api.post(`/lms/courses/${courseId}/lessons`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+    },
+    updateLesson: (lessonId, data, file) => {
+        const formData = new FormData();
+        formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+        if (file) formData.append('file', file);
+        return api.put(`/lms/lessons/${lessonId}`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+    },
+    deleteLesson: (lessonId) => api.delete(`/lms/lessons/${lessonId}`),
+
+    // Enrollments
+    enroll: (courseId) => api.post(`/lms/courses/${courseId}/enroll`),
+    getMyEnrollments: () => api.get('/lms/my-enrollments'),
+    getCourseEnrollments: (courseId) => api.get(`/lms/courses/${courseId}/enrollments`),
+    updateProgress: (courseId, percent) => api.put(`/lms/courses/${courseId}/progress`, { percent }),
+    dropCourse: (courseId) => api.delete(`/lms/courses/${courseId}/enroll`),
+    requestRevisit: (courseId) => api.post(`/lms/courses/${courseId}/revisit`),
+    approveRevisit: (enrollmentId) => api.post(`/lms/enrollments/${enrollmentId}/approve-revisit`),
+
+    // Virtual Classes/Sessions
+    getCourseSessions: (courseId) => api.get(`/lms/courses/${courseId}/sessions`),
+    getUpcomingSessions: () => api.get('/lms/sessions/upcoming'),
+    scheduleSession: (courseId, data) => api.post(`/lms/courses/${courseId}/sessions`, data),
+    updateSession: (sessionId, data) => api.put(`/lms/sessions/${sessionId}`, data),
+    deleteSession: (sessionId) => api.delete(`/lms/sessions/${sessionId}`),
+};
+
 // Chatbot AI API
 export const chatbotAPI = {
     /**
