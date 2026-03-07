@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ||
+    (import.meta.env.PROD ? 'https://karmika-backend-1.onrender.com/api' : 'http://localhost:8080/api');
 
 const api = axios.create({
     baseURL: API_BASE_URL,
@@ -318,6 +319,22 @@ export const onboardingAPI = {
     // Shared
     getOnboardingData: (employeeId) => api.get(`/onboarding/employee/${employeeId}`),
     getSummary: (employeeId) => api.get(`/onboarding/employee/${employeeId}/summary`),
+};
+
+// Inventory API
+export const inventoryAPI = {
+    // Items (HR manages)
+    getItems: () => api.get('/inventory/items'),
+    createItem: (data) => api.post('/inventory/items', data),
+    updateItem: (id, data) => api.put(`/inventory/items/${id}`, data),
+    deleteItem: (id) => api.delete(`/inventory/items/${id}`),
+
+    // Requests
+    getMyRequests: () => api.get('/inventory/requests/my'),
+    getAllRequests: () => api.get('/inventory/requests'),
+    createRequest: (data) => api.post('/inventory/requests', data),
+    processRequest: (id, action, comments) =>
+        api.put(`/inventory/requests/${id}/process`, { action, comments }),
 };
 
 // Chatbot AI API
