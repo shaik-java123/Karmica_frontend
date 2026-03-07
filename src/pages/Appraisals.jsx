@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { appraisalAPI, employeeAPI } from '../services/api';
 import BackButton from '../components/BackButton';
+import Icon from '../components/Icon';
 import GoalsTab from './GoalsTab';
 import './Appraisals.css';
 
@@ -37,7 +38,8 @@ const Appraisals = () => {
         enablePeerReview: true,
         enableSubordinateReview: false,
         minPeerReviewers: 2,
-        maxPeerReviewers: 5
+        maxPeerReviewers: 5,
+        competencyIds: []
     });
 
     // Competencies State (Admin/HR)
@@ -132,11 +134,14 @@ const Appraisals = () => {
             setLoading(false);
         }
     };
-
     const handleCreateCycle = async (e) => {
         e.preventDefault();
         try {
-            await appraisalAPI.createCycle(cycleForm);
+            const payload = {
+                ...cycleForm,
+                competencies: cycleForm.competencyIds.map(id => ({ id }))
+            };
+            await appraisalAPI.createCycle(payload);
             toast.success('Appraisal cycle created successfully');
             setShowCycleModal(false);
             resetCycleForm();
@@ -162,6 +167,22 @@ const Appraisals = () => {
         }
     };
 
+    const handleDeleteCycle = async (cycleId) => {
+        if (!window.confirm('Are you sure you want to delete this cycle? This cannot be undone if it is a draft.')) {
+            return;
+        }
+        try {
+            setLoading(true);
+            await appraisalAPI.deleteCycle(cycleId);
+            toast.success('Cycle deleted successfully');
+            fetchCycles();
+        } catch (error) {
+            toast.error(error.response?.data?.error || 'Failed to delete cycle');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handleCreateCompetency = async (e) => {
         e.preventDefault();
         try {
@@ -172,6 +193,22 @@ const Appraisals = () => {
             fetchCompetencies();
         } catch (error) {
             toast.error(error.response?.data?.error || 'Failed to create competency');
+        }
+    };
+
+    const handleDeleteCompetency = async (compId) => {
+        if (!window.confirm('Are you sure you want to remove this competency?')) {
+            return;
+        }
+        try {
+            setLoading(true);
+            await appraisalAPI.deleteCompetency(compId);
+            toast.success('Competency removed successfully');
+            fetchCompetencies();
+        } catch (error) {
+            toast.error(error.response?.data?.error || 'Failed to remove competency');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -262,7 +299,8 @@ const Appraisals = () => {
             enablePeerReview: true,
             enableSubordinateReview: false,
             minPeerReviewers: 2,
-            maxPeerReviewers: 5
+            maxPeerReviewers: 5,
+            competencyIds: []
         });
     };
 
@@ -280,13 +318,14 @@ const Appraisals = () => {
 
     const getBandIcon = (band) => {
         const icons = {
-            OUTSTANDING: '🌟',
-            EXCEEDS: '🟢',
-            MEETS: '🔵',
-            NEEDS_IMPROVEMENT: '🟡',
-            UNSATISFACTORY: '🔴',
+            OUTSTANDING: 'star',
+            EXCEEDS: 'award',
+            MEETS: 'check',
+            NEEDS_IMPROVEMENT: 'trending',
+            UNSATISFACTORY: 'back',
         };
-        return icons[band] || '⚪';
+        const name = icons[band] || 'info';
+        return <Icon name={name} size={18} />;
     };
 
     // Handles both ISO string ("2026-01-15") and Java LocalDate array ([2026, 1, 15])
@@ -304,12 +343,12 @@ const Appraisals = () => {
     };
 
     const CYCLE_TYPE_CFG = {
-        ANNUAL: { label: 'Annual', icon: '📅', color: '#2563eb', bg: '#dbeafe' },
-        SEMI_ANNUAL: { label: 'Half-Yearly', icon: '📆', color: '#7c3aed', bg: '#ede9fe' },
-        QUARTERLY: { label: 'Quarterly', icon: '🗓️', color: '#059669', bg: '#d1fae5' },
-        PROBATION: { label: 'Probation', icon: '🔎', color: '#d97706', bg: '#fef3c7' },
-        PIP: { label: 'PIP', icon: '📈', color: '#dc2626', bg: '#fee2e2' },
-        PROJECT_END: { label: 'Project End', icon: '🏁', color: '#6b7280', bg: '#f3f4f6' },
+        ANNUAL: { label: 'Annual', icon: 'calendar', color: '#2563eb', bg: '#dbeafe' },
+        SEMI_ANNUAL: { label: 'Half-Yearly', icon: 'calendar', color: '#7c3aed', bg: '#ede9fe' },
+        QUARTERLY: { label: 'Quarterly', icon: 'calendar', color: '#059669', bg: '#d1fae5' },
+        PROBATION: { label: 'Probation', icon: 'search', color: '#d97706', bg: '#fef3c7' },
+        PIP: { label: 'PIP', icon: 'trending', color: '#dc2626', bg: '#fee2e2' },
+        PROJECT_END: { label: 'Project End', icon: 'check', color: '#6b7280', bg: '#f3f4f6' },
     };
 
     const getStatusBadgeClass = (status) => {
@@ -333,7 +372,9 @@ const Appraisals = () => {
     return (
         <div className="appraisals-page">
             <BackButton to="/dashboard" label="Back to Dashboard" />
-            <h1>🎯 Performance Appraisals</h1>
+            <h1>
+                <Icon name="target" size={32} className="header-icon" /> Performance Appraisals
+            </h1>
 
             <div className="tabs">
                 <button
@@ -355,7 +396,7 @@ const Appraisals = () => {
                     className={activeTab === 'goals' ? 'tab active' : 'tab'}
                     onClick={() => setActiveTab('goals')}
                 >
-                    🎯 Goals & Targets
+                    <Icon name="target" size={18} /> Goals & Targets
                 </button>
                 {isManagerOrAbove && (
                     <button
@@ -395,10 +436,14 @@ const Appraisals = () => {
                     </div>
 
                     {loading ? (
-                        <div className="loading">⏳ Loading appraisals...</div>
+                        <div className="loading">
+                            <Icon name="clock" size={24} className="spin" /> Loading appraisals...
+                        </div>
                     ) : myAppraisals.length === 0 ? (
                         <div className="appraisal-empty-state">
-                            <div className="appraisal-empty-icon">📋</div>
+                            <div className="appraisal-empty-icon">
+                                <Icon name="tasks" size={64} />
+                            </div>
                             <h3>No appraisals yet</h3>
                             <p>Your manager or HR will create an appraisal cycle and assign you once it's activated.</p>
                         </div>
@@ -407,14 +452,32 @@ const Appraisals = () => {
                             {myAppraisals.map((appraisal) => {
                                 const cycleType = appraisal.cycleType;
                                 const tcfg = CYCLE_TYPE_CFG[cycleType] || null;
+
+                                // Progress bar — count every review step definitively
                                 const completionPct = (() => {
                                     let done = 0, total = 0;
-                                    if (appraisal.selfReviewCompleted != null) { total++; if (appraisal.selfReviewCompleted) done++; }
-                                    if (appraisal.managerReviewCompleted != null) { total++; if (appraisal.managerReviewCompleted) done++; }
-                                    if ((appraisal.peerReviewsRequired || 0) > 0) {
-                                        total += appraisal.peerReviewsRequired;
-                                        done += Math.min(appraisal.peerReviewsCompleted || 0, appraisal.peerReviewsRequired);
+
+                                    // Self-review: always a step (true=done, false/null=pending)
+                                    total++;
+                                    if (appraisal.selfReviewCompleted === true) done++;
+
+                                    // Manager review: always a step
+                                    total++;
+                                    if (appraisal.managerReviewCompleted === true) done++;
+
+                                    // Peer reviews: only if required
+                                    const peerReq = appraisal.peerReviewsRequired || 0;
+                                    if (peerReq > 0) {
+                                        total += peerReq;
+                                        done += Math.min(appraisal.peerReviewsCompleted || 0, peerReq);
                                     }
+
+                                    // Final performance rating: bonus step
+                                    if (appraisal.performanceRating) {
+                                        total++;
+                                        done++;
+                                    }
+
                                     return total > 0 ? Math.round((done / total) * 100) : 0;
                                 })();
 
@@ -426,7 +489,7 @@ const Appraisals = () => {
                                                 <h3>{appraisal.cycleName || 'Appraisal'}</h3>
                                                 {tcfg && (
                                                     <span className="appraisal-cycle-type-chip" style={{ color: tcfg.color, background: tcfg.bg }}>
-                                                        {tcfg.icon} {tcfg.label}
+                                                        <Icon name={tcfg.icon} size={14} /> {tcfg.label}
                                                     </span>
                                                 )}
                                             </div>
@@ -459,20 +522,32 @@ const Appraisals = () => {
                                                 <div className="progress-item">
                                                     <span>Self Review</span>
                                                     <span className={appraisal.selfReviewCompleted ? 'completed' : 'pending'}>
-                                                        {appraisal.selfReviewCompleted ? '✓ Done' : '⏳ Pending'}
+                                                        {appraisal.selfReviewCompleted ? <Icon name="check" size={14} /> : <Icon name="clock" size={14} />}
+                                                        {appraisal.selfReviewCompleted ? ' Done' : ' Pending'}
                                                     </span>
                                                 </div>
                                                 <div className="progress-item">
                                                     <span>Manager Review</span>
                                                     <span className={appraisal.managerReviewCompleted ? 'completed' : 'pending'}>
-                                                        {appraisal.managerReviewCompleted ? '✓ Done' : '⏳ Pending'}
+                                                        {appraisal.managerReviewCompleted ? <Icon name="check" size={14} /> : <Icon name="clock" size={14} />}
+                                                        {appraisal.managerReviewCompleted ? ' Done' : ' Awaiting Manager'}
                                                     </span>
                                                 </div>
                                                 {(appraisal.peerReviewsRequired || 0) > 0 && (
                                                     <div className="progress-item">
                                                         <span>Peer Reviews</span>
                                                         <span className={(appraisal.peerReviewsCompleted || 0) >= appraisal.peerReviewsRequired ? 'completed' : 'pending'}>
-                                                            {appraisal.peerReviewsCompleted || 0} / {appraisal.peerReviewsRequired} {appraisal.peerReviewsRequired > 0 && (appraisal.peerReviewsCompleted || 0) === 0 ? '(Nominated)' : ''}
+                                                            {appraisal.peerReviewsCompleted || 0}/{appraisal.peerReviewsRequired} done
+                                                        </span>
+                                                    </div>
+                                                )}
+                                                {appraisal.managerReviewCompleted && (
+                                                    <div className="progress-item">
+                                                        <span>Performance Band</span>
+                                                        <span className={appraisal.performanceRating ? 'completed' : 'pending'}>
+                                                            {appraisal.performanceRating
+                                                                ? `✓ ${appraisal.performanceRating.replace(/_/g, ' ')}`
+                                                                : '⏳ Pending Finalization'}
                                                         </span>
                                                     </div>
                                                 )}
@@ -481,7 +556,7 @@ const Appraisals = () => {
                                             {/* Manager info */}
                                             {appraisal.managerName && (
                                                 <div className="appraisal-manager-row">
-                                                    <span>👔 Manager:</span>
+                                                    <span><Icon name="users" size={14} /> Manager:</span>
                                                     <strong>{appraisal.managerName}</strong>
                                                 </div>
                                             )}
@@ -558,7 +633,8 @@ const Appraisals = () => {
                                                     className="btn btn-secondary appraisal-peer-btn"
                                                     onClick={() => {
                                                         setCurrentAppraisalForPeers(appraisal);
-                                                        setSelectedPeers([]); // Reset for new selection
+                                                        // Pre-load already-nominated peers instead of resetting
+                                                        setSelectedPeers(appraisal.peerReviewerIds || []);
                                                         setPeerSearchQuery('');
                                                         setShowPeerModal(true);
                                                         employeeAPI.getAll()
@@ -566,7 +642,7 @@ const Appraisals = () => {
                                                             .catch(err => toast.error('Failed to load colleague list'));
                                                     }}
                                                 >
-                                                    👥 {appraisal.peerReviewsRequired > 0 ? 'Manage Peer Reviewers' : 'Select Peer Reviewers'}
+                                                    <Icon name="users" size={18} /> {(appraisal.peerReviewerIds || []).length > 0 ? 'Change Peer Reviewers' : 'Select Peer Reviewers'}
                                                 </button>
                                             )}
                                         </div>
@@ -583,13 +659,28 @@ const Appraisals = () => {
                 <div className="reviews-section">
                     <div className="section-header">
                         <h2>Pending Reviews</h2>
-                        <p>Complete reviews for your colleagues</p>
+                        <p>Complete reviews assigned to you for colleagues</p>
+                    </div>
+
+                    {/* ── Role explanation banner ── */}
+                    <div style={{ background: 'linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 100%)', border: '1px solid #c7d7f9', borderRadius: '12px', padding: '16px 20px', marginBottom: '20px', display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+                        <div style={{ fontSize: '1.6rem', lineHeight: 1 }}>📋</div>
+                        <div>
+                            <div style={{ fontWeight: 700, color: '#1e3a8a', fontSize: '0.95rem', marginBottom: '6px' }}>How Reviews Work</div>
+                            <div style={{ fontSize: '0.85rem', color: '#374151', lineHeight: 1.6 }}>
+                                <strong><Icon name="users" size={14} /> Self Review:</strong> As an employee, you evaluate your own competencies and overall performance.<br />
+                                <strong><Icon name="users" size={14} /> Manager Review:</strong> Your manager rates your competencies, reviews your goals, and submits qualitative feedback.<br />
+                                <strong><Icon name="users" size={14} /> Peer Review:</strong> Colleagues nominated by the employee provide anonymous 360° feedback on collaboration and behavior.<br />
+                                <br />
+                                <em>After all required reviews are submitted, the manager finalizes the <strong>Performance Band</strong> using the <strong>Rate Employees</strong> tab.</em>
+                            </div>
+                        </div>
                     </div>
 
                     {loading ? (
                         <div className="loading">Loading...</div>
                     ) : pendingReviews.length === 0 ? (
-                        <div className="no-data">No pending reviews</div>
+                        <div className="no-data">No pending reviews — you're all caught up! ✅</div>
                     ) : (
                         <div className="reviews-list">
                             {pendingReviews.map((review) => (
@@ -598,14 +689,27 @@ const Appraisals = () => {
                                         <h3>{review.employeeName}</h3>
                                         <p className="cycle-name">{review.cycleName}</p>
                                         <span className="review-type-badge">
-                                            {review.reviewerType.replace(/_/g, ' ')}
+                                            {review.reviewerType === 'SELF' ? <span><Icon name="users" size={14} /> Self Review</span>
+                                                : review.reviewerType === 'MANAGER' ? <span><Icon name="users" size={14} /> Manager Review</span>
+                                                    : review.reviewerType === 'PEER' ? <span><Icon name="users" size={14} /> Peer Review</span>
+                                                        : review.reviewerType.replace(/_/g, ' ')}
                                         </span>
+                                        {review.reviewerType === 'PEER' && (
+                                            <p style={{ margin: '4px 0 0', fontSize: '0.78rem', color: '#6b7280' }}>
+                                                🔒 Your feedback is anonymous to the employee
+                                            </p>
+                                        )}
+                                        {review.reviewerType === 'MANAGER' && (
+                                            <p style={{ margin: '4px 0 0', fontSize: '0.78rem', color: '#6b7280' }}>
+                                                ⚠️ After submitting, go to <strong>Rate Employees</strong> to finalize the performance band
+                                            </p>
+                                        )}
                                     </div>
                                     <button
                                         className="btn btn-primary"
                                         onClick={() => handleStartReview(review.reviewId)}
                                     >
-                                        Start Review
+                                        {review.status === 'IN_PROGRESS' ? <span><Icon name="edit" size={16} /> Continue Review</span> : <span><Icon name="check" size={16} /> Start Review</span>}
                                     </button>
                                 </div>
                             ))}
@@ -621,7 +725,7 @@ const Appraisals = () => {
             {activeTab === 'rate-employees' && isManagerOrAbove && (
                 <div className="rating-section">
                     <div className="section-header">
-                        <h2>🏅 Rate Employees</h2>
+                        <h2><Icon name="award" size={24} /> Rate Employees</h2>
                         <p>Finalize performance bands using the 60 % goal achievement + 40 % competency review formula.</p>
                     </div>
 
@@ -662,22 +766,42 @@ const Appraisals = () => {
                                     </div>
 
                                     <div className="rating-card-body">
-                                        <div className="mini-progress-row">
-                                            <span>Self Review</span>
-                                            <span className={ap.selfReviewCompleted ? 'check-done' : 'check-pend'}>
-                                                {ap.selfReviewCompleted ? '✔' : '○'}
-                                            </span>
+                                        {/* Two-step process indicator */}
+                                        <div style={{ background: '#f8fafc', borderRadius: '8px', padding: '10px 12px', marginBottom: '10px', border: '1px solid #e2e8f0' }}>
+                                            <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '8px' }}>Review Progress</div>
+                                            <div className="mini-progress-row">
+                                                <span>① Self Review</span>
+                                                <span className={ap.selfReviewCompleted ? 'check-done' : 'check-pend'}>
+                                                    {ap.selfReviewCompleted ? '✔ Done' : '○ Pending'}
+                                                </span>
+                                            </div>
+                                            <div className="mini-progress-row">
+                                                <span>② Manager Review <span style={{ fontSize: '0.7rem', color: '#6366f1', fontWeight: 700 }}>(Step 1)</span></span>
+                                                <span className={ap.managerReviewCompleted ? 'check-done' : 'check-pend'}>
+                                                    {ap.managerReviewCompleted ? '✔ Submitted' : '○ Not yet'}
+                                                </span>
+                                            </div>
+                                            {(ap.peerReviewsRequired || 0) > 0 && (
+                                                <div className="mini-progress-row">
+                                                    <span>Peer Reviews</span>
+                                                    <span className={(ap.peerReviewsCompleted || 0) >= ap.peerReviewsRequired ? 'check-done' : 'check-pend'}>
+                                                        {ap.peerReviewsCompleted || 0}/{ap.peerReviewsRequired}
+                                                    </span>
+                                                </div>
+                                            )}
+                                            <div className="mini-progress-row" style={{ marginTop: '4px', paddingTop: '6px', borderTop: '1px dashed #e2e8f0' }}>
+                                                <span>③ Performance Band <span style={{ fontSize: '0.7rem', color: '#dc2626', fontWeight: 700 }}>(Step 2)</span></span>
+                                                <span className={ap.performanceRating ? 'check-done' : 'check-pend'}>
+                                                    {ap.performanceRating ? `✔ ${ap.performanceRating.replace(/_/g, ' ')}` : '○ Not finalized'}
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div className="mini-progress-row">
-                                            <span>Manager Review</span>
-                                            <span className={ap.managerReviewCompleted ? 'check-done' : 'check-pend'}>
-                                                {ap.managerReviewCompleted ? '✔' : '○'}
-                                            </span>
-                                        </div>
-                                        <div className="mini-progress-row">
-                                            <span>Overall Rating</span>
-                                            <span>{ap.overallRating ? `${ap.overallRating.toFixed(1)} / 5` : '—'}</span>
-                                        </div>
+                                        {ap.overallRating && (
+                                            <div className="mini-progress-row">
+                                                <span>Avg Competency Rating</span>
+                                                <span style={{ fontWeight: 700 }}>{ap.overallRating.toFixed(1)} / 5</span>
+                                            </div>
+                                        )}
                                         {ap.performanceRating && (
                                             <div className={`band-badge band-${ap.performanceRating.toLowerCase()}`}>
                                                 {getBandIcon(ap.performanceRating)} {ap.performanceRating.replace(/_/g, ' ')}
@@ -686,13 +810,20 @@ const Appraisals = () => {
                                     </div>
 
                                     <div className="rating-card-footer">
+                                        {!ap.managerReviewCompleted && (
+                                            <div style={{ fontSize: '0.78rem', color: '#d97706', background: '#fef3c7', border: '1px solid #fde68a', borderRadius: '6px', padding: '6px 10px', marginBottom: '8px' }}>
+                                                ⚠️ Complete your <strong>Manager Review</strong> first (in Pending Reviews tab)
+                                            </div>
+                                        )}
                                         <button
-                                            className="btn btn-primary btn-sm"
+                                            className={`btn btn-sm ${ap.managerReviewCompleted ? 'btn-primary' : 'btn-secondary'}`}
                                             onClick={() => handleOpenRatingModal(ap.id)}
+                                            title={!ap.managerReviewCompleted ? 'Submit the manager competency review first' : ''}
                                         >
                                             {ap.performanceRating ? '✏️ Revise Rating' : '🏅 Calculate & Rate'}
                                         </button>
                                     </div>
+
                                 </div>
                             ))}
                         </div>
@@ -721,6 +852,17 @@ const Appraisals = () => {
                                         <div className="cycle-card-header">
                                             <div className="cycle-card-title-row">
                                                 <h3>{cycle.cycleName}</h3>
+                                                <div className="cycle-card-actions">
+                                                    {(cycle.status === 'DRAFT' || cycle.status === 'CANCELLED') && (
+                                                        <button
+                                                            className="btn-icon delete"
+                                                            onClick={(e) => { e.stopPropagation(); handleDeleteCycle(cycle.id); }}
+                                                            title="Delete Cycle"
+                                                        >
+                                                            🗑️
+                                                        </button>
+                                                    )}
+                                                </div>
                                                 <div className="cycle-card-badges">
                                                     <span
                                                         className="cycle-type-badge"
@@ -738,6 +880,7 @@ const Appraisals = () => {
                                             )}
                                         </div>
                                         <div className="cycle-card-body">
+                                            {/* ... existing body ... */}
                                             <div className="cycle-dates">
                                                 <div className="cycle-date-block">
                                                     <span className="cycle-date-label">📋 Review Period</span>
@@ -795,7 +938,16 @@ const Appraisals = () => {
                         <div className="competencies-grid">
                             {competencies.map((comp) => (
                                 <div key={comp.id} className={`competency-card ${comp.category.toLowerCase()}`}>
-                                    <h3>{comp.name}</h3>
+                                    <div className="comp-card-header">
+                                        <h3>{comp.name}</h3>
+                                        <button
+                                            className="btn-icon delete"
+                                            onClick={() => handleDeleteCompetency(comp.id)}
+                                            title="Delete Competency"
+                                        >
+                                            🗑️
+                                        </button>
+                                    </div>
                                     <p className="code">Code: {comp.code}</p>
                                     <p className="category">{comp.category}</p>
                                     <p className="description">{comp.description}</p>
@@ -958,6 +1110,47 @@ const Appraisals = () => {
                                 </div>
                             )}
 
+                            <div className="form-group">
+                                <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <span>Select Competencies (Template)</span>
+                                    <span style={{ fontSize: '0.75rem', fontWeight: 400, color: '#6b7280' }}>
+                                        Empty = Use all active competencies
+                                    </span>
+                                </label>
+                                <div className="template-competency-picker" style={{
+                                    maxHeight: '200px',
+                                    overflowY: 'auto',
+                                    border: '1px solid #e5e7eb',
+                                    borderRadius: '6px',
+                                    padding: '10px',
+                                    background: '#f9fafb'
+                                }}>
+                                    {competencies.filter(c => c.isActive).map(comp => (
+                                        <label key={comp.id} style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '8px',
+                                            padding: '4px 0',
+                                            fontSize: '0.85rem',
+                                            cursor: 'pointer'
+                                        }}>
+                                            <input
+                                                type="checkbox"
+                                                checked={cycleForm.competencyIds.includes(comp.id)}
+                                                onChange={(e) => {
+                                                    const ids = e.target.checked
+                                                        ? [...cycleForm.competencyIds, comp.id]
+                                                        : cycleForm.competencyIds.filter(id => id !== comp.id);
+                                                    setCycleForm({ ...cycleForm, competencyIds: ids });
+                                                }}
+                                            />
+                                            <span><strong>{comp.name}</strong> ({comp.category})</span>
+                                        </label>
+                                    ))}
+                                    {competencies.length === 0 && <p style={{ fontSize: '0.8rem', color: '#9ca3af' }}>No active competencies found.</p>}
+                                </div>
+                            </div>
+
                             <div className="modal-actions">
                                 <button type="button" className="btn btn-secondary" onClick={() => setShowCycleModal(false)}>
                                     Cancel
@@ -1057,19 +1250,54 @@ const Appraisals = () => {
                 <div className="modal-overlay">
                     <div className="modal-content large">
                         <div className="modal-header">
-                            <h2>Select Peer Reviewers</h2>
-                            <button className="close-btn" onClick={() => setShowPeerModal(false)}>×</button>
+                            <div>
+                                <h2>👥 Select Peer Reviewers</h2>
+                                <p style={{ margin: '4px 0 0', fontSize: '0.85rem', color: 'rgba(255,255,255,0.85)', padding: 0, marginBottom: 0 }}>
+                                    Choose {currentAppraisalForPeers?.peerReviewsRequired || 2} to 5 colleagues
+                                </p>
+                            </div>
+                            <button
+                                onClick={() => setShowPeerModal(false)}
+                                style={{
+                                    background: 'rgba(255,255,255,0.25)',
+                                    border: '2px solid rgba(255,255,255,0.7)',
+                                    color: '#ffffff',
+                                    borderRadius: '50%',
+                                    width: '34px',
+                                    height: '34px',
+                                    fontSize: '1.3rem',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontWeight: 'bold',
+                                    lineHeight: 1,
+                                    flexShrink: 0
+                                }}
+                            >
+                                ×
+                            </button>
                         </div>
-                        <p>Select {currentAppraisalForPeers?.peerReviewsRequired || 2} to 5 colleagues to review your performance</p>
 
                         <div className="peer-multi-select-container">
-                            <label className="field-label">Search and Select Peer Reviewers</label>
+                            <label className="field-label">
+                                Search and Select Peer Reviewers
+                                {selectedPeers.length > 0 && (
+                                    <span style={{ fontWeight: 'normal', color: '#6366f1', marginLeft: '8px', fontSize: '0.85rem' }}>
+                                        ({selectedPeers.length} selected)
+                                    </span>
+                                )}
+                            </label>
 
                             {/* Selected Chips */}
                             <div className="peers-selected-chips">
                                 {selectedPeers.map(peerId => {
                                     const emp = employees.find(e => e.id === peerId);
-                                    if (!emp) return null;
+                                    if (!emp) return (
+                                        <div key={peerId} className="peer-chip" style={{ opacity: 0.6 }}>
+                                            <span>Loading...</span>
+                                        </div>
+                                    );
                                     return (
                                         <div key={peerId} className="peer-chip">
                                             <span>{emp.firstName} {emp.lastName}</span>
@@ -1082,7 +1310,8 @@ const Appraisals = () => {
                                         </div>
                                     );
                                 })}
-                                {selectedPeers.length === 0 && <span className="placeholder-text">No peers selected yet...</span>}
+                                {selectedPeers.length === 0 && <span className="placeholder-text">No peers selected yet — search below...</span>}
+
                             </div>
 
                             {/* Dropdown Input */}
@@ -1181,8 +1410,29 @@ const Appraisals = () => {
     );
 };
 
+// ─── Helper: star label map ──────────────────────────────────────────────────
+const STAR_LABELS = ['', 'Poor', 'Below Avg', 'Average', 'Good', 'Excellent'];
+
+// ─── StarDisplay (read-only) ─────────────────────────────────────────────────
+// Uses CSS classes (not inline styles) so they win over the blanket
+// ".modal-content span { color: #111 !important }" rule.
+const StarDisplay = ({ value }) => {
+    const numVal = Number(value) || 0;
+    return (
+        <span style={{ display: 'inline-flex', gap: '2px', alignItems: 'center' }}>
+            {[1, 2, 3, 4, 5].map(s => (
+                <span key={s} className={`star-char ${numVal >= s ? 'star-filled' : 'star-empty'}`}>★</span>
+            ))}
+            {numVal > 0
+                ? <span className="star-label">{STAR_LABELS[numVal]}</span>
+                : <span className="star-label star-label-none">Not rated</span>
+            }
+        </span>
+    );
+};
+
 // Review Submission Modal Component
-// `review` prop shape: { review, competencies, employee, existingRatings }
+// `review` prop shape: { review, competencies, employee, existingRatings, selfReview, peerReviews }
 const ReviewSubmissionModal = ({ review, onClose, toast }) => {
     // Pre-fill any existing ratings
     const initRatings = () => {
@@ -1202,14 +1452,20 @@ const ReviewSubmissionModal = ({ review, onClose, toast }) => {
     const [strengths, setStrengths] = useState(review.review?.strengths || '');
     const [areasOfImprovement, setAreasOfImprovement] = useState(review.review?.areasOfImprovement || '');
     const [submitting, setSubmitting] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(false);
 
-    // Correct data path: review.competencies (not review.data.competencies)
     const competencies = review.competencies || [];
     const employee = review.employee || {};
     const reviewObj = review.review || {};
     const goals = review.goals || [];
-    const otherReviews = review.otherReviews || [];
+    const otherReviews = review.otherReviews || []; // This includes all other reviews (self, peer, etc.)
     const isSubmitted = reviewObj.status === 'SUBMITTED';
+
+    const isManagerReview = reviewObj.reviewerType === 'MANAGER';
+
+    // Extract self-review and peer reviews from otherReviews for specific display
+    const selfReview = otherReviews.find(r => r.reviewerType === 'SELF');
+    const peerReviews = otherReviews.filter(r => r.reviewerType === 'PEER');
 
     const handleSubmit = async (e, isDraft = false) => {
         if (e) e.preventDefault();
@@ -1283,233 +1539,399 @@ const ReviewSubmissionModal = ({ review, onClose, toast }) => {
     const ratedCount = competencies.filter(c => ratings[c.id]).length;
 
     return (
-        <div className="modal-overlay">
-            <div className="modal-content extra-large">
-                <div className="modal-header">
+        <div className="modal-overlay" style={isExpanded ? { alignItems: 'stretch', padding: 0 } : {}}>
+            <div
+                className={`modal-content review-submission-modal ${isManagerReview ? 'extra-extra-large' : 'extra-large'} ${isExpanded ? 'modal-fullscreen' : ''}`}
+                style={isExpanded
+                    ? { display: 'flex', flexDirection: 'column', maxHeight: '100vh', height: '100vh', width: '100vw', maxWidth: '100vw', margin: 0, borderRadius: 0 }
+                    : { display: 'flex', flexDirection: 'column', maxHeight: '92vh' }
+                }
+            >
+                {/* ── Fixed Header ── */}
+                <div className="modal-header" style={{ flexShrink: 0 }}>
                     <div>
-                        <h2>📝 Performance Review</h2>
-                        <p style={{ margin: '4px 0 0', fontSize: '0.9rem', color: '#666' }}>
-                            Reviewing: <strong>{employee.firstName} {employee.lastName}</strong>
-                            {employee.designation && ` • ${employee.designation}`}
+                        <h2>
+                            {isManagerReview
+                                ? `📋 Appraisal Review — ${employee.firstName || ''} ${employee.lastName || ''}`
+                                : `📝 Performance Review — ${employee.firstName || ''} ${employee.lastName || ''}`}
+                        </h2>
+                        <p style={{ margin: '4px 0 0', fontSize: '0.85rem', color: 'rgba(255,255,255,0.85)', padding: 0, marginBottom: 0 }}>
+                            {employee.designation && <span>{employee.designation}</span>}
+                            {employee.designation && employee.department?.name && ' • '}
+                            {employee.department?.name && <span>{employee.department.name}</span>}
                         </p>
                     </div>
-                    <button className="close-btn" onClick={onClose}>×</button>
-                </div>
-
-                {/* Review type badge */}
-                {reviewObj.reviewerType && (
-                    <div style={{ padding: '0 24px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <div>
-                            <span className="review-type-badge">{(reviewObj.reviewerType || '').replace(/_/g, ' ')}</span>
-                            {isSubmitted && <span className="status-badge status-completed" style={{ marginLeft: '10px' }}>SUBMITTED</span>}
-                        </div>
-                        <button type="button" className="btn btn-secondary btn-sm" onClick={handleExport}>
-                            📊 Export to Excel
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                        <button type="button" onClick={handleExport}
+                            style={{ background: 'rgba(255,255,255,0.2)', color: 'white', border: '1px solid rgba(255,255,255,0.5)', borderRadius: '6px', padding: '5px 12px', fontSize: '0.8rem', cursor: 'pointer', fontWeight: 600 }}>
+                            📊 Export
+                        </button>
+                        {/* Expand / Collapse button */}
+                        <button
+                            type="button"
+                            onClick={() => setIsExpanded(v => !v)}
+                            title={isExpanded ? 'Exit fullscreen (Restore)' : 'Expand to fullscreen'}
+                            style={{
+                                background: 'rgba(255,255,255,0.2)',
+                                border: '2px solid rgba(255,255,255,0.7)',
+                                color: '#ffffff',
+                                borderRadius: '50%',
+                                width: '34px',
+                                height: '34px',
+                                fontSize: '1rem',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontWeight: 'bold',
+                                lineHeight: 1,
+                                flexShrink: 0,
+                                transition: 'background 0.2s'
+                            }}
+                        >
+                            {isExpanded ? '✖️' : '⛶'}
+                        </button>
+                        {/* Close button */}
+                        <button onClick={onClose}
+                            title="Close"
+                            style={{ background: 'rgba(255,255,255,0.25)', border: '2px solid rgba(255,255,255,0.7)', color: 'white', borderRadius: '50%', width: '34px', height: '34px', fontSize: '1.3rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', lineHeight: 1, flexShrink: 0 }}>
+                            ×
                         </button>
                     </div>
-                )}
+                </div>
 
-                <form onSubmit={(e) => handleSubmit(e, false)}>
-                    <div className="review-form">
-                        {/* Employee Goals Section */}
-                        {goals.length > 0 && (
-                            <div className="review-goals-breakdown">
-                                <h3>Linked Goals Details</h3>
-                                <div className="goal-breakdown-section">
-                                    <table className="goal-breakdown-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Goal</th>
-                                                <th>Weight</th>
-                                                <th>Progress</th>
-                                                <th>Status</th>
-                                                <th>Manager Comments</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {goals.map(g => (
-                                                <tr key={g.id}>
-                                                    <td>{g.title}</td>
-                                                    <td className="center">{g.weightage}%</td>
-                                                    <td>
-                                                        <div className="mini-bar-track">
-                                                            <div
-                                                                className="mini-bar-fill"
-                                                                style={{
+                {/* ── Fixed Sub-header strip ── */}
+                <div style={{ padding: '10px 20px', display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', borderBottom: '2px solid #e2e8f0', background: '#f8fafc', flexShrink: 0 }}>
+                    <span className="review-type-badge">{(reviewObj.reviewerType || '').replace(/_/g, ' ')}</span>
+                    {isSubmitted && <span className="status-badge status-completed" style={{ color: '#065f46', background: '#d1fae5' }}>✓ SUBMITTED</span>}
+                    {isManagerReview && !isSubmitted && (
+                        <span style={{ fontSize: '0.82rem', color: '#64748b', fontStyle: 'italic' }}>
+                            💡 Review the employee's self-evaluation (left panel) before rating.
+                        </span>
+                    )}
+                </div>
+
+                {/* ── Scrollable Body ── */}
+                <form onSubmit={(e) => handleSubmit(e, false)} style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
+                    <div className={`review-form ${isManagerReview ? 'manager-layout' : ''}`} style={{ flex: 1, overflowY: 'auto', minHeight: 0 }}>
+                        {isManagerReview && (
+                            <div className="manager-review-left-panel">
+                                {/* Left panel banner */}
+                                <div style={{ background: 'linear-gradient(135deg, #6366f1 0%, #818cf8 100%)', color: 'white', padding: '10px 14px', borderRadius: '8px', marginBottom: '16px', fontSize: '0.85rem', fontWeight: 700 }}>
+                                    👤 Employee's Submitted Data
+                                </div>
+                                {/* Employee Goals Section */}
+                                {goals.length > 0 && (
+                                    <div className="review-goals-breakdown">
+                                        <h3>Goal Progress</h3>
+                                        <div className="goal-breakdown-section">
+                                            <table className="goal-breakdown-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Goal</th>
+                                                        <th>Weight</th>
+                                                        <th>Progress</th>
+                                                        <th>Status</th>
+                                                        <th>Manager Comments</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {goals.map(g => (
+                                                        <tr key={g.id}>
+                                                            <td>{g.title}</td>
+                                                            <td className="center">{g.weightage}%</td>
+                                                            <td>
+                                                                <div className="mini-bar-track">
+                                                                    <div
+                                                                        className="mini-bar-fill"
+                                                                        style={{
+                                                                            width: `${g.progressPct}%`,
+                                                                            background: g.progressPct >= 75 ? '#16a34a' : g.progressPct >= 50 ? '#d97706' : '#dc2626'
+                                                                        }}
+                                                                    />
+                                                                </div>
+                                                                <span className="pct-label">{g.progressPct}%</span>
+                                                            </td>
+                                                            <td>
+                                                                <span className={`goal-status-chip gs-${g.status.toLowerCase()}`}>
+                                                                    {g.status.replace(/_/g, ' ')}
+                                                                </span>
+                                                            </td>
+                                                            <td>{g.managerComments || '—'}</td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Peer Reviews Summary */}
+                                {peerReviews.length > 0 && (
+                                    <div className="review-comments-breakdown" style={{ marginTop: '0', marginBottom: '24px' }}>
+                                        <h3>Peer Feedback Summary</h3>
+                                        <div className="feedback-list scrollable">
+                                            {peerReviews.map((rev, idx) => (
+                                                <div key={idx} className="feedback-card">
+                                                    <div className="feedback-card-header">
+                                                        <span className="reviewer-name">{rev.reviewerName}</span>
+                                                        <span className="reviewer-type">{rev.reviewerType.replace(/_/g, ' ')}</span>
+                                                        <div className="feedback-rating">Rating: {rev.overallRating ? rev.overallRating.toFixed(1) : '—'}⭐</div>
+                                                    </div>
+                                                    <div className="feedback-content">
+                                                        <div className="fb-section">
+                                                            <strong>Strengths:</strong>
+                                                            <p>{rev.strengths}</p>
+                                                        </div>
+                                                        <div className="fb-section">
+                                                            <strong>Areas for Improvement:</strong>
+                                                            <p>{rev.areasOfImprovement}</p>
+                                                        </div>
+                                                        <div className="fb-section">
+                                                            <strong>Overall Comments:</strong>
+                                                            <p>{rev.overallComments}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        <div className={`manager-review-right-panel ${!isManagerReview ? 'full-width-panel' : ''}`}>
+                            {/* Right panel heading for manager reviews */}
+                            {isManagerReview && (
+                                <div style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)', color: 'white', padding: '10px 14px', borderRadius: '8px', marginBottom: '16px', fontSize: '0.85rem', fontWeight: 700 }}>
+                                    ✍️ Your Manager Assessment
+                                </div>
+                            )}
+                            {/* For non-manager reviews: show goals and other reviews first */}
+                            {!isManagerReview && goals.length > 0 && (
+                                <div className="review-goals-breakdown" style={{ marginBottom: '20px' }}>
+                                    <h3>Linked Goals Details</h3>
+                                    <div className="goal-breakdown-section">
+                                        <table className="goal-breakdown-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Goal</th>
+                                                    <th>Weight</th>
+                                                    <th>Progress</th>
+                                                    <th>Status</th>
+                                                    <th>Manager Comments</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {goals.map(g => (
+                                                    <tr key={g.id}>
+                                                        <td>{g.title}</td>
+                                                        <td className="center">{g.weightage}%</td>
+                                                        <td>
+                                                            <div className="mini-bar-track">
+                                                                <div className="mini-bar-fill" style={{
                                                                     width: `${g.progressPct}%`,
                                                                     background: g.progressPct >= 75 ? '#16a34a' : g.progressPct >= 50 ? '#d97706' : '#dc2626'
-                                                                }}
-                                                            />
-                                                        </div>
-                                                        <span className="pct-label">{g.progressPct}%</span>
-                                                    </td>
-                                                    <td>
-                                                        <span className={`goal-status-chip gs-${g.status.toLowerCase()}`}>
-                                                            {g.status.replace(/_/g, ' ')}
-                                                        </span>
-                                                    </td>
-                                                    <td>{g.managerComments || '—'}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                                                                }} />
+                                                            </div>
+                                                            <span className="pct-label">{g.progressPct}%</span>
+                                                        </td>
+                                                        <td><span className={`goal-status-chip gs-${g.status.toLowerCase()}`}>{g.status.replace(/_/g, ' ')}</span></td>
+                                                        <td>{g.managerComments || '—'}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
-                        )}
-
-                        {/* Completed Peer/Self Reviews */}
-                        {otherReviews.length > 0 && (
-                            <div className="review-comments-breakdown" style={{ marginTop: '0', marginBottom: '24px' }}>
-                                <h3>Team Member & Peer Feedback</h3>
-                                <div className="feedback-list">
-                                    {otherReviews.map((rev, idx) => (
-                                        <div key={idx} className="feedback-card">
-                                            <div className="feedback-card-header">
-                                                <span className="reviewer-name">{rev.reviewerName}</span>
-                                                <span className="reviewer-type">{rev.reviewerType.replace(/_/g, ' ')}</span>
-                                                <div className="feedback-rating">Rating: {rev.overallRating ? rev.overallRating.toFixed(1) : '—'}⭐</div>
-                                            </div>
-                                            <div className="feedback-content">
-                                                <div className="fb-section">
-                                                    <strong>Strengths:</strong>
-                                                    <p>{rev.strengths}</p>
+                            )}
+                            {!isManagerReview && otherReviews.length > 0 && (
+                                <div className="review-comments-breakdown" style={{ marginBottom: '24px' }}>
+                                    <h3>Team Member &amp; Peer Feedback</h3>
+                                    <div className="feedback-list">
+                                        {otherReviews.map((rev, idx) => (
+                                            <div key={idx} className="feedback-card">
+                                                <div className="feedback-card-header">
+                                                    <span className="reviewer-name">{rev.reviewerName}</span>
+                                                    <span className="reviewer-type">{rev.reviewerType.replace(/_/g, ' ')}</span>
+                                                    <div className="feedback-rating">Rating: {rev.overallRating ? rev.overallRating.toFixed(1) : '—'}⭐</div>
                                                 </div>
-                                                <div className="fb-section">
-                                                    <strong>Areas for Improvement:</strong>
-                                                    <p>{rev.areasOfImprovement}</p>
-                                                </div>
-                                                <div className="fb-section">
-                                                    <strong>Overall Comments:</strong>
-                                                    <p>{rev.overallComments}</p>
+                                                <div className="feedback-content">
+                                                    {rev.strengths && <div className="fb-section"><strong>Strengths:</strong><p>{rev.strengths}</p></div>}
+                                                    {rev.areasOfImprovement && <div className="fb-section"><strong>Areas for Improvement:</strong><p>{rev.areasOfImprovement}</p></div>}
+                                                    {rev.overallComments && <div className="fb-section"><strong>Overall Comments:</strong><p>{rev.overallComments}</p></div>}
                                                 </div>
                                             </div>
-                                        </div>
-                                    ))}
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
 
-                        {/* Competencies section */}
-                        {competencies.length === 0 ? (
-                            <div className="no-competencies-notice">
-                                <p>⚠️ No competencies are configured yet. Please contact HR/Admin to set up competencies.</p>
-                                <p style={{ fontSize: '0.85rem', color: '#888', marginTop: 6 }}>
-                                    You can still submit overall feedback below.
-                                </p>
-                            </div>
-                        ) : (
-                            <>
-                                <div className="review-section-header">
-                                    <h3>Rate Competencies</h3>
-                                    <span className="review-progress-chip">
-                                        {ratedCount}/{competencies.length} rated
-                                    </span>
+                            {/* Competencies section */}
+                            {competencies.length === 0 ? (
+                                <div className="no-competencies-notice">
+                                    <p>⚠️ No competencies are configured yet. Please contact HR/Admin to set up competencies.</p>
+                                    <p style={{ fontSize: '0.85rem', color: '#888', marginTop: 6 }}>
+                                        You can still submit overall feedback below.
+                                    </p>
                                 </div>
-                                <div className="competencies-rating">
-                                    {competencies.map((competency) => (
-                                        <div key={competency.id} className="competency-rating-item">
-                                            <div className="competency-header">
-                                                <h4>{competency.name}</h4>
-                                                <span className={`category-badge cat-${(competency.category || '').toLowerCase()}`}>
-                                                    {(competency.category || '').replace(/_/g, ' ')}
-                                                </span>
-                                            </div>
-                                            {competency.description && (
-                                                <p className="description">{competency.description}</p>
-                                            )}
-
-                                            <div className="rating-input">
-                                                <label>Rating (1–5) *</label>
-                                                <div className="star-rating">
-                                                    {[1, 2, 3, 4, 5].map((star) => (
-                                                        <button
-                                                            key={star}
-                                                            type="button"
-                                                            className={`star ${(ratings[competency.id] || 0) >= star ? 'selected' : ''} ${isSubmitted ? 'disabled' : ''}`}
-                                                            onClick={() => !isSubmitted && setRatings({ ...ratings, [competency.id]: star })}
-                                                            title={['', 'Poor', 'Below Average', 'Average', 'Good', 'Excellent'][star]}
-                                                            disabled={isSubmitted}
-                                                        >
-                                                            ⭐
-                                                        </button>
-                                                    ))}
-                                                    <span className="rating-value">
-                                                        {ratings[competency.id]
-                                                            ? ['', 'Poor', 'Below Avg', 'Average', 'Good', 'Excellent'][ratings[competency.id]]
-                                                            : 'Not rated'}
+                            ) : (
+                                <>
+                                    <div className="review-section-header">
+                                        <h3>Rate Competencies</h3>
+                                        <span className="review-progress-chip">
+                                            {ratedCount}/{competencies.length} rated
+                                        </span>
+                                    </div>
+                                    <div className="competencies-rating">
+                                        {competencies.map((competency) => (
+                                            <div key={competency.id} className="competency-rating-item">
+                                                <div className="competency-header">
+                                                    <h4>{competency.name}</h4>
+                                                    <span className={`category-badge cat-${(competency.category || '').toLowerCase()}`}>
+                                                        {(competency.category || '').replace(/_/g, ' ')}
                                                     </span>
                                                 </div>
-                                            </div>
+                                                {competency.description && (
+                                                    <p className="description">{competency.description}</p>
+                                                )}
 
-                                            <div className="form-group">
-                                                <label>Comments (optional)</label>
-                                                <textarea
-                                                    value={comments[competency.id] || ''}
-                                                    onChange={(e) => setComments({ ...comments, [competency.id]: e.target.value })}
-                                                    rows="2"
-                                                    disabled={isSubmitted}
-                                                    placeholder="Add specific feedback for this competency…"
-                                                />
+                                                {isManagerReview && selfReview && (() => {
+                                                    const cid = String(competency.id);
+                                                    const selfRating = selfReview.competencyRatings?.[cid] || selfReview.competencyRatings?.[competency.id];
+                                                    const selfComment = selfReview.competencyComments?.[cid] || selfReview.competencyComments?.[competency.id];
+                                                    return (
+                                                        <div className="self-evaluation-display">
+                                                            <label>👤 Employee's Self-Evaluation</label>
+                                                            <StarDisplay value={selfRating} />
+                                                            {selfComment && (
+                                                                <p className="self-comment">"{selfComment}"</p>
+                                                            )}
+                                                        </div>
+                                                    );
+                                                })()}
+
+                                                <div className="rating-input">
+                                                    <label>{isManagerReview ? "Your Rating (1–5) *" : "Rating (1–5) *"}</label>
+                                                    <div className="star-rating">
+                                                        {[1, 2, 3, 4, 5].map((star) => (
+                                                            <button
+                                                                key={star}
+                                                                type="button"
+                                                                className={`star ${(ratings[competency.id] || 0) >= star ? 'selected' : ''} ${isSubmitted ? 'disabled' : ''}`}
+                                                                onClick={() => !isSubmitted && setRatings({ ...ratings, [competency.id]: star })}
+                                                                title={['', 'Poor', 'Below Average', 'Average', 'Good', 'Excellent'][star]}
+                                                                disabled={isSubmitted}
+                                                            >
+                                                                ⭐
+                                                            </button>
+                                                        ))}
+                                                        <span className="rating-value">
+                                                            {ratings[competency.id]
+                                                                ? STAR_LABELS[ratings[competency.id]]
+                                                                : 'Not rated'}
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <div className="form-group">
+                                                    <label>{isManagerReview ? "Your Comments (optional)" : "Comments (optional)"}</label>
+                                                    <textarea
+                                                        value={comments[competency.id] || ''}
+                                                        onChange={(e) => setComments({ ...comments, [competency.id]: e.target.value })}
+                                                        rows="2"
+                                                        disabled={isSubmitted}
+                                                        placeholder="Add specific feedback for this competency…"
+                                                    />
+                                                </div>
                                             </div>
+                                        ))}
+                                    </div>
+                                </>
+                            )}
+
+                            {/* Overall Feedback */}
+                            <div className="overall-feedback">
+                                <h3>{isManagerReview ? '✍️ Your Manager Assessment' : 'Overall Feedback'}</h3>
+
+                                {isManagerReview && selfReview && (
+                                    <div className="self-evaluation-overall">
+                                        <h4>👤 Employee's Self-Assessment (read-only reference)</h4>
+                                        <div className="form-group">
+                                            <strong>Strengths (self):</strong>
+                                            <p>{selfReview.strengths || '—'}</p>
                                         </div>
-                                    ))}
+                                        <div className="form-group">
+                                            <strong>Areas for Improvement (self):</strong>
+                                            <p>{selfReview.areasOfImprovement || '—'}</p>
+                                        </div>
+                                        <div className="form-group">
+                                            <strong>Overall Comments (self):</strong>
+                                            <p>{selfReview.overallComments || '—'}</p>
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className="form-group">
+                                    <label>{isManagerReview ? '💪 Strengths (your assessment) *' : 'Strengths *'}</label>
+                                    <textarea
+                                        value={strengths}
+                                        onChange={(e) => setStrengths(e.target.value)}
+                                        rows="3"
+                                        required
+                                        disabled={isSubmitted}
+                                        placeholder={isManagerReview
+                                            ? "As manager, what are this employee's notable strengths?"
+                                            : "What are this employee's key strengths?"}
+                                    />
                                 </div>
-                            </>
-                        )}
 
-                        {/* Overall Feedback */}
-                        <div className="overall-feedback">
-                            <h3>Overall Feedback</h3>
+                                <div className="form-group">
+                                    <label>{isManagerReview ? '📈 Development Areas (your assessment) *' : 'Areas of Improvement *'}</label>
+                                    <textarea
+                                        value={areasOfImprovement}
+                                        onChange={(e) => setAreasOfImprovement(e.target.value)}
+                                        rows="3"
+                                        required
+                                        disabled={isSubmitted}
+                                        placeholder={isManagerReview
+                                            ? "What development areas would you recommend for this employee?"
+                                            : "What areas should this employee focus on improving?"}
+                                    />
+                                </div>
 
-                            <div className="form-group">
-                                <label>Strengths *</label>
-                                <textarea
-                                    value={strengths}
-                                    onChange={(e) => setStrengths(e.target.value)}
-                                    rows="3"
-                                    required
-                                    disabled={isSubmitted}
-                                    placeholder="What are this employee's key strengths?"
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Areas of Improvement *</label>
-                                <textarea
-                                    value={areasOfImprovement}
-                                    onChange={(e) => setAreasOfImprovement(e.target.value)}
-                                    rows="3"
-                                    required
-                                    disabled={isSubmitted}
-                                    placeholder="What areas should this employee focus on improving?"
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Overall Comments *</label>
-                                <textarea
-                                    value={overallComments}
-                                    onChange={(e) => setOverallComments(e.target.value)}
-                                    rows="4"
-                                    required
-                                    disabled={isSubmitted}
-                                    placeholder="Provide a holistic summary of this employee's performance…"
-                                />
+                                <div className="form-group">
+                                    <label>{isManagerReview ? '💬 Manager Summary & Comments *' : 'Overall Comments *'}</label>
+                                    <textarea
+                                        value={overallComments}
+                                        onChange={(e) => setOverallComments(e.target.value)}
+                                        rows="4"
+                                        required
+                                        disabled={isSubmitted}
+                                        placeholder={isManagerReview
+                                            ? "Provide your holistic assessment — performance, attitude, team contribution, next steps…"
+                                            : "Provide a holistic summary of this employee's performance…"}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="modal-actions">
-                        <button type="button" className="btn btn-secondary" onClick={onClose}>
-                            Close
+                    {/* ── Fixed Footer Actions ── */}
+                    <div className="modal-actions" style={{ flexShrink: 0, borderTop: '2px solid #e2e8f0', background: '#f8fafc', padding: '14px 24px', display: 'flex', justifyContent: 'flex-end', gap: '10px', borderRadius: '0 0 16px 16px' }}>
+                        <button type="button" className="btn btn-secondary" onClick={onClose}
+                            style={{ background: '#e2e8f0', color: '#334155', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: 600, cursor: 'pointer' }}>
+                            ✕ Close
                         </button>
                         {!isSubmitted && (
                             <>
-                                <button type="button" className="btn btn-secondary" disabled={submitting} onClick={(e) => handleSubmit(e, true)}>
-                                    {submitting ? '⏳...' : '💾 Save Draft'}
+                                <button type="button" disabled={submitting} onClick={(e) => handleSubmit(e, true)}
+                                    style={{ background: '#fff', color: '#4338ca', border: '2px solid #6366f1', padding: '10px 20px', borderRadius: '8px', fontWeight: 600, cursor: 'pointer', opacity: submitting ? 0.6 : 1 }}>
+                                    {submitting ? '⏳ Saving...' : '💾 Save Draft'}
                                 </button>
-                                <button type="submit" className="btn btn-primary" disabled={submitting}>
-                                    {submitting ? '⏳ Submitting…' : '✅ Submit Review'}
+                                <button type="submit" disabled={submitting}
+                                    style={{ background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', color: 'white', border: 'none', padding: '10px 24px', borderRadius: '8px', fontWeight: 700, cursor: 'pointer', opacity: submitting ? 0.6 : 1, boxShadow: '0 2px 8px rgba(99,102,241,0.4)' }}>
+                                    {submitting ? '⏳ Submitting…' : isManagerReview ? '✅ Submit Manager Review' : '✅ Submit Review'}
                                 </button>
                             </>
                         )}
@@ -1571,15 +1993,40 @@ const RatingModal = ({ preview, appraisalId, onClose, onFinalize, getBandIcon })
                 <div className="rating-modal-body">
                     {/* Score breakdown */}
                     <div className="score-breakdown-section">
-                        <h3>Score Breakdown</h3>
-                        <div className="score-gauges">
-                            <ScoreGauge label="🎯 Goal Achievement" score={preview.goalScore} weightPct={preview.goalWeight} color="#16a34a" />
-                            <ScoreGauge label="📋 Competency Reviews" score={preview.competencyScore} weightPct={preview.competencyWeight} color="#2563eb" />
-                            <ScoreGauge label="⚡ Final Blended Score" score={preview.finalScore} weightPct={100} color="#7c3aed" />
+                        <h3>📊 Score Breakdown</h3>
+                        <div style={{ background: '#f0f4ff', border: '1px solid #e0e7ff', borderRadius: '10px', padding: '12px 16px', marginBottom: '16px', fontSize: '0.85rem', color: '#3730a3' }}>
+                            Formula: <strong>KPI Achievement × {preview.goalWeight}%</strong> +
+                            <strong> Behavior &amp; Competencies × {preview.competencyWeight}%</strong> +
+                            <strong> Feedback &amp; Collaboration × {preview.feedbackWeight}%</strong>
                         </div>
-                        {!preview.hasCompetencyData && (
+                        <div className="score-gauges">
+                            <ScoreGauge
+                                label="🎯 KPI Achievement (Goals)"
+                                score={preview.goalScore}
+                                weightPct={preview.goalWeight}
+                                color="#16a34a" />
+                            <ScoreGauge
+                                label="🧠 Behavior & Competencies"
+                                score={preview.competencyScore}
+                                weightPct={preview.competencyWeight}
+                                color="#2563eb" />
+                            <ScoreGauge
+                                label="🤝 Feedback & Collaboration"
+                                score={preview.feedbackScore ?? 0}
+                                weightPct={preview.feedbackWeight}
+                                color="#7c3aed" />
+                            <ScoreGauge
+                                label="⚡ Final Blended Score"
+                                score={preview.finalScore}
+                                weightPct={100}
+                                color="#dc2626" />
+                        </div>
+                        {(!preview.hasCompetencyData || !preview.hasFeedbackData) && (
                             <div className="info-banner">
-                                ℹ️ No competency reviews submitted yet — final score is based entirely on goal achievement (100 %).
+                                ℹ️ Missing data — weights redistributed:
+                                {!preview.hasCompetencyData && <span> <strong>Behavior &amp; Competencies</strong> not yet submitted.</span>}
+                                {!preview.hasFeedbackData && <span> <strong>Feedback &amp; Collaboration</strong> (peer reviews) not yet submitted.</span>}
+                                Gap weight flows proportionally to available components.
                             </div>
                         )}
                     </div>
@@ -1630,37 +2077,79 @@ const RatingModal = ({ preview, appraisalId, onClose, onFinalize, getBandIcon })
                         )}
                     </div>
 
-                    {/* Review Comments Section */}
+                    {/* Review Comments Section — grouped by formula component */}
                     {preview.reviewComments && preview.reviewComments.length > 0 && (
                         <div className="review-comments-breakdown">
-                            <h3>Peer & Qualitative Feedback</h3>
-                            <div className="feedback-list">
-                                {preview.reviewComments.map(rev => (
-                                    <div key={rev.id} className="feedback-card">
-                                        <div className="feedback-card-header">
-                                            <span className="reviewer-name">{rev.reviewerName}</span>
-                                            <span className="reviewer-type">{rev.reviewerType.replace(/_/g, ' ')}</span>
-                                            <div className="feedback-rating">Rating: {rev.rating.toFixed(1)}⭐</div>
-                                        </div>
-                                        <div className="feedback-content">
-                                            <div className="fb-section">
-                                                <strong>Strengths:</strong>
-                                                <p>{rev.strengths}</p>
-                                            </div>
-                                            <div className="fb-section">
-                                                <strong>Areas for Improvement:</strong>
-                                                <p>{rev.areasOfImprovement}</p>
-                                            </div>
-                                            <div className="fb-section">
-                                                <strong>Overall Comments:</strong>
-                                                <p>{rev.overallComments}</p>
-                                            </div>
-                                        </div>
+                            <h3>Reviews by Formula Component</h3>
+
+                            {/* Behavior & Competencies group */}
+                            {preview.reviewComments.filter(r => r.reviewerCategory === 'Behavior & Competencies').length > 0 && (
+                                <>
+                                    <div style={{ fontWeight: 700, color: '#1d4ed8', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.5px', margin: '12px 0 6px', paddingBottom: '4px', borderBottom: '2px solid #dbeafe' }}>
+                                        🧠 Behavior &amp; Competencies (30%)
                                     </div>
-                                ))}
-                            </div>
+                                    <div className="feedback-list">
+                                        {preview.reviewComments.filter(r => r.reviewerCategory === 'Behavior & Competencies').map(rev => (
+                                            <div key={rev.id} className="feedback-card">
+                                                <div className="feedback-card-header">
+                                                    <span className="reviewer-name">{rev.reviewerName}</span>
+                                                    <span className="reviewer-type">{rev.reviewerType.replace(/_/g, ' ')}</span>
+                                                    {rev.rating != null && <div className="feedback-rating">Rating: {Number(rev.rating).toFixed(1)}⭐</div>}
+                                                </div>
+                                                <div className="feedback-content">
+                                                    {rev.strengths && <div className="fb-section"><strong>Strengths:</strong><p>{rev.strengths}</p></div>}
+                                                    {rev.areasOfImprovement && <div className="fb-section"><strong>Areas for Improvement:</strong><p>{rev.areasOfImprovement}</p></div>}
+                                                    {rev.overallComments && <div className="fb-section"><strong>Comments:</strong><p>{rev.overallComments}</p></div>}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </>
+                            )}
+
+                            {/* Feedback & Collaboration group */}
+                            {preview.reviewComments.filter(r => r.reviewerCategory === 'Feedback & Collaboration').length > 0 && (
+                                <>
+                                    <div style={{ fontWeight: 700, color: '#6d28d9', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.5px', margin: '14px 0 6px', paddingBottom: '4px', borderBottom: '2px solid #ede9fe' }}>
+                                        🤝 Feedback &amp; Collaboration — Peer Reviews (20%)
+                                    </div>
+                                    <div className="feedback-list">
+                                        {preview.reviewComments.filter(r => r.reviewerCategory === 'Feedback & Collaboration').map(rev => (
+                                            <div key={rev.id} className="feedback-card">
+                                                <div className="feedback-card-header">
+                                                    <span className="reviewer-name">{rev.reviewerName}</span>
+                                                    <span className="reviewer-type">PEER (Anonymous)</span>
+                                                    {rev.rating != null && <div className="feedback-rating">Rating: {Number(rev.rating).toFixed(1)}⭐</div>}
+                                                </div>
+                                                <div className="feedback-content">
+                                                    {rev.strengths && <div className="fb-section"><strong>Strengths:</strong><p>{rev.strengths}</p></div>}
+                                                    {rev.areasOfImprovement && <div className="fb-section"><strong>Areas for Improvement:</strong><p>{rev.areasOfImprovement}</p></div>}
+                                                    {rev.overallComments && <div className="fb-section"><strong>Comments:</strong><p>{rev.overallComments}</p></div>}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </>
+                            )}
+
+                            {/* Fallback: uncategorized */}
+                            {preview.reviewComments.filter(r => !r.reviewerCategory || r.reviewerCategory === 'Other').map(rev => (
+                                <div key={rev.id} className="feedback-card">
+                                    <div className="feedback-card-header">
+                                        <span className="reviewer-name">{rev.reviewerName}</span>
+                                        <span className="reviewer-type">{rev.reviewerType.replace(/_/g, ' ')}</span>
+                                        {rev.rating != null && <div className="feedback-rating">Rating: {Number(rev.rating).toFixed(1)}⭐</div>}
+                                    </div>
+                                    <div className="feedback-content">
+                                        {rev.strengths && <div className="fb-section"><strong>Strengths:</strong><p>{rev.strengths}</p></div>}
+                                        {rev.areasOfImprovement && <div className="fb-section"><strong>Areas for Improvement:</strong><p>{rev.areasOfImprovement}</p></div>}
+                                        {rev.overallComments && <div className="fb-section"><strong>Comments:</strong><p>{rev.overallComments}</p></div>}
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     )}
+
 
                     {/* Band result */}
                     <div className="band-result-section">
@@ -1708,4 +2197,3 @@ const RatingModal = ({ preview, appraisalId, onClose, onFinalize, getBandIcon })
         </div>
     );
 };
-

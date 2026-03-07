@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from '../context/ToastContext';
 import { employeeAPI } from '../services/api';
 import BackButton from '../components/BackButton';
+import Icon from '../components/Icon';
 import './Profile.css';
 
 const Profile = () => {
@@ -192,7 +193,7 @@ const Profile = () => {
                                     </div>
                                 )}
                                 <div className="image-overlay">
-                                    <span className="upload-icon">📷</span>
+                                    <span className="upload-icon"><Icon name="users" size={24} /></span>
                                     <span className="upload-text">Change Photo</span>
                                 </div>
                             </div>
@@ -253,7 +254,7 @@ const Profile = () => {
                             <h2>Personal Details</h2>
                             {!isEditing && (
                                 <button onClick={() => setIsEditing(true)} className="btn btn-primary btn-sm">
-                                    ✏️ Edit
+                                    <Icon name="edit" size={14} /> Edit
                                 </button>
                             )}
                         </div>
@@ -407,10 +408,10 @@ const Profile = () => {
                             {isEditing && (
                                 <div className="form-actions">
                                     <button onClick={handleSave} className="btn btn-primary">
-                                        💾 Save Changes
+                                        <Icon name="check" size={18} /> Save Changes
                                     </button>
                                     <button onClick={handleCancel} className="btn btn-secondary">
-                                        ✖️ Cancel
+                                        <Icon name="back" size={18} /> Cancel
                                     </button>
                                 </div>
                             )}
@@ -422,7 +423,7 @@ const Profile = () => {
                         <h2>Appearance</h2>
                         <div className="theme-section">
                             <div className="theme-info">
-                                <div className="theme-icon">{isDark ? '🌙' : '☀️'}</div>
+                                <div className="theme-icon"><Icon name={isDark ? 'moon' : 'sun'} size={24} /></div>
                                 <div>
                                     <h3>Theme</h3>
                                     <p className="theme-description">
@@ -452,21 +453,21 @@ const Profile = () => {
                         <h2>Quick Stats</h2>
                         <div className="stats-list">
                             <div className="stat-item">
-                                <span className="stat-icon">🌴</span>
+                                <span className="stat-icon"><Icon name="palm" size={20} /></span>
                                 <div className="stat-info">
                                     <p className="stat-label">Leaves Available</p>
                                     <p className="stat-number">15 days</p>
                                 </div>
                             </div>
                             <div className="stat-item">
-                                <span className="stat-icon">📊</span>
+                                <span className="stat-icon"><Icon name="chart" size={20} /></span>
                                 <div className="stat-info">
                                     <p className="stat-label">Attendance Rate</p>
                                     <p className="stat-number">98%</p>
                                 </div>
                             </div>
                             <div className="stat-item">
-                                <span className="stat-icon">⏰</span>
+                                <span className="stat-icon"><Icon name="clock" size={20} /></span>
                                 <div className="stat-info">
                                     <p className="stat-label">Days Present</p>
                                     <p className="stat-number">220 days</p>

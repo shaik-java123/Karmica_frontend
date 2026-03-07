@@ -3,6 +3,7 @@ import { leaveAPI, configAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import BackButton from '../components/BackButton';
+import Icon from '../components/Icon';
 import './Leaves.css';
 import './Employees.css'; // Import Employees.css for table styles
 
@@ -142,9 +143,11 @@ const Leaves = () => {
         <div className="leaves-page">
             <BackButton to="/dashboard" label="Back to Dashboard" />
             <div className="leaves-header">
-                <h1>🏖️ Leave Management</h1>
+                <h1>
+                    <Icon name="palm" size={32} className="header-icon" /> Leave Management
+                </h1>
                 <button className="btn btn-primary" onClick={() => setShowModal(true)}>
-                    + Apply Leave
+                    <Icon name="edit" size={18} /> Apply Leave
                 </button>
             </div>
 
@@ -233,16 +236,24 @@ const Leaves = () => {
                                         </td>
                                         <td>
                                             <div className="action-buttons">
-                                                <button onClick={() => handleView(leave)} className="btn-icon" title="View Details">👁️</button>
+                                                <button onClick={() => handleView(leave)} className="btn-icon" title="View Details">
+                                                    <Icon name="search" size={18} />
+                                                </button>
 
                                                 {leave.status === 'PENDING' && canApproveLeaves && activeTab !== 'my' && (
                                                     <>
-                                                        <button onClick={() => handleApprove(leave.id)} className="btn-icon success" title="Approve">✓</button>
-                                                        <button onClick={() => handleReject(leave.id)} className="btn-icon danger" title="Reject">✗</button>
+                                                        <button onClick={() => handleApprove(leave.id)} className="btn-icon success" title="Approve">
+                                                            <Icon name="check" size={18} />
+                                                        </button>
+                                                        <button onClick={() => handleReject(leave.id)} className="btn-icon danger" title="Reject">
+                                                            <Icon name="back" size={18} style={{ transform: 'rotate(45deg)' }} />
+                                                        </button>
                                                     </>
                                                 )}
                                                 {leave.status === 'PENDING' && activeTab === 'my' && (
-                                                    <button onClick={() => handleCancel(leave.id)} className="btn-icon danger" title="Cancel">🗑️</button>
+                                                    <button onClick={() => handleCancel(leave.id)} className="btn-icon danger" title="Cancel">
+                                                        <Icon name="trash" size={18} />
+                                                    </button>
                                                 )}
                                             </div>
                                         </td>
@@ -264,7 +275,7 @@ const Leaves = () => {
                     <div className="modal-content glass-card" onClick={(e) => e.stopPropagation()}>
                         <div className="modal-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                             <h2 style={{ margin: 0 }}>Leave Details</h2>
-                            <button className="close-btn" onClick={() => setShowViewModal(false)}>×</button>
+                            <button className="close-btn" onClick={() => setShowViewModal(false)}><Icon name="x" size={24} /></button>
                         </div>
                         <div className="view-profile-header">
                             <div className="profile-avatar-large">
@@ -313,11 +324,11 @@ const Leaves = () => {
                         <div className="modal-actions">
                             {selectedLeave.status === 'PENDING' && canApproveLeaves && activeTab !== 'my' && (
                                 <>
-                                    <button onClick={() => handleReject(selectedLeave.id)} className="btn btn-secondary" style={{ color: '#EF4444' }}>Reject</button>
-                                    <button onClick={() => handleApprove(selectedLeave.id)} className="btn btn-primary">Approve</button>
+                                    <button onClick={() => handleReject(selectedLeave.id)} className="btn btn-secondary" style={{ color: '#EF4444' }}><Icon name="back" size={18} style={{ transform: 'rotate(45deg)' }} /> Reject</button>
+                                    <button onClick={() => handleApprove(selectedLeave.id)} className="btn btn-primary"><Icon name="check" size={18} /> Approve</button>
                                 </>
                             )}
-                            <button type="button" className="btn btn-secondary" onClick={() => setShowViewModal(false)}>Close</button>
+                            <button type="button" className="btn btn-secondary" onClick={() => setShowViewModal(false)}><Icon name="back" size={18} /> Close</button>
                         </div>
                     </div>
                 </div>
@@ -329,7 +340,7 @@ const Leaves = () => {
                     <div className="modal-content glass-card" onClick={(e) => e.stopPropagation()}>
                         <div className="modal-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                             <h2 style={{ margin: 0 }}>Apply for Leave</h2>
-                            <button className="close-btn" onClick={() => setShowModal(false)}>×</button>
+                            <button className="close-btn" onClick={() => setShowModal(false)}><Icon name="x" size={24} /></button>
                         </div>
                         <form onSubmit={handleSubmit}>
                             <select
@@ -364,8 +375,8 @@ const Leaves = () => {
                                 required
                             />
                             <div className="modal-actions">
-                                <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Cancel</button>
-                                <button type="submit" className="btn btn-primary">Submit</button>
+                                <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}><Icon name="back" size={18} /> Cancel</button>
+                                <button type="submit" className="btn btn-primary"><Icon name="check" size={18} /> Submit</button>
                             </div>
                         </form>
                     </div>

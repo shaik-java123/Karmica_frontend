@@ -3,24 +3,26 @@ import { useNavigate } from 'react-router-dom';
 import { onboardingAPI, employeeAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
+import BackButton from '../components/BackButton';
+import Icon from '../components/Icon';
 import './Onboarding.css';
 
 // ── Constants ─────────────────────────────────────────────────────────────
 const TASK_TYPE_LABELS = {
-    UPLOAD_PHOTO: { label: '📸 Upload Photo', color: '#8b5cf6' },
-    UPLOAD_DOCUMENT: { label: '📄 Upload Document', color: '#3b82f6' },
-    FILL_FORM: { label: '📝 Fill Form', color: '#f59e0b' },
-    SIGN_DOCUMENT: { label: '✍️ Sign Document', color: '#ec4899' },
-    GENERAL: { label: '✅ General Task', color: '#6b7280' },
-    ACKNOWLEDGEMENT: { label: '🤝 Acknowledge', color: '#10b981' },
+    UPLOAD_PHOTO: { label: 'Upload Photo', icon: 'users', color: '#8b5cf6' },
+    UPLOAD_DOCUMENT: { label: 'Upload Document', icon: 'folder', color: '#3b82f6' },
+    FILL_FORM: { label: 'Fill Form', icon: 'edit', color: '#f59e0b' },
+    SIGN_DOCUMENT: { label: 'Sign Document', icon: 'edit', color: '#ec4899' },
+    GENERAL: { label: 'General Task', icon: 'check', color: '#6b7280' },
+    ACKNOWLEDGEMENT: { label: 'Acknowledge', icon: 'users', color: '#10b981' },
 };
 
 const STATUS_CONFIG = {
-    PENDING: { label: 'Pending', icon: '⏳', color: '#f59e0b', bg: 'rgba(245,158,11,0.12)' },
-    IN_REVIEW: { label: 'In Review', icon: '🔍', color: '#3b82f6', bg: 'rgba(59,130,246,0.12)' },
-    APPROVED: { label: 'Approved', icon: '✅', color: '#10b981', bg: 'rgba(16,185,129,0.12)' },
-    REJECTED: { label: 'Rejected', icon: '❌', color: '#ef4444', bg: 'rgba(239,68,68,0.12)' },
-    WAIVED: { label: 'Waived', icon: '⏭️', color: '#8b5cf6', bg: 'rgba(139,92,246,0.12)' },
+    PENDING: { label: 'Pending', icon: 'clock', color: '#f59e0b', bg: 'rgba(245,158,11,0.12)' },
+    IN_REVIEW: { label: 'In Review', icon: 'search', color: '#3b82f6', bg: 'rgba(59,130,246,0.12)' },
+    APPROVED: { label: 'Approved', icon: 'check', color: '#10b981', bg: 'rgba(16,185,129,0.12)' },
+    REJECTED: { label: 'Rejected', icon: 'back', color: '#ef4444', bg: 'rgba(239,68,68,0.12)' },
+    WAIVED: { label: 'Waived', icon: 'refresh', color: '#8b5cf6', bg: 'rgba(139,92,246,0.12)' },
 };
 
 const DOC_TYPES = [
@@ -203,9 +205,10 @@ const Onboarding = () => {
      * The browser (or OS) handles rendering, keeping backend load near zero
      * regardless of file size.
      */
+    const BACKEND_HOST = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api').replace('/api', '');
     const getFileLink = (url, name, mimeType, fileSize) => {
         if (!url) return null;
-        const fullUrl = `http://localhost:8080${url}`;
+        const fullUrl = `${BACKEND_HOST}${url}`;
         const ext = name?.split('.').pop()?.toLowerCase() || '';
         const isImage = mimeType?.startsWith('image/') || ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'].includes(ext);
         const isPdf = mimeType === 'application/pdf' || ext === 'pdf';
@@ -245,9 +248,9 @@ const Onboarding = () => {
             <div className="ob-header">
                 <div>
                     <button className="ob-back-btn" onClick={() => navigate('/dashboard')}>
-                        ← Dashboard
+                        <Icon name="back" size={16} /> Dashboard
                     </button>
-                    <h1 className="ob-title">🎓 Employee Onboarding</h1>
+                    <h1 className="ob-title"><Icon name="school" size={32} className="header-icon" /> Employee Onboarding</h1>
                     <p className="ob-subtitle">
                         {isHR ? 'Manage onboarding checklists and share documents with new employees'
                             : 'Complete your onboarding tasks to get started'}
@@ -259,7 +262,7 @@ const Onboarding = () => {
             {isHR && (
                 <div className="ob-selector-bar">
                     <div className="ob-select-wrap">
-                        <span className="ob-select-label">👤 Select Employee</span>
+                        <span className="ob-select-label"><Icon name="users" size={16} /> Select Employee</span>
                         <select
                             className="ob-select"
                             value={selectedEmp?.id || ''}
@@ -281,16 +284,16 @@ const Onboarding = () => {
                         <div className="ob-emp-actions">
                             {checklist.length === 0 && (
                                 <button className="ob-btn-start" onClick={handleStartOnboarding} disabled={loading}>
-                                    🚀 Start Onboarding
+                                    <Icon name="school" size={18} /> Start Onboarding
                                 </button>
                             )}
                             {checklist.length > 0 && (
                                 <>
                                     <button className="ob-btn-secondary" onClick={() => setShowAddTask(true)}>
-                                        ➕ Add Task
+                                        <Icon name="plus" size={18} /> Add Task
                                     </button>
                                     <button className="ob-btn-secondary" onClick={() => setShowUploadDoc(true)}>
-                                        📤 Upload Document
+                                        <Icon name="folder" size={18} /> Upload Document
                                     </button>
                                 </>
                             )}
@@ -302,7 +305,7 @@ const Onboarding = () => {
             {/* ── No employee selected (HR) ── */}
             {isHR && !selectedEmp && (
                 <div className="ob-empty-state">
-                    <div className="ob-empty-icon">👋</div>
+                    <div className="ob-empty-icon"><Icon name="users" size={48} /></div>
                     <h3>Select an employee to manage their onboarding</h3>
                     <p>Choose from the dropdown above to view or start their onboarding checklist.</p>
                 </div>
@@ -367,13 +370,13 @@ const Onboarding = () => {
                                 className={`ob-tab ${activeTab === 'checklist' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('checklist')}
                             >
-                                📋 Checklist <span className="ob-tab-badge">{checklist.length}</span>
+                                <Icon name="tasks" size={18} /> Checklist <span className="ob-tab-badge">{checklist.length}</span>
                             </button>
                             <button
                                 className={`ob-tab ${activeTab === 'documents' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('documents')}
                             >
-                                📁 Documents <span className="ob-tab-badge">{documents.length}</span>
+                                <Icon name="folder" size={18} /> Documents <span className="ob-tab-badge">{documents.length}</span>
                             </button>
                         </div>
                     )}
@@ -385,7 +388,7 @@ const Onboarding = () => {
 
                             {!loading && checklist.length === 0 && selectedEmp && (
                                 <div className="ob-empty-state">
-                                    <div className="ob-empty-icon">📋</div>
+                                    <div className="ob-empty-icon"><Icon name="tasks" size={48} /></div>
                                     <h3>No onboarding tasks yet</h3>
                                     <p>Click <strong>"Start Onboarding"</strong> to seed the default checklist, or add tasks manually.</p>
                                 </div>
@@ -402,10 +405,10 @@ const Onboarding = () => {
                                         <div className="ob-task-header">
                                             <div className="ob-task-meta">
                                                 <span className="ob-task-type" style={{ background: tt.color + '22', color: tt.color }}>
-                                                    {tt.label}
+                                                    <Icon name={tt.icon} size={14} /> {tt.label}
                                                 </span>
                                                 <span className="ob-task-status" style={{ background: st.bg, color: st.color }}>
-                                                    {st.icon} {st.label}
+                                                    <Icon name={st.icon} size={14} /> {st.label}
                                                 </span>
                                                 {isOverdue && (
                                                     <span className="ob-overdue">🔴 Overdue</span>
@@ -418,11 +421,11 @@ const Onboarding = () => {
                                                             className="ob-btn-review"
                                                             onClick={() => { setShowReviewTask(task); setReviewAction('approve'); }}
                                                         >
-                                                            🔍 Review
+                                                            <Icon name="search" size={16} /> Review
                                                         </button>
                                                     )}
                                                     <button className="ob-btn-del" onClick={() => handleDeleteTask(task.id)}>
-                                                        🗑️
+                                                        <Icon name="trash" size={18} />
                                                     </button>
                                                 </div>
                                             )}
@@ -452,10 +455,10 @@ const Onboarding = () => {
                                         <div className="ob-task-footer">
                                             <div className="ob-task-dates">
                                                 {task.dueDate && (
-                                                    <span>📅 Due: <strong>{formatDate(task.dueDate)}</strong></span>
+                                                    <span><Icon name="calendar" size={14} /> Due: <strong>{formatDate(task.dueDate)}</strong></span>
                                                 )}
                                                 {task.completedAt && (
-                                                    <span>⏱ Submitted: {formatDate(task.completedAt)}</span>
+                                                    <span><Icon name="check" size={14} /> Submitted: {formatDate(task.completedAt)}</span>
                                                 )}
                                             </div>
 
@@ -463,7 +466,7 @@ const Onboarding = () => {
                                                 {/* Employee attachment download */}
                                                 {task.attachmentPath && (
                                                     <a
-                                                        href={`http://localhost:8080${task.attachmentPath}`}
+                                                        href={`${BACKEND_HOST}${task.attachmentPath}`}
                                                         target="_blank"
                                                         rel="noreferrer"
                                                         className="ob-btn-download"
@@ -478,7 +481,7 @@ const Onboarding = () => {
                                                         className="ob-btn-submit-task"
                                                         onClick={() => { setShowSubmitTask(task); setSubmitNotes(''); setSubmitFile(null); }}
                                                     >
-                                                        📤 Submit
+                                                        <Icon name="folder" size={16} /> Submit
                                                     </button>
                                                 )}
                                             </div>
@@ -496,28 +499,30 @@ const Onboarding = () => {
                                 <div className="ob-doc-header">
                                     <h3>HR Shared Documents</h3>
                                     <button className="ob-btn-secondary" onClick={() => setShowUploadDoc(true)}>
-                                        📤 Upload Document
+                                        <Icon name="folder" size={18} /> Upload Document
                                     </button>
                                 </div>
                             )}
                             {documents.length === 0 && (
                                 <div className="ob-empty-state">
-                                    <div className="ob-empty-icon">📁</div>
+                                    <div className="ob-empty-icon"><Icon name="folder" size={48} /></div>
                                     <h3>No documents yet</h3>
                                     <p>HR will upload offer letters, policies, NDA, and other onboarding documents here.</p>
                                 </div>
                             )}
                             <div className="ob-doc-grid">
                                 {documents.map(doc => {
-                                    const docUrl = `http://localhost:8080${doc.filePath}`;
-                                    const isPdf = doc.mimeType?.includes('pdf') || doc.filePath?.endsWith('.pdf');
-                                    const isImg = doc.mimeType?.includes('image') || /\.(jpg|jpeg|png|gif|webp)$/i.test(doc.filePath);
-                                    const isWord = doc.mimeType?.includes('word') || /\.(doc|docx)$/i.test(doc.filePath);
-                                    const icon = isPdf ? '📋' : isImg ? '🖼️' : isWord ? '📝' : '📄';
+                                    const docUrl = `${BACKEND_HOST}${doc.filePath}`;
+                                    const ext = doc.documentName?.split('.').pop()?.toLowerCase() || '';
+                                    const isImg = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'].includes(ext);
+                                    const isPdf = ext === 'pdf';
+                                    const isWord = ['doc', 'docx'].includes(ext);
+
+                                    const icon = isPdf ? 'tasks' : isImg ? 'users' : isWord ? 'edit' : 'folder';
                                     const viewLabel = isPdf ? 'View PDF' : isImg ? 'View Image' : isWord ? 'Open Doc' : 'Open File';
                                     return (
                                         <div key={doc.id} className={`ob-doc-card ${doc.source === 'HR_UPLOAD' ? 'hr' : 'emp'}`}>
-                                            <div className="ob-doc-icon">{icon}</div>
+                                            <div className="ob-doc-icon"><Icon name={icon} size={32} /></div>
                                             <div className="ob-doc-info">
                                                 <h4>{doc.documentName}</h4>
                                                 {doc.description && <p>{doc.description}</p>}
@@ -557,7 +562,7 @@ const Onboarding = () => {
             {showAddTask && (
                 <div className="ob-modal-overlay" onClick={() => setShowAddTask(false)}>
                     <div className="ob-modal" onClick={e => e.stopPropagation()}>
-                        <h3>➕ Add Checklist Task</h3>
+                        <h3><Icon name="plus" size={20} /> Add Checklist Task</h3>
                         <form onSubmit={handleAddTask} className="ob-modal-form">
                             <div className="ob-field">
                                 <label>Task Title *</label>
@@ -605,7 +610,7 @@ const Onboarding = () => {
             {showUploadDoc && (
                 <div className="ob-modal-overlay" onClick={() => setShowUploadDoc(false)}>
                     <div className="ob-modal" onClick={e => e.stopPropagation()}>
-                        <h3>📤 Upload HR Document</h3>
+                        <h3><Icon name="folder" size={20} /> Upload HR Document</h3>
                         <form onSubmit={handleUploadDoc} className="ob-modal-form">
                             <div className="ob-field">
                                 <label>Document Name *</label>
@@ -635,7 +640,7 @@ const Onboarding = () => {
                                     {uploadDocFile
                                         ? <><span className="ob-file-name">📄 {uploadDocFile.name}</span>
                                             <span className="ob-file-size">({formatSize(uploadDocFile.size)})</span></>
-                                        : <><div className="ob-file-icon">📁</div>
+                                        : <><div className="ob-file-icon"><Icon name="folder" size={32} /></div>
                                             <p>Click to choose file</p>
                                             <p className="ob-file-hint">PDF, Word, Image — max 10MB</p></>
                                     }
@@ -657,7 +662,7 @@ const Onboarding = () => {
             {showSubmitTask && (
                 <div className="ob-modal-overlay" onClick={() => setShowSubmitTask(null)}>
                     <div className="ob-modal" onClick={e => e.stopPropagation()}>
-                        <h3>📤 Submit: {showSubmitTask.title}</h3>
+                        <h3><Icon name="folder" size={20} /> Submit: {showSubmitTask.title}</h3>
                         {showSubmitTask.description && (
                             <p className="ob-modal-desc">{showSubmitTask.description}</p>
                         )}
@@ -691,7 +696,7 @@ const Onboarding = () => {
                             </div>
                             <div className="ob-modal-actions">
                                 <button type="button" className="ob-btn-ghost" onClick={() => setShowSubmitTask(null)}>Cancel</button>
-                                <button type="submit" className="ob-btn-primary">✅ Submit for Review</button>
+                                <button type="submit" className="ob-btn-primary"><Icon name="check" size={18} /> Submit for Review</button>
                             </div>
                         </form>
                     </div>
@@ -702,7 +707,7 @@ const Onboarding = () => {
             {showReviewTask && (
                 <div className="ob-modal-overlay" onClick={() => setShowReviewTask(null)}>
                     <div className="ob-modal ob-modal-wide" onClick={e => e.stopPropagation()}>
-                        <h3>🔍 Review: {showReviewTask.title}</h3>
+                        <h3><Icon name="search" size={20} /> Review: {showReviewTask.title}</h3>
 
                         {/* Employee notes */}
                         {showReviewTask.employeeNotes && (

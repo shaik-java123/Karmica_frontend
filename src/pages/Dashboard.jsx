@@ -3,7 +3,8 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { dashboardAPI, notificationAPI } from '../services/api'; // Added notificationAPI
 import NotificationBell from '../components/NotificationBell';
-import { useToast } from '../context/ToastContext'; // Added useToast
+import Icon from '../components/Icon';
+import { useToast } from '../context/ToastContext';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -96,47 +97,49 @@ const Dashboard = () => {
 
         if (isAdmin) {
             return [
-                { label: 'Total Employees', value: stats.totalEmployees || '0', icon: '👥', color: 'primary', path: '/employees' },
-                { label: 'Attendance Rate', value: stats.attendanceRate || '0%', icon: '📊', color: 'success', path: '/attendance' },
-                { label: 'Departments', value: stats.totalDepartments || '0', icon: '🏢', color: 'secondary', path: '/departments' },
-                { label: 'Project Count', value: stats.projectCount || '0', icon: '📁', color: 'info', path: '/analytics' },
-                { label: 'Pending Leaves', value: stats.pendingLeaves || '0', icon: '📋', color: 'warning', path: '/leaves' },
-                { label: 'Weekly Leaves', value: stats.approvedLeavesThisWeek || '0', icon: '📈', color: 'primary', path: '/leaves' },
-                { label: 'Today Present', value: stats.todayAttendance || '0', icon: '✅', color: 'success', path: '/attendance' },
-                { label: 'My Check-in', value: stats.todayCheckIn ? '✓ Done' : '✗ Pending', icon: '⏰', color: stats.todayCheckIn ? 'success' : 'warning', path: '/attendance' },
+                { label: 'Total Employees', value: stats.totalEmployees || '0', icon: 'users', color: 'primary', path: '/employees' },
+                { label: 'Attendance Rate', value: stats.attendanceRate || '0%', icon: 'chart', color: 'success', path: '/attendance' },
+                { label: 'Departments', value: stats.totalDepartments || '0', icon: 'building', color: 'secondary', path: '/departments' },
+                { label: 'Project Count', value: stats.projectCount || '0', icon: 'folder', color: 'info', path: '/analytics' },
+                { label: 'Pending Leaves', value: stats.pendingLeaves || '0', icon: 'calendar', color: 'warning', path: '/leaves' },
+                { label: 'Weekly Leaves', value: stats.approvedLeavesThisWeek || '0', icon: 'trending', color: 'primary', path: '/leaves' },
+                { label: 'Today Present', value: stats.todayAttendance || '0', icon: 'check', color: 'success', path: '/attendance' },
+                { label: 'My Check-in', value: stats.todayCheckIn ? '✓ Done' : '✗ Pending', icon: 'clock', color: stats.todayCheckIn ? 'success' : 'warning', path: '/attendance' },
             ];
         } else if (user?.role === 'MANAGER') {
             return [
-                { label: 'Team Size', value: stats.teamSize || '0', icon: '👥', color: 'primary', path: '/employees' },
-                { label: 'Pending Team Leaves', value: stats.pendingTeamLeaves || '0', icon: '📋', color: 'warning', path: '/leaves' },
-                { label: 'Leaves Taken', value: stats.leavesTaken || '0', icon: '🌴', color: 'secondary', path: '/leaves' },
-                { label: 'My Pending Leaves', value: stats.myPendingLeaves || '0', icon: '⏳', color: 'success', path: '/leaves' },
+                { label: 'Team Size', value: stats.teamSize || '0', icon: 'users', color: 'primary', path: '/employees' },
+                { label: 'Pending Team Leaves', value: stats.pendingTeamLeaves || '0', icon: 'tasks', color: 'warning', path: '/leaves' },
+                { label: 'Leaves Taken', value: stats.leavesTaken || '0', icon: 'palm', color: 'secondary', path: '/leaves' },
+                { label: 'My Pending Leaves', value: stats.myPendingLeaves || '0', icon: 'clock', color: 'success', path: '/leaves' },
             ];
         } else {
             return [
-                { label: 'Leaves Taken', value: stats.leavesTaken || '0', icon: '🌴', color: 'primary', path: '/leaves' },
-                { label: 'Pending Leaves', value: stats.myPendingLeaves || '0', icon: '⏳', color: 'warning', path: '/leaves' },
-                { label: 'Check-in Today', value: stats.todayCheckIn ? '✓ Done' : '✗ Pending', icon: '⏰', color: 'success', path: '/attendance' },
-                { label: 'Status', value: stats.checkedIn ? 'Active' : 'Inactive', icon: '📊', color: 'secondary', path: '/attendance' },
+                { label: 'Leaves Taken', value: stats.leavesTaken || '0', icon: 'palm', color: 'primary', path: '/leaves' },
+                { label: 'Pending Leaves', value: stats.myPendingLeaves || '0', icon: 'clock', color: 'warning', path: '/leaves' },
+                { label: 'Check-in Today', value: stats.todayCheckIn ? '✓ Done' : '✗ Pending', icon: 'clock', color: 'success', path: '/attendance' },
+                { label: 'Status', value: stats.checkedIn ? 'Active' : 'Inactive', icon: 'chart', color: 'secondary', path: '/attendance' },
             ];
         }
     };
 
     // Dynamic Quick Actions
     const quickActions = [
-        { label: 'Employee Directory', icon: '👥', path: '/employees' },
-        { label: 'Mark Attendance', icon: '⏰', path: '/attendance' },
-        { label: 'My Tasks', icon: '📋', path: '/tasks' },
-        { label: 'Worklist', icon: '✅', path: '/worklist' },
-        { label: 'Apply Leave', icon: '📝', path: '/leaves' },
-        { label: 'Appraisals', icon: '🎯', path: '/appraisals' },
-        { label: 'Onboarding', icon: '🎓', path: '/onboarding' },
+        { label: 'Employee Directory', icon: 'users', path: '/employees' },
+        { label: 'Mark Attendance', icon: 'clock', path: '/attendance' },
+        { label: 'My Tasks', icon: 'tasks', path: '/tasks' },
+        { label: 'Worklist', icon: 'check', path: '/worklist' },
+        { label: 'Apply Leave', icon: 'palm', path: '/leaves' },
+        { label: 'Appraisals', icon: 'target', path: '/appraisals' },
+        { label: 'Onboarding', icon: 'school', path: '/onboarding' },
+        { label: 'Inventory', icon: 'folder', path: '/inventory' },
+        { label: 'Learning & Dev', icon: 'award', path: '/lms' },
     ];
 
-    if (user?.role === 'ADMIN' || user?.role === 'HR' || user?.role === 'MANAGER') {
+    if (user?.role === 'ADMIN' || user?.role === 'HR') {
         quickActions.unshift({
             label: 'Team Analytics',
-            icon: '📊',
+            icon: 'chart',
             path: '/analytics'
         });
     }
@@ -144,31 +147,62 @@ const Dashboard = () => {
     if (user?.role === 'ADMIN' || user?.role === 'HR') {
         quickActions.push({
             label: 'Announcement',
-            icon: '📢',
+            icon: 'announce',
             action: () => setShowAnnouncementModal(true)
         });
         quickActions.push({
             label: 'Organization',
-            icon: '🏢',
+            icon: 'building',
             path: '/organization'
         });
         quickActions.push({
             label: 'Payroll',
-            icon: '💰',
+            icon: 'money',
             path: '/payroll'
+        });
+        quickActions.push({
+            label: 'Recruitment',
+            icon: 'briefcase',
+            path: '/job-postings'
+        });
+        quickActions.push({
+            label: 'Resume Check',
+            icon: 'search',
+            path: '/resume-validation'
+        });
+        quickActions.push({
+            label: 'Hot Opportunities',
+            icon: 'flame',
+            path: '/apply'
+        });
+        quickActions.push({
+            label: 'System Health',
+            icon: 'chart',
+            path: '/system-health'
+        });
+        quickActions.push({
+            label: 'API Demo',
+            icon: 'search',
+            path: '/api-demo'
         });
     } else {
         // Everyone can view organization details to check holidays/policies
         quickActions.push({
             label: 'Organization',
-            icon: '🏢',
+            icon: 'building',
             path: '/organization'
         });
         // Employees also need access to Payroll for slips/tax
         quickActions.push({
             label: 'Payroll',
-            icon: '💰',
+            icon: 'money',
             path: '/payroll'
+        });
+        // Associate / Internal Job Postings (HotOps)
+        quickActions.push({
+            label: 'Hot Opportunities',
+            icon: 'flame',
+            path: '/apply'
         });
     }
 
@@ -225,7 +259,9 @@ const Dashboard = () => {
                                     }}
                                     onClick={() => stat.path && navigate(stat.path)}
                                 >
-                                    <div className="stat-icon">{stat.icon}</div>
+                                    <div className="stat-icon">
+                                        <Icon name={stat.icon} size={32} />
+                                    </div>
                                     <div className="stat-content">
                                         <p className="stat-label">{stat.label}</p>
                                         <h3 className="stat-value">{stat.value}</h3>
@@ -248,7 +284,9 @@ const Dashboard = () => {
                                 onClick={() => action.action ? action.action() : navigate(action.path)}
                                 style={{ animationDelay: `${index * 50}ms` }}
                             >
-                                <div className="action-icon">{action.icon}</div>
+                                <div className="action-icon">
+                                    <Icon name={action.icon} size={28} />
+                                </div>
                                 <p className="action-label">{action.label}</p>
                             </button>
                         ))}

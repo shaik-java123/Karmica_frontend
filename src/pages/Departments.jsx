@@ -3,6 +3,7 @@ import { departmentAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import BackButton from '../components/BackButton';
+import Icon from '../components/Icon';
 import './Employees.css'; // Reusing common styles from Employees.css
 
 const Departments = () => {
@@ -90,7 +91,7 @@ const Departments = () => {
         <div className="employees-page">
             <BackButton to="/dashboard" label="Back to Dashboard" />
             <div className="employees-header">
-                <h1>🏢 Departments</h1>
+                <h1><Icon name="building" size={32} className="header-icon" /> Departments</h1>
                 {canManageDept && (
                     <button
                         className="btn btn-primary"
@@ -141,8 +142,8 @@ const Departments = () => {
                                         {canManageDept && (
                                             <td>
                                                 <div className="action-buttons">
-                                                    <button onClick={() => handleEdit(dept)} className="btn-icon" title="Edit">✏️</button>
-                                                    <button onClick={() => handleDelete(dept.id)} className="btn-icon danger" title="Delete">🗑️</button>
+                                                    <button onClick={() => handleEdit(dept)} className="btn-icon" title="Edit"><Icon name="edit" size={18} /></button>
+                                                    <button onClick={() => handleDelete(dept.id)} className="btn-icon danger" title="Delete"><Icon name="trash" size={18} /></button>
                                                 </div>
                                             </td>
                                         )}

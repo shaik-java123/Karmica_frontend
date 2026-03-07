@@ -3,21 +3,22 @@ import { useNavigate } from 'react-router-dom';
 import { taskAPI, employeeAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
+import Icon from '../components/Icon';
 import './Worklist.css';
 
 // ── Constants ──────────────────────────────────────────────────────────────
 const STATUS_CFG = {
-    TODO: { label: 'To Do', color: '#f59e0b', bg: 'rgba(245,158,11,0.15)', icon: '🕐' },
-    IN_PROGRESS: { label: 'In Progress', color: '#3b82f6', bg: 'rgba(59,130,246,0.15)', icon: '⚙️' },
-    COMPLETED: { label: 'Completed', color: '#10b981', bg: 'rgba(16,185,129,0.15)', icon: '✅' },
-    CANCELLED: { label: 'Cancelled', color: '#6b7280', bg: 'rgba(107,114,128,0.15)', icon: '🚫' },
+    TODO: { label: 'To Do', color: '#f59e0b', bg: 'rgba(245,158,11,0.15)', icon: 'clock' },
+    IN_PROGRESS: { label: 'In Progress', color: '#3b82f6', bg: 'rgba(59,130,246,0.15)', icon: 'edit' },
+    COMPLETED: { label: 'Completed', color: '#10b981', bg: 'rgba(16,185,129,0.15)', icon: 'check' },
+    CANCELLED: { label: 'Cancelled', color: '#6b7280', bg: 'rgba(107,114,128,0.15)', icon: 'back' },
 };
 
 const PRIORITY_CFG = {
-    LOW: { label: 'Low', color: '#10b981', dot: '🟢' },
-    MEDIUM: { label: 'Medium', color: '#f59e0b', dot: '🟡' },
-    HIGH: { label: 'High', color: '#ef4444', dot: '🔴' },
-    URGENT: { label: 'Urgent', color: '#dc2626', dot: '🚨' },
+    LOW: { label: 'Low', color: '#10b981', icon: 'check' },
+    MEDIUM: { label: 'Medium', color: '#f59e0b', icon: 'info' },
+    HIGH: { label: 'High', color: '#ef4444', icon: 'flame' },
+    URGENT: { label: 'Urgent', color: '#dc2626', icon: 'target' },
 };
 
 // ── Component ──────────────────────────────────────────────────────────────
@@ -156,15 +157,15 @@ const Worklist = () => {
             {/* Header */}
             <div className="wl-header">
                 <div className="wl-header-left">
-                    <button className="wl-back" onClick={() => navigate('/dashboard')}>← Dashboard</button>
+                    <button className="wl-back" onClick={() => navigate('/dashboard')}><Icon name="back" size={16} /> Dashboard</button>
                     <div>
-                        <h1 className="wl-title">📋 My Worklist</h1>
+                        <h1 className="wl-title"><Icon name="tasks" size={32} className="header-icon" /> My Worklist</h1>
                         <p className="wl-sub">All your work items in one place — assigned to you and delegated by you</p>
                     </div>
                 </div>
                 {canAssign && (
                     <button className="wl-btn-assign" onClick={() => setShowModal(true)}>
-                        + Assign Task
+                        <Icon name="plus" size={18} /> Assign Task
                     </button>
                 )}
             </div>
@@ -212,7 +213,7 @@ const Worklist = () => {
             {/* Filters */}
             <div className="wl-filters">
                 <div className="wl-search-wrap">
-                    <span className="wl-search-icon">🔍</span>
+                    <span className="wl-search-icon"><Icon name="search" size={16} /></span>
                     <input
                         className="wl-search"
                         placeholder="Search tasks..."
@@ -223,13 +224,13 @@ const Worklist = () => {
                 <select className="wl-filter-select" value={filterStatus} onChange={e => setFilterStatus(e.target.value)}>
                     <option value="ALL">All Status</option>
                     {Object.entries(STATUS_CFG).map(([k, v]) => (
-                        <option key={k} value={k}>{v.icon} {v.label}</option>
+                        <option key={k} value={k}>{v.label}</option>
                     ))}
                 </select>
                 <select className="wl-filter-select" value={filterPriority} onChange={e => setFilterPriority(e.target.value)}>
                     <option value="ALL">All Priority</option>
                     {Object.entries(PRIORITY_CFG).map(([k, v]) => (
-                        <option key={k} value={k}>{v.dot} {v.label}</option>
+                        <option key={k} value={k}>{v.label}</option>
                     ))}
                 </select>
                 {(filterStatus !== 'ALL' || filterPriority !== 'ALL' || search) && (
@@ -247,7 +248,7 @@ const Worklist = () => {
                 </div>
             ) : filtered.length === 0 ? (
                 <div className="wl-empty">
-                    <div className="wl-empty-icon">{activeTab === 'mine' ? '🎉' : '📭'}</div>
+                    <div className="wl-empty-icon"><Icon name={activeTab === 'mine' ? 'star' : 'folder'} size={48} /></div>
                     <h3>{activeTab === 'mine' ? 'All clear! No tasks found.' : 'No delegated tasks yet.'}</h3>
                     <p>{activeTab === 'mine' ? 'You have no work items matching your filters.' : 'Assign tasks to your team members to track them here.'}</p>
                 </div>
@@ -270,14 +271,14 @@ const Worklist = () => {
                                     <div className="wl-item-top">
                                         <div className="wl-item-title-wrap">
                                             <h3 className="wl-item-title">{task.title}</h3>
-                                            {overdue && <span className="wl-overdue-tag">🔴 Overdue</span>}
+                                            {overdue && <span className="wl-overdue-tag"><Icon name="target" size={12} /> Overdue</span>}
                                         </div>
                                         <div className="wl-item-badges">
                                             <span className="wl-badge-priority" style={{ color: pr.color, borderColor: pr.color + '55', background: pr.color + '18' }}>
-                                                {pr.dot} {pr.label}
+                                                <Icon name={pr.icon} size={14} /> {pr.label}
                                             </span>
                                             <span className="wl-badge-status" style={{ color: st.color, borderColor: st.color + '55', background: st.bg }}>
-                                                {st.icon} {st.label}
+                                                <Icon name={st.icon} size={14} /> {st.label}
                                             </span>
                                         </div>
                                     </div>
@@ -290,28 +291,28 @@ const Worklist = () => {
                                     {/* Row 3: comments */}
                                     {task.comments && (
                                         <div className="wl-item-comments">
-                                            💬 <em>{task.comments}</em>
+                                            <Icon name="search" size={14} /> <em>{task.comments}</em>
                                         </div>
                                     )}
 
                                     {/* Row 4: meta */}
                                     <div className="wl-item-meta">
                                         <span className="wl-meta-item">
-                                            📅 Due: <strong style={{ color: overdue ? '#ef4444' : 'inherit' }}>{formatDate(task.dueDate)}</strong>
+                                            <Icon name="calendar" size={14} /> Due: <strong style={{ color: overdue ? '#ef4444' : 'inherit' }}>{formatDate(task.dueDate)}</strong>
                                         </span>
                                         {isMine && task.assignedBy && (
                                             <span className="wl-meta-item">
-                                                👤 From: <strong>{task.assignedBy.firstName} {task.assignedBy.lastName}</strong>
+                                                <Icon name="users" size={14} /> From: <strong>{task.assignedBy.firstName} {task.assignedBy.lastName}</strong>
                                             </span>
                                         )}
                                         {!isMine && task.assignedTo && (
                                             <span className="wl-meta-item">
-                                                👤 To: <strong>{task.assignedTo.firstName} {task.assignedTo.lastName}</strong>
+                                                <Icon name="users" size={14} /> To: <strong>{task.assignedTo.firstName} {task.assignedTo.lastName}</strong>
                                             </span>
                                         )}
                                         {task.completedAt && (
                                             <span className="wl-meta-item wl-meta-done">
-                                                ✅ Done: {formatDate(task.completedAt)}
+                                                <Icon name="check" size={14} /> Done: {formatDate(task.completedAt)}
                                             </span>
                                         )}
                                     </div>
@@ -320,31 +321,31 @@ const Worklist = () => {
                                     <div className="wl-item-actions">
                                         {isMine && task.status === 'TODO' && (
                                             <button className="wl-action-btn start" onClick={() => updateStatus(task.id, 'IN_PROGRESS')}>
-                                                ▶ Start Working
+                                                <Icon name="check" size={16} /> Start Working
                                             </button>
                                         )}
                                         {isMine && task.status === 'IN_PROGRESS' && (
                                             <button className="wl-action-btn complete" onClick={() => setCommentModal({ task, targetStatus: 'COMPLETED' })}>
-                                                ✓ Mark Complete
+                                                <Icon name="check" size={16} /> Mark Complete
                                             </button>
                                         )}
                                         {isMine && task.status === 'REJECTED' && (
                                             <button className="wl-action-btn start" onClick={() => updateStatus(task.id, 'IN_PROGRESS')}>
-                                                🔄 Restart
+                                                <Icon name="refresh" size={16} /> Restart
                                             </button>
                                         )}
                                         {!isMine && task.status !== 'COMPLETED' && task.status !== 'CANCELLED' && (
                                             <button className="wl-action-btn cancel" onClick={() => setCommentModal({ task, targetStatus: 'CANCELLED' })}>
-                                                🚫 Cancel Task
+                                                <Icon name="back" size={16} /> Cancel Task
                                             </button>
                                         )}
                                         {!isMine && (
                                             <>
                                                 <button className="wl-action-btn reassign" onClick={() => setReassignModal({ task })}>
-                                                    🔄 Reassign
+                                                    <Icon name="refresh" size={16} /> Reassign
                                                 </button>
                                                 <button className="wl-action-btn delete" onClick={() => handleDelete(task.id)}>
-                                                    🗑 Delete
+                                                    <Icon name="trash" size={16} /> Delete
                                                 </button>
                                             </>
                                         )}
@@ -360,7 +361,7 @@ const Worklist = () => {
             {showModal && (
                 <div className="wl-overlay" onClick={() => setShowModal(false)}>
                     <div className="wl-modal" onClick={e => e.stopPropagation()}>
-                        <h2>📋 Assign New Task</h2>
+                        <h2><Icon name="tasks" size={24} /> Assign New Task</h2>
                         <form onSubmit={handleCreate} className="wl-modal-form">
                             <div className="wl-field">
                                 <label>Task Title *</label>
@@ -396,10 +397,10 @@ const Worklist = () => {
                                 <div className="wl-field">
                                     <label>Priority *</label>
                                     <select value={form.priority} onChange={e => setForm(p => ({ ...p, priority: e.target.value }))}>
-                                        <option value="LOW">🟢 Low</option>
-                                        <option value="MEDIUM">🟡 Medium</option>
-                                        <option value="HIGH">🔴 High</option>
-                                        <option value="URGENT">🚨 Urgent</option>
+                                        <option value="LOW">Low</option>
+                                        <option value="MEDIUM">Medium</option>
+                                        <option value="HIGH">High</option>
+                                        <option value="URGENT">Urgent</option>
                                     </select>
                                 </div>
                             </div>
@@ -416,12 +417,13 @@ const Worklist = () => {
             {commentModal && (
                 <div className="wl-overlay" onClick={() => setCommentModal(null)}>
                     <div className="wl-modal wl-modal-sm" onClick={e => e.stopPropagation()}>
-                        <h2>{commentModal.targetStatus === 'COMPLETED' ? '✅ Complete Task' : '🚫 Cancel Task'}</h2>
+                        <h2>{commentModal.targetStatus === 'COMPLETED' ? <><Icon name="check" size={24} /> Complete Task</> : <><Icon name="back" size={24} /> Cancel Task</>}</h2>
                         <p className="wl-modal-task-name">{commentModal.task.title}</p>
                         <CommentForm
                             label={commentModal.targetStatus === 'COMPLETED' ? 'Completion notes (optional)' : 'Reason for cancellation (optional)'}
                             actionLabel={commentModal.targetStatus === 'COMPLETED' ? 'Mark as Completed' : 'Cancel Task'}
                             actionClass={commentModal.targetStatus === 'COMPLETED' ? 'wl-btn-success' : 'wl-btn-danger'}
+                            actionIcon={commentModal.targetStatus === 'COMPLETED' ? 'check' : 'back'}
                             onSubmit={(comment) => updateStatus(commentModal.task.id, commentModal.targetStatus, comment)}
                             onCancel={() => setCommentModal(null)}
                         />
@@ -454,7 +456,9 @@ const CommentForm = ({ label, actionLabel, actionClass, onSubmit, onCancel }) =>
             </div>
             <div className="wl-modal-footer">
                 <button type="button" className="wl-btn-ghost" onClick={onCancel}>Cancel</button>
-                <button type="button" className={actionClass} onClick={() => onSubmit(comment)}>{actionLabel}</button>
+                <button type="button" className={actionClass} onClick={() => onSubmit(comment)}>
+                    {actionIcon && <Icon name={actionIcon} size={18} />} {actionLabel}
+                </button>
             </div>
         </div>
     );
@@ -471,14 +475,14 @@ const ReassignModal = ({ task, employees, onConfirm, onClose }) => {
     return (
         <div className="wl-overlay" onClick={onClose}>
             <div className="wl-modal wl-modal-sm" onClick={e => e.stopPropagation()}>
-                <h2>🔄 Reassign Task</h2>
+                <h2><Icon name="refresh" size={24} /> Reassign Task</h2>
                 <p className="wl-modal-task-name">{task.title}</p>
 
                 {/* Show current assignee */}
                 <div className="wl-reassign-current">
                     <span className="wl-reassign-label">Currently assigned to:</span>
                     <span className="wl-reassign-name">
-                        👤 {task.assignedTo?.firstName} {task.assignedTo?.lastName}
+                        <Icon name="users" size={16} /> {task.assignedTo?.firstName} {task.assignedTo?.lastName}
                     </span>
                 </div>
 
@@ -518,7 +522,7 @@ const ReassignModal = ({ task, employees, onConfirm, onClose }) => {
                             disabled={!newAssigneeId}
                             onClick={() => onConfirm(newAssigneeId, reason)}
                         >
-                            🔄 Reassign Task
+                            <Icon name="refresh" size={18} /> Reassign Task
                         </button>
                     </div>
                 </div>

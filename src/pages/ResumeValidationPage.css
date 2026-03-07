@@ -1,0 +1,160 @@
+/* =====================================================
+   Resume Validation Page — Premium Full-Page Layout
+   ===================================================== */
+
+.rvp-container {
+    padding: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    min-height: 100vh;
+}
+
+/* ---------- Page Header ---------- */
+.rvp-page-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.rvp-back-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 0.6rem 1.1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.rvp-back-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--primary-color);
+}
+
+.rvp-page-title {
+    flex: 1;
+    min-width: 200px;
+}
+
+.rvp-page-title h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    background: linear-gradient(135deg, var(--primary-color), #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.rvp-page-title p {
+    margin: 0.4rem 0 0;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.rvp-actions {
+    flex-shrink: 0;
+}
+
+.rvp-link-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 0.6rem 1.1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.rvp-link-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* ---------- Info Banner ---------- */
+.rvp-info-banner {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.06), rgba(139, 92, 246, 0.04));
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.rvp-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+}
+
+.rvp-feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+}
+
+.rvp-feature-icon {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+}
+
+.rvp-feature-title {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.rvp-feature-desc {
+    margin: 0.1rem 0 0;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+/* ---------- Tool Wrapper ---------- */
+.rvp-tool-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.rvp-tool-wrapper .rv-container {
+    width: 100%;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+    .rvp-container {
+        padding: 1rem;
+    }
+
+    .rvp-page-header {
+        flex-direction: column;
+    }
+
+    .rvp-info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .rvp-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .rvp-page-title h1 {
+        font-size: 1.5rem;
+    }
+}

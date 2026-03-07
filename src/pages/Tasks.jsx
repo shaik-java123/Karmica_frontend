@@ -3,6 +3,7 @@ import { taskAPI, employeeAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import BackButton from '../components/BackButton';
+import Icon from '../components/Icon';
 import './Tasks.css';
 
 const Tasks = () => {
@@ -139,10 +140,12 @@ const Tasks = () => {
             <BackButton to="/dashboard" label="Back to Dashboard" />
 
             <div className="tasks-header">
-                <h1>📋 Task Management</h1>
+                <h1>
+                    <Icon name="tasks" size={32} className="header-icon" /> Task Management
+                </h1>
                 {canAssignTasks && (
                     <button className="btn btn-primary" onClick={() => setShowModal(true)}>
-                        + Assign Task
+                        <Icon name="plus" size={18} /> Assign Task
                     </button>
                 )}
             </div>
@@ -210,14 +213,14 @@ const Tasks = () => {
                             <div className="task-details">
                                 <p className="task-description">{task.description}</p>
                                 <p className="task-due-date">
-                                    <strong>📅 Due:</strong> {formatDate(task.dueDate)}
+                                    <strong><Icon name="calendar" size={16} /> Due:</strong> {formatDate(task.dueDate)}
                                     {isOverdue(task.dueDate, task.status) && (
                                         <span className="overdue-label"> (OVERDUE)</span>
                                     )}
                                 </p>
                                 {task.comments && (
                                     <p className="task-comments">
-                                        <strong>💬 Comments:</strong> {task.comments}
+                                        <strong><Icon name="search" size={14} /> Comments:</strong> {task.comments}
                                     </p>
                                 )}
                             </div>
@@ -230,7 +233,7 @@ const Tasks = () => {
                                                 className="btn-start"
                                                 onClick={() => handleStatusUpdate(task.id, 'IN_PROGRESS')}
                                             >
-                                                ▶ Start
+                                                <Icon name="check" size={16} /> Start
                                             </button>
                                         )}
                                         {task.status === 'IN_PROGRESS' && (
@@ -238,7 +241,7 @@ const Tasks = () => {
                                                 className="btn-complete"
                                                 onClick={() => handleStatusUpdate(task.id, 'COMPLETED')}
                                             >
-                                                ✓ Complete
+                                                <Icon name="check" size={16} /> Complete
                                             </button>
                                         )}
                                     </>
@@ -264,7 +267,7 @@ const Tasks = () => {
             {showModal && (
                 <div className="modal-overlay" onClick={() => setShowModal(false)}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                        <h2>📋 Assign New Task</h2>
+                        <h2><Icon name="tasks" size={24} /> Assign New Task</h2>
                         <form onSubmit={handleSubmit}>
 
                             <div className="form-group">
@@ -324,10 +327,10 @@ const Tasks = () => {
                                     onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
                                     required
                                 >
-                                    <option value="LOW">🟢 Low</option>
-                                    <option value="MEDIUM">🟡 Medium</option>
-                                    <option value="HIGH">🔴 High</option>
-                                    <option value="URGENT">🚨 Urgent</option>
+                                    <option value="LOW">Low</option>
+                                    <option value="MEDIUM">Medium</option>
+                                    <option value="HIGH">High</option>
+                                    <option value="URGENT">Urgent</option>
                                 </select>
                             </div>
 
@@ -336,7 +339,7 @@ const Tasks = () => {
                                     Cancel
                                 </button>
                                 <button type="submit" className="btn-submit">
-                                    ✅ Assign Task
+                                    <Icon name="check" size={18} /> Assign Task
                                 </button>
                             </div>
                         </form>

@@ -3,6 +3,7 @@ import { employeeAPI, departmentAPI, teamAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import BackButton from '../components/BackButton';
+import Icon from '../components/Icon';
 import './Employees.css';
 
 const Employees = () => {
@@ -193,7 +194,7 @@ const Employees = () => {
         <div className="employees-page">
             <BackButton to="/dashboard" label="Back to Dashboard" />
             <div className="employees-header">
-                <h1>{isManager ? 'My Team' : '👥 Employees Directory'}</h1>
+                <h1>{isManager ? 'My Team' : <span><Icon name="users" size={32} className="header-icon" /> Employees Directory</span>}</h1>
                 {canManageEmployees && (
                     <button
                         className="btn btn-primary"
@@ -210,7 +211,7 @@ const Employees = () => {
             <div className="search-bar">
                 <input
                     type="text"
-                    placeholder="🔍 Search by name, ID or email..."
+                    placeholder="Search by name, ID or email..."
                     value={searchQuery}
                     onChange={handleSearch}
                 />
@@ -251,9 +252,9 @@ const Employees = () => {
                                         </td>
                                         <td>
                                             <div className="contact-info">
-                                                <div className="info-row">📧 {employee.email}</div>
-                                                <div className="info-row">📞 {employee.phone}</div>
-                                                <div className="info-row">🏢 {employee.department?.name || 'N/A'}</div>
+                                                <div className="info-row"><Icon name="clock" size={14} /> {employee.email}</div>
+                                                <div className="info-row"><Icon name="clock" size={14} /> {employee.phone}</div>
+                                                <div className="info-row"><Icon name="building" size={14} /> {employee.department?.name || 'N/A'}</div>
                                             </div>
                                         </td>
                                         <td>
@@ -274,15 +275,25 @@ const Employees = () => {
                                         {(canManageEmployees || isManager) && (
                                             <td>
                                                 <div className="action-buttons">
-                                                    <button onClick={() => handleView(employee)} className="btn-icon" title="View Details">👁️</button>
+                                                    <button onClick={() => handleView(employee)} className="btn-icon" title="View Details">
+                                                        <Icon name="search" size={18} />
+                                                    </button>
                                                     {canManageEmployees && (
                                                         <>
-                                                            <button onClick={() => handleEdit(employee)} className="btn-icon" title="Edit">✏️</button>
-                                                            <button onClick={() => handleAssignManager(employee)} className="btn-icon" title="Assign Manager">👔</button>
+                                                            <button onClick={() => handleEdit(employee)} className="btn-icon" title="Edit">
+                                                                <Icon name="edit" size={18} />
+                                                            </button>
+                                                            <button onClick={() => handleAssignManager(employee)} className="btn-icon" title="Assign Manager">
+                                                                <Icon name="users" size={18} />
+                                                            </button>
                                                             {employee.status === 'ACTIVE' ? (
-                                                                <button onClick={() => handleDeactivate(employee.id)} className="btn-icon danger" title="Deactivate">🗑️</button>
+                                                                <button onClick={() => handleDeactivate(employee.id)} className="btn-icon danger" title="Deactivate">
+                                                                    <Icon name="trash" size={18} />
+                                                                </button>
                                                             ) : (
-                                                                <button onClick={() => handleActivate(employee.id)} className="btn-icon success" title="Activate">✅</button>
+                                                                <button onClick={() => handleActivate(employee.id)} className="btn-icon success" title="Activate">
+                                                                    <Icon name="check" size={18} />
+                                                                </button>
                                                             )}
                                                         </>
                                                     )}

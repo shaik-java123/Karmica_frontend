@@ -9,6 +9,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import Dashboard from './pages/Dashboard';
 import Employees from './pages/Employees';
 import Departments from './pages/Departments';
+import Inventory from './pages/Inventory';
 import Leaves from './pages/Leaves';
 import Attendance from './pages/Attendance';
 import Tasks from './pages/Tasks';
@@ -20,6 +21,12 @@ import Appraisals from './pages/Appraisals';
 import Onboarding from './pages/Onboarding';
 import Worklist from './pages/Worklist';
 import AnalyticsDashboard from './pages/AnalyticsDashboard';
+import JobPostings from './pages/JobPostings';
+import ResumeValidationPage from './pages/ResumeValidationPage';
+import ApplicationPortal from './pages/ApplicationPortal';
+import LMS from './pages/LMS';
+import SystemHealth from './pages/SystemHealth';
+import ApiDemo from './pages/ApiDemo';
 import ChatBot from './components/ChatBot';
 import './index.css';
 
@@ -212,6 +219,58 @@ function App() {
                                 element={
                                     <ProtectedRoute>
                                         <AnalyticsDashboard />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route
+                                path="/job-postings"
+                                element={
+                                    <ProtectedRoute>
+                                        <JobPostings />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route
+                                path="/resume-validation"
+                                element={
+                                    <ProtectedRoute>
+                                        <ResumeValidationPage />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route
+                                path="/apply"
+                                element={<ApplicationPortal />}
+                            />
+                            <Route
+                                path="/lms"
+                                element={
+                                    <ProtectedRoute>
+                                        <LMS />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route
+                                path="/inventory"
+                                element={
+                                    <ProtectedRoute>
+                                        <Inventory />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route
+                                path="/system-health"
+                                element={
+                                    <ProtectedRoute>
+                                        <SystemHealth />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route
+                                path="/api-demo"
+                                element={
+                                    <ProtectedRoute>
+                                        <ApiDemo />
                                     </ProtectedRoute>
                                 }
                             />

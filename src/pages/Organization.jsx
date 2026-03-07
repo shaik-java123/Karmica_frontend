@@ -3,6 +3,7 @@ import { holidayAPI, policyAPI, configAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import BackButton from '../components/BackButton';
+import Icon from '../components/Icon';
 import './Organization.css';
 
 const Organization = () => {
@@ -190,11 +191,19 @@ const Organization = () => {
         <div className="organization-page">
             <BackButton to="/dashboard" label="Back to Dashboard" />
             <div className="page-header">
-                <h1>🏢 Organization</h1>
+                <h1>
+                    <Icon name="building" size={32} className="header-icon" /> Organization
+                </h1>
                 <div className="tabs">
-                    <button className={`tab-btn ${activeTab === 'holidays' ? 'active' : ''}`} onClick={() => setActiveTab('holidays')}>📅 Holiday Calendar</button>
-                    <button className={`tab-btn ${activeTab === 'policies' ? 'active' : ''}`} onClick={() => setActiveTab('policies')}>📜 Policies</button>
-                    <button className={`tab-btn ${activeTab === 'leavetypes' ? 'active' : ''}`} onClick={() => setActiveTab('leavetypes')}>📝 Leave Types</button>
+                    <button className={`tab-btn ${activeTab === 'holidays' ? 'active' : ''}`} onClick={() => setActiveTab('holidays')}>
+                        <Icon name="calendar" size={18} /> Holiday Calendar
+                    </button>
+                    <button className={`tab-btn ${activeTab === 'policies' ? 'active' : ''}`} onClick={() => setActiveTab('policies')}>
+                        <Icon name="tasks" size={18} /> Policies
+                    </button>
+                    <button className={`tab-btn ${activeTab === 'leavetypes' ? 'active' : ''}`} onClick={() => setActiveTab('leavetypes')}>
+                        <Icon name="palm" size={18} /> Leave Types
+                    </button>
                 </div>
             </div>
 
@@ -238,8 +247,12 @@ const Organization = () => {
                                                 <td><span className={`badge badge-${h.type?.toLowerCase()}`}>{h.type}</span></td>
                                                 {isAdminOrHR && (
                                                     <td>
-                                                        <button onClick={() => openEditHoliday(h)} className="btn-icon">✏️</button>
-                                                        <button onClick={() => handleDeleteHoliday(h.id)} className="btn-icon danger">🗑️</button>
+                                                        <button onClick={() => openEditHoliday(h)} className="btn-icon" title="Edit">
+                                                            <Icon name="edit" size={18} />
+                                                        </button>
+                                                        <button onClick={() => handleDeleteHoliday(h.id)} className="btn-icon danger" title="Delete">
+                                                            <Icon name="trash" size={18} />
+                                                        </button>
                                                     </td>
                                                 )}
                                             </tr>
@@ -279,8 +292,12 @@ const Organization = () => {
                                         <button className="btn btn-outline" onClick={() => alert(p.content)}>View Content</button>
                                         {isAdminOrHR && (
                                             <>
-                                                <button onClick={() => openEditPolicy(p)} className="btn-icon">✏️</button>
-                                                <button onClick={() => handleDeletePolicy(p.id)} className="btn-icon danger">🗑️</button>
+                                                <button onClick={() => openEditPolicy(p)} className="btn-icon" title="Edit">
+                                                    <Icon name="edit" size={18} />
+                                                </button>
+                                                <button onClick={() => handleDeletePolicy(p.id)} className="btn-icon danger" title="Delete">
+                                                    <Icon name="trash" size={18} />
+                                                </button>
                                             </>
                                         )}
                                     </div>
@@ -330,8 +347,12 @@ const Organization = () => {
                                             </td>
                                             {isAdminOrHR && (
                                                 <td>
-                                                    <button onClick={() => openEditLeaveType(lt)} className="btn-icon">✏️</button>
-                                                    <button onClick={() => handleDeleteLeaveType(lt.id)} className="btn-icon danger">🗑️</button>
+                                                    <button onClick={() => openEditLeaveType(lt)} className="btn-icon" title="Edit">
+                                                        <Icon name="edit" size={18} />
+                                                    </button>
+                                                    <button onClick={() => handleDeleteLeaveType(lt.id)} className="btn-icon danger" title="Delete">
+                                                        <Icon name="trash" size={18} />
+                                                    </button>
                                                 </td>
                                             )}
                                         </tr>
@@ -378,8 +399,8 @@ const Organization = () => {
                                     onChange={e => setHolidayForm({ ...holidayForm, description: e.target.value })} />
                             </div>
                             <div className="modal-actions">
-                                <button type="button" className="btn btn-secondary" onClick={() => setShowHolidayModal(false)}>Cancel</button>
-                                <button type="submit" className="btn btn-primary">Save</button>
+                                <button type="button" className="btn btn-secondary" onClick={() => setShowHolidayModal(false)}><Icon name="back" size={18} /> Cancel</button>
+                                <button type="submit" className="btn btn-primary"><Icon name="check" size={18} /> Save</button>
                             </div>
                         </form>
                     </div>
@@ -417,8 +438,8 @@ const Organization = () => {
                                     onChange={e => setPolicyForm({ ...policyForm, version: e.target.value })} />
                             </div>
                             <div className="modal-actions">
-                                <button type="button" className="btn btn-secondary" onClick={() => setShowPolicyModal(false)}>Cancel</button>
-                                <button type="submit" className="btn btn-primary">Save</button>
+                                <button type="button" className="btn btn-secondary" onClick={() => setShowPolicyModal(false)}><Icon name="back" size={18} /> Cancel</button>
+                                <button type="submit" className="btn btn-primary"><Icon name="check" size={18} /> Save</button>
                             </div>
                         </form>
                     </div>
@@ -465,8 +486,8 @@ const Organization = () => {
                                 </label>
                             </div>
                             <div className="modal-actions">
-                                <button type="button" className="btn btn-secondary" onClick={() => setShowLeaveTypeModal(false)}>Cancel</button>
-                                <button type="submit" className="btn btn-primary">Save</button>
+                                <button type="button" className="btn btn-secondary" onClick={() => setShowLeaveTypeModal(false)}><Icon name="back" size={18} /> Cancel</button>
+                                <button type="submit" className="btn btn-primary"><Icon name="check" size={18} /> Save</button>
                             </div>
                         </form>
                     </div>

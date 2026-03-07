@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
 
 const api = axios.create({
     baseURL: API_BASE_URL,
@@ -238,10 +238,12 @@ export const appraisalAPI = {
     getAllCycles: () => api.get('/appraisals/cycles'),
     getActiveCycles: () => api.get('/appraisals/cycles/active'),
     activateCycle: (id) => api.post(`/appraisals/cycles/${id}/activate`),
+    deleteCycle: (id) => api.delete(`/appraisals/cycles/${id}`),
 
     // Competency Management
     createCompetency: (data) => api.post('/appraisals/competencies', data),
     getAllCompetencies: () => api.get('/appraisals/competencies'),
+    deleteCompetency: (id) => api.delete(`/appraisals/competencies/${id}`),
 
     // Appraisal Management
     getMyAppraisals: () => api.get('/appraisals/my-appraisals'),
@@ -331,5 +333,156 @@ export const chatbotAPI = {
         api.post('/chatbot/chat', { message, history }),
 };
 
-export default api;
+// Job Posting / Recruitment API
+export const jobPostingAPI = {
+    // Job Posting CRUD
+    create: (data) => api.post('/recruitment/jobs', data),
+    getAll: (filters = {}) => {
+        let url = '/recruitment/jobs';
+        const params = new URLSearchParams();
+        if (filters.status && filters.status !== 'ALL') params.append('status', filters.status);
+        if (filters.search) params.append('search', filters.search);
+        if (params.toString()) url += `?${params.toString()}`;
+        return api.get(url);
+    },
+    getById: (id) => api.get(`/recruitment/jobs/${id}`),
+    update: (id, data) => api.put(`/recruitment/jobs/${id}`, data),
+    delete: (id) => api.delete(`/recruitment/jobs/${id}`),
 
+    // Job Posting Status Management
+    publish: (id) => api.post(`/recruitment/jobs/${id}/publish`),
+    close: (id) => api.post(`/recruitment/jobs/${id}/close`),
+    hold: (id) => api.post(`/recruitment/jobs/${id}/hold`),
+
+    // Applications
+    getApplications: (jobId) => api.get(`/recruitment/jobs/${jobId}/applications`),
+    submitApplication: (jobId, data) => {
+        if (data instanceof FormData) {
+            return api.post(`/recruitment/jobs/${jobId}/apply`, data, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+        }
+        return api.post(`/recruitment/jobs/${jobId}/apply`, data);
+    },
+    getMyApplications: (email) => {
+        let url = '/recruitment/my-applications';
+        if (email) url += `?email=${encodeURIComponent(email)}`;
+        return api.get(url);
+    },
+    getAllApplications: (search) => {
+        let url = '/recruitment/applications';
+        if (search) url += `?search=${encodeURIComponent(search)}`;
+        return api.get(url);
+    },
+    getApplication: (id) => api.get(`/recruitment/applications/${id}`),
+    updateApplicationStatus: (appId, data) => api.put(`/recruitment/applications/${appId}/status`, data),
+    validateResumeForApplication: (appId, resumeContent) =>
+        api.post(`/recruitment/applications/${appId}/validate-resume`, { resumeContent }),
+    getTopCandidates: (minScore = 70) => api.get(`/recruitment/applications/top-candidates?minScore=${minScore}`),
+    getUnvalidatedResumes: () => api.get('/recruitment/resume/unvalidated'),
+
+    // Job Statistics
+    getStats: () => api.get('/recruitment/stats'),
+};
+
+// Resume Validation API
+export const resumeValidationAPI = {
+    // Validate resume content against job requirements
+    validateResume: (resumeContent, jobRequirements) =>
+        api.post('/recruitment/resume/validate', {
+            resumeContent,
+            minExperienceYears: jobRequirements?.minExperienceYears || 0,
+            requiredSkills: jobRequirements?.requiredSkills || [],
+        }),
+
+    // Validate resume for a specific application
+    validateForApplication: (applicationId, resumeContent) =>
+        api.post(`/recruitment/applications/${applicationId}/validate-resume`, { resumeContent }),
+};
+
+
+// ─── LMS / Learning Management System API ───
+export const lmsAPI = {
+    // Stats
+    getStats: () => api.get('/lms/stats'),
+    getMyStats: () => api.get('/lms/my-stats'),
+
+    // Courses
+    getCourses: (search, status) => {
+        let url = '/lms/courses';
+        const params = new URLSearchParams();
+        if (search) params.append('search', search);
+        if (status) params.append('status', status);
+        if (params.toString()) url += `?${params.toString()}`;
+        return api.get(url);
+    },
+    getCourse: (id) => api.get(`/lms/courses/${id}`),
+    getCategories: () => api.get('/lms/categories'),
+    createCourse: (data) => api.post('/lms/courses', data),
+    updateCourse: (id, data) => api.put(`/lms/courses/${id}`, data),
+    publishCourse: (id) => api.post(`/lms/courses/${id}/publish`),
+    archiveCourse: (id) => api.post(`/lms/courses/${id}/archive`),
+    deleteCourse: (id) => api.delete(`/lms/courses/${id}`),
+
+    // Lessons (multipart for file upload)
+    getLessons: (courseId) => api.get(`/lms/courses/${courseId}/lessons`),
+    addLesson: (courseId, data, file) => {
+        const form = new FormData();
+        form.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+        if (file) form.append('file', file);
+        return api.post(`/lms/courses/${courseId}/lessons`, form, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+        });
+    },
+    updateLesson: (lessonId, data, file) => {
+        const form = new FormData();
+        form.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+        if (file) form.append('file', file);
+        return api.put(`/lms/lessons/${lessonId}`, form, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+        });
+    },
+    deleteLesson: (lessonId) => api.delete(`/lms/lessons/${lessonId}`),
+
+    // Enrollment
+    enroll: (courseId) => api.post(`/lms/courses/${courseId}/enroll`),
+    getMyEnrollments: () => api.get('/lms/my-enrollments'),
+    getCourseEnrollments: (courseId) => api.get(`/lms/courses/${courseId}/enrollments`),
+    updateProgress: (courseId, percent) => api.put(`/lms/courses/${courseId}/progress`, { percent }),
+    dropCourse: (courseId) => api.delete(`/lms/courses/${courseId}/enroll`),
+    requestRevisit: (courseId) => api.post(`/lms/courses/${courseId}/revisit`),
+    approveRevisit: (enrollmentId) => api.post(`/lms/enrollments/${enrollmentId}/approve-revisit`),
+
+    // Virtual Classes / Live Sessions (Google Meet)
+    getCourseSessions: (courseId) => api.get(`/lms/courses/${courseId}/sessions`),
+    getUpcomingSessions: () => api.get('/lms/sessions/upcoming'),
+    scheduleSession: (courseId, data) => api.post(`/lms/courses/${courseId}/sessions`, data),
+    updateSession: (vcId, data) => api.put(`/lms/sessions/${vcId}`, data),
+    deleteSession: (vcId) => api.delete(`/lms/sessions/${vcId}`),
+};
+
+
+// ─── Admin / System Health API ───
+export const adminAPI = {
+    getCircuitBreakers: () => api.get('/admin/circuit-breakers'),
+};
+
+// ─── Demo API for Integrations ───
+export const demoAPI = {
+    getUsers: (results = 6) => api.get(`/demo/users?results=${results}`),
+};
+
+// ─── Inventory API ───
+export const inventoryAPI = {
+    getItems: () => api.get('/inventory/items'),
+    createItem: (data) => api.post('/inventory/items', data),
+    updateItem: (id, data) => api.put(`/inventory/items/${id}`, data),
+    deleteItem: (id) => api.delete(`/inventory/items/${id}`),
+
+    getMyRequests: () => api.get('/inventory/requests/my-requests'),
+    createRequest: (data) => api.post('/inventory/requests', data),
+    getAllRequests: () => api.get('/inventory/requests/all'),
+    processRequest: (id, action, comments) => api.put(`/inventory/requests/${id}/process`, { action, comments })
+};
+
+export default api;

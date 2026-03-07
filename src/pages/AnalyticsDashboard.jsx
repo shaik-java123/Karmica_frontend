@@ -6,6 +6,7 @@ import {
     PieChart, Pie, Cell
 } from 'recharts';
 import BackButton from '../components/BackButton';
+import Icon from '../components/Icon';
 import './AnalyticsDashboard.css';
 
 const AnalyticsDashboard = () => {
@@ -84,28 +85,36 @@ const AnalyticsDashboard = () => {
                 {/* Top Metrics Row */}
                 <div className="metrics-grid">
                     <div className="metric-card glass-card">
-                        <div className="metric-icon primary">👥</div>
+                        <div className="metric-icon primary">
+                            <Icon name="users" size={32} />
+                        </div>
                         <div className="metric-info">
                             <h3>Total Employees</h3>
                             <p>{totalEmployees}</p>
                         </div>
                     </div>
                     <div className="metric-card glass-card">
-                        <div className="metric-icon success">✅</div>
+                        <div className="metric-icon success">
+                            <Icon name="check" size={32} />
+                        </div>
                         <div className="metric-info">
                             <h3>Today's Attendance</h3>
                             <p>{attendanceCount} ({attendanceRate}%)</p>
                         </div>
                     </div>
                     <div className="metric-card glass-card">
-                        <div className="metric-icon warning">📉</div>
+                        <div className="metric-icon warning">
+                            <Icon name="trending" size={32} />
+                        </div>
                         <div className="metric-info">
                             <h3>Leaves (This Month)</h3>
                             <p>{leavesTaken}</p>
                         </div>
                     </div>
                     <div className="metric-card glass-card">
-                        <div className="metric-icon info">📁</div>
+                        <div className="metric-icon info">
+                            <Icon name="folder" size={32} />
+                        </div>
                         <div className="metric-info">
                             <h3>Project Count</h3>
                             <p>{projectCount}</p>

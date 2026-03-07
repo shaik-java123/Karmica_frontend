@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import Icon from '../components/Icon';
 import './Login.css';
 
 const Login = () => {
@@ -95,9 +96,9 @@ const Login = () => {
                             <div style={{ textAlign: 'right', marginTop: '6px' }}>
                                 <Link
                                     to="/forgot-password"
-                                    style={{ fontSize: '0.82rem', color: 'rgba(165,180,252,0.9)', textDecoration: 'none' }}
+                                    style={{ fontSize: '0.82rem', color: 'rgba(165,180,252,0.9)', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '4px' }}
                                 >
-                                    🔑 Forgot password?
+                                    <Icon name="search" size={14} /> Forgot password?
                                 </Link>
                             </div>
                         </div>
@@ -121,17 +122,17 @@ const Login = () => {
 
                 <div className="features-grid">
                     <div className="feature-card glass-card">
-                        <div className="feature-icon">👥</div>
+                        <div className="feature-icon"><Icon name="users" size={24} /></div>
                         <h3>Employee Management</h3>
                         <p>Comprehensive employee lifecycle management</p>
                     </div>
                     <div className="feature-card glass-card">
-                        <div className="feature-icon">📊</div>
+                        <div className="feature-icon"><Icon name="chart" size={24} /></div>
                         <h3>Analytics</h3>
                         <p>Real-time insights and reports</p>
                     </div>
                     <div className="feature-card glass-card">
-                        <div className="feature-icon">💰</div>
+                        <div className="feature-icon"><Icon name="money" size={24} /></div>
                         <h3>Payroll</h3>
                         <p>Automated payroll processing</p>
                     </div>

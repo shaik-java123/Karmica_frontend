@@ -3,6 +3,7 @@ import { attendanceAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import BackButton from '../components/BackButton';
+import Icon from '../components/Icon';
 import AnimatedClock from '../components/AnimatedClock';
 import './Attendance.css';
 
@@ -109,7 +110,7 @@ const Attendance = () => {
     return (
         <div className="attendance-page">
             <BackButton to="/dashboard" label="Back to Dashboard" />
-            <h1>🕐 Attendance</h1>
+            <h1><Icon name="clock" size={32} className="header-icon" /> Attendance</h1>
 
             {activeTab === 'today' && canCheckInOut && (
                 <div className="today-section">

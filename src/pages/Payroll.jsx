@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { payrollAPI, salaryComponentAPI, employeeAPI } from '../services/api';
 import BackButton from '../components/BackButton';
+import Icon from '../components/Icon';
 import './Payroll.css';
 
 // ---------- helpers ----------
@@ -496,7 +497,7 @@ const Payroll = () => {
     return (
         <div className="payroll-page">
             <BackButton to="/dashboard" label="Back to Dashboard" />
-            <h1>💰 Payroll Management</h1>
+            <h1><Icon name="money" size={32} className="header-icon" /> Payroll Management</h1>
 
             <div className="tabs">
                 <button className={activeTab === 'slips' ? 'tab active' : 'tab'} onClick={() => setActiveTab('slips')}>Salary Slips</button>
@@ -506,7 +507,7 @@ const Payroll = () => {
                     <button className={activeTab === 'structure' ? 'tab active' : 'tab'} onClick={() => setActiveTab('structure')}>Salary Structure</button>
                 </>}
                 {(isAdminOrHR || isFinanceOrAdmin) && (
-                    <button className={activeTab === 'settings' ? 'tab active' : 'tab'} onClick={() => setActiveTab('settings')}>⚙️ Settings</button>
+                    <button className={activeTab === 'settings' ? 'tab active' : 'tab'} onClick={() => setActiveTab('settings')}><Icon name="edit" size={16} /> Settings</button>
                 )}
             </div>
 
@@ -525,7 +526,7 @@ const Payroll = () => {
                         <div style={{ display: 'flex', gap: 10 }}>
                             {isAdminOrHR && (
                                 <button className="btn btn-primary" onClick={handleGenerateBulkSlips} disabled={loading}>
-                                    📊 Generate Bulk Slips
+                                    <Icon name="chart" size={18} /> Generate Bulk Slips
                                 </button>
                             )}
                         </div>
@@ -565,15 +566,15 @@ const Payroll = () => {
                                                 </span>
                                             </td>
                                             <td>
-                                                <button className="btn-icon" onClick={() => handleViewSlip(slip.id)} title="View">👁️</button>
-                                                <button className="btn-icon" onClick={() => handlePrint(slip)} title="Print">🖨️</button>
+                                                <button className="btn-icon" onClick={() => handleViewSlip(slip.id)} title="View"><Icon name="search" size={18} /></button>
+                                                <button className="btn-icon" onClick={() => handlePrint(slip)} title="Print"><Icon name="printer" size={18} /></button>
                                                 {isAdminOrHR && slip.approvalStatus !== 'APPROVED' && (
-                                                    <button className="btn-icon" onClick={() => handleRegenerate(slip.id)} title="Refresh values from structure">🔄</button>
+                                                    <button className="btn-icon" onClick={() => handleRegenerate(slip.id)} title="Refresh values from structure"><Icon name="refresh" size={18} /></button>
                                                 )}
                                                 {isFinanceOrAdmin && slip.approvalStatus === 'PENDING_APPROVAL' && (
                                                     <>
-                                                        <button className="btn-icon approve-icon" onClick={() => openApproveModal(slip.id)} title="Approve">✅</button>
-                                                        <button className="btn-icon reject-icon" onClick={() => openRejectModal(slip.id)} title="Reject">❌</button>
+                                                        <button className="btn-icon approve-icon" onClick={() => openApproveModal(slip.id)} title="Approve"><Icon name="check" size={18} /></button>
+                                                        <button className="btn-icon reject-icon" onClick={() => openRejectModal(slip.id)} title="Reject"><Icon name="back" size={18} style={{ transform: 'rotate(45deg)' }} /></button>
                                                     </>
                                                 )}
                                             </td>
@@ -643,7 +644,7 @@ const Payroll = () => {
                 <div className="components-section">
                     <div className="section-header">
                         <h2>Salary Components</h2>
-                        <button className="btn btn-primary" onClick={() => setShowComponentModal(true)}>➕ Add Component</button>
+                        <button className="btn btn-primary" onClick={() => setShowComponentModal(true)}><Icon name="plus" size={18} /> Add Component</button>
                     </div>
                     <div className="components-grid">
                         {components.map(comp => (
@@ -685,7 +686,7 @@ const Payroll = () => {
                                         <h2>{selectedEmployee.firstName} {selectedEmployee.lastName}</h2>
                                         <p>{selectedEmployee.designation} | {selectedEmployee.department?.name}</p>
                                     </div>
-                                    <button className="btn btn-primary" onClick={handleSaveStructure} disabled={loading}>💾 Save Structure</button>
+                                    <button className="btn btn-primary" onClick={handleSaveStructure} disabled={loading}><Icon name="check" size={18} /> Save Structure</button>
                                 </div>
                                 {loading ? <div className="loading">Loading structure...</div> : (
                                     <div className="structure-form">
@@ -749,7 +750,7 @@ const Payroll = () => {
                         <div className="section-header">
                             <h2>🏢 Company / Pay Slip Settings</h2>
                             {!editingCompany && (
-                                <button className="btn btn-primary" onClick={() => { setCompanyDraft({ ...companySettings }); setEditingCompany(true); }}>✏️ Edit</button>
+                                <button className="btn btn-primary" onClick={() => { setCompanyDraft({ ...companySettings }); setEditingCompany(true); }}><Icon name="edit" size={18} /> Edit</button>
                             )}
                         </div>
                         {editingCompany ? (
@@ -776,7 +777,7 @@ const Payroll = () => {
                                 </div>
                                 <div className="modal-actions">
                                     <button className="btn btn-secondary" onClick={() => setEditingCompany(false)}>Cancel</button>
-                                    <button className="btn btn-primary" onClick={handleSaveCompany}>💾 Save Settings</button>
+                                    <button className="btn btn-primary" onClick={handleSaveCompany}><Icon name="check" size={18} /> Save Settings</button>
                                 </div>
                             </>
                         ) : (
