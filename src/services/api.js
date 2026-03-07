@@ -337,18 +337,26 @@ export const inventoryAPI = {
         api.put(`/inventory/requests/${id}/process`, { action, comments }),
 };
 
-// Job Posting API
+// Job Posting & Recruitment API
 export const jobPostingAPI = {
-    getAll: (params) => api.get('/job-postings', { params }),
-    getStats: () => api.get('/job-postings/stats'),
-    create: (data) => api.post('/job-postings', data),
-    update: (id, data) => api.put(`/job-postings/${id}`, data),
-    publish: (id) => api.put(`/job-postings/${id}/publish`),
-    close: (id) => api.put(`/job-postings/${id}/close`),
-    hold: (id) => api.put(`/job-postings/${id}/hold`),
-    delete: (id) => api.delete(`/job-postings/${id}`),
-    getApplications: (jobId) => api.get(`/job-postings/${jobId}/applications`),
-    updateApplicationStatus: (appId, data) => api.put(`/job-postings/applications/${appId}/status`, data),
+    getAll: (params) => api.get('/recruitment/jobs', { params }),
+    getStats: () => api.get('/recruitment/stats'),
+    create: (data) => api.post('/recruitment/jobs', data),
+    update: (id, data) => api.put(`/recruitment/jobs/${id}`, data),
+    publish: (id) => api.post(`/recruitment/jobs/${id}/publish`),
+    close: (id) => api.post(`/recruitment/jobs/${id}/close`),
+    hold: (id) => api.post(`/recruitment/jobs/${id}/hold`),
+    delete: (id) => api.delete(`/recruitment/jobs/${id}`),
+    getApplications: (jobId) => api.get(`/recruitment/jobs/${jobId}/applications`),
+    updateApplicationStatus: (appId, data) => api.put(`/recruitment/applications/${appId}/status`, data),
+};
+
+// Resume Validation API
+export const resumeValidationAPI = {
+    validateResume: (resumeContent, req) => api.post('/recruitment/resume/validate', { resumeContent, ...req }),
+    getUnvalidated: () => api.get('/recruitment/resume/unvalidated'),
+    validateApplication: (id, resumeContent) => api.post(`/recruitment/applications/${id}/validate-resume`, { resumeContent }),
+    getTopCandidates: (minScore) => api.get(`/recruitment/applications/top-candidates?minScore=${minScore}`)
 };
 
 // Chatbot AI API
