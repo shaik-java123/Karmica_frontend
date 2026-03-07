@@ -422,6 +422,11 @@ export const chatbotAPI = {
         api.post('/chatbot/chat', { message, history }),
 };
 
+// API Demo Integration
+export const demoAPI = {
+    getUsers: (count = 6) => api.get(`/demo/random-users?count=${count}`)
+};
+
 // Admin API
 export const adminAPI = {
     getCircuitBreakers: () => api.get('/admin/circuit-breakers'),
