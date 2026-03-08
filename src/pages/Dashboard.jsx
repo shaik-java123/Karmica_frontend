@@ -24,18 +24,6 @@ const Dashboard = () => {
     // Flash Announcement State
     const [flashAnnouncement, setFlashAnnouncement] = useState(null);
 
-    useEffect(() => {
-        // ... existing useEffect ...
-        fetchDashboardStats();
-        checkFlashAnnouncements();
-        // Update profile image if it changes
-        const updateProfileImage = () => {
-            setProfileImage(localStorage.getItem(`profile-image-${user?.username}`) || null);
-        };
-        window.addEventListener('storage', updateProfileImage);
-        return () => window.removeEventListener('storage', updateProfileImage);
-    }, []);
-
     const fetchDashboardStats = async () => {
         try {
             const response = await dashboardAPI.getStats();
@@ -61,6 +49,17 @@ const Dashboard = () => {
             console.error('Failed to get notifications', error);
         }
     };
+
+    useEffect(() => {
+        fetchDashboardStats();
+        checkFlashAnnouncements();
+        // Update profile image if it changes
+        const updateProfileImage = () => {
+            setProfileImage(localStorage.getItem(`profile-image-${user?.username}`) || null);
+        };
+        window.addEventListener('storage', updateProfileImage);
+        return () => window.removeEventListener('storage', updateProfileImage);
+    }, []);
 
     const dismissFlashAnnouncement = async () => {
         if (!flashAnnouncement) return;
